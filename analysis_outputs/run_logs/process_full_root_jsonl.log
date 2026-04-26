@@ -1,0 +1,48 @@
+Traceback (most recent call last):
+  File "/Users/sherlock/Desktop/01_项目代码/回流/huiliu-data-processor/huiliu-data-processor/process.py", line 829, in main
+    filter_data(intermediate_file, args.output_file)
+  File "/Users/sherlock/Desktop/01_项目代码/回流/huiliu-data-processor/huiliu-data-processor/process.py", line 769, in filter_data
+    print(f"✅ 通过过滤: {stats['passed']:,} ({stats['passed']/stats['total']*100:.1f}%)")
+ZeroDivisionError: division by zero
+[0;34m============================================================[0m
+[0;32m阶段1: 数据转换 (txt → jsonl with user_reply)[0m
+[0;34m============================================================[0m
+📂 输入文件: [1;33mxx_all_scene_service_v2_0408_signals_sort_process_multiple_chuli.jsonl[0m
+📁 输出文件: [1;33manalysis_outputs/pipeline_sample_outputs/root_full_attempt_cleaned_intermediate.jsonl[0m
+
+[1;33m⏳ 正在读取原始数据...[0m
+  已读取: 10000 行
+
+✅ 读取完成:
+  - 总行数: 13524
+  - 有效会话数: 0
+  - 有效数据条数: 0
+
+[1;33m⏳ 正在提取用户回复...[0m
+✅ 提取完成: 0 个会话包含用户回复
+
+[1;33m⏳ 正在匹配数据...[0m
+✅ 匹配完成: 0 条数据
+
+[1;33m⏳ 正在写入文件...[0m
+[0;32m✅ 阶段1完成！[0m
+📁 输出文件: analysis_outputs/pipeline_sample_outputs/root_full_attempt_cleaned_intermediate.jsonl
+📊 数据条数: 0
+
+[0;34m============================================================[0m
+[0;32m阶段2: 数据过滤[0m
+[0;34m============================================================[0m
+📂 输入文件: [1;33manalysis_outputs/pipeline_sample_outputs/root_full_attempt_cleaned_intermediate.jsonl[0m
+📁 输出文件: [1;33manalysis_outputs/pipeline_sample_outputs/root_full_attempt_cleaned.jsonl[0m
+
+[1;33m⏳ 正在应用过滤规则...[0m
+
+
+[1;33m⏳ 正在写入结果...[0m
+
+[0;34m============================================================[0m
+[0;32m📊 处理统计[0m
+[0;34m============================================================[0m
+输入总行数: 0
+
+[0;31m❌ 处理失败: division by zero[0m

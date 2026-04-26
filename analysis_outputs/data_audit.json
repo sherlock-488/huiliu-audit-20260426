@@ -1,0 +1,2889 @@
+{
+  "root": "/Users/sherlock/Desktop/01_项目代码/回流",
+  "summary": {
+    "total_lines": 13584,
+    "parsed_lines": 13582,
+    "failed_lines": 2
+  },
+  "files": [
+    {
+      "file_path": "huiliu-data-processor/__MACOSX/huiliu-data-processor/tests/._test_call_escalate.jsonl",
+      "total_lines": 1,
+      "parsed_lines": 0,
+      "failed_lines": 1,
+      "parse_errors": {
+        "JSONDecodeError": 1
+      },
+      "top_level_fields": [],
+      "fields": {},
+      "samples": [],
+      "session": {
+        "session_id_exists": false,
+        "session_field_used_for_stats": null,
+        "unique_session_count": null,
+        "duplicate_session_count": null,
+        "max_duplicate_count": null
+      },
+      "distributions": {
+        "scene_or_场景_top30": [],
+        "label_or_标签_top30": [],
+        "ResponseSolution_top50": [],
+        "DialogueAgreeSolution_top50": [],
+        "model_name_or_模型名称_top30": []
+      },
+      "signals": {
+        "candidate_assessments_sample": [],
+        "assessment_summary": {}
+      }
+    },
+    {
+      "file_path": "huiliu-data-processor/__MACOSX/huiliu-data-processor/tests/._test_call_escalate_output.jsonl",
+      "total_lines": 1,
+      "parsed_lines": 0,
+      "failed_lines": 1,
+      "parse_errors": {
+        "JSONDecodeError": 1
+      },
+      "top_level_fields": [],
+      "fields": {},
+      "samples": [],
+      "session": {
+        "session_id_exists": false,
+        "session_field_used_for_stats": null,
+        "unique_session_count": null,
+        "duplicate_session_count": null,
+        "max_duplicate_count": null
+      },
+      "distributions": {
+        "scene_or_场景_top30": [],
+        "label_or_标签_top30": [],
+        "ResponseSolution_top50": [],
+        "DialogueAgreeSolution_top50": [],
+        "model_name_or_模型名称_top30": []
+      },
+      "signals": {
+        "candidate_assessments_sample": [],
+        "assessment_summary": {}
+      }
+    },
+    {
+      "file_path": "huiliu-data-processor/huiliu-data-processor/tests/test_call_escalate.jsonl",
+      "total_lines": 10,
+      "parsed_lines": 10,
+      "failed_lines": 0,
+      "parse_errors": {},
+      "top_level_fields": [
+        "input",
+        "model_name",
+        "session_id",
+        "target",
+        "user_reply"
+      ],
+      "fields": {
+        "input": {
+          "count": 10,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "str": 10
+          }
+        },
+        "model_name": {
+          "count": 10,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "str": 10
+          }
+        },
+        "session_id": {
+          "count": 10,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "str": 10
+          }
+        },
+        "target": {
+          "count": 10,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "str": 10
+          }
+        },
+        "user_reply": {
+          "count": 10,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "str": 10
+          }
+        }
+      },
+      "samples": [
+        {
+          "line": 1,
+          "data": {
+            "session_id": "test_call_01",
+            "model_name": "test",
+            "user_reply": "用户：好的，谢谢",
+            "input": "User: 我的订单还没到\nSystem signals: {订单配送状态: 配送中}",
+            "target": "{\"Response\": \"您好，我马上给您打电话核实情况，请注意接听。\", \"ResponseSolution\": \"无\"}"
+          }
+        },
+        {
+          "line": 2,
+          "data": {
+            "session_id": "test_call_02",
+            "model_name": "test",
+            "user_reply": "用户：好的",
+            "input": "User: 骑手没联系我\nSystem signals: {订单配送状态: 配送中}",
+            "target": "{\"Response\": \"好的，我为您联系骑手，稍后会给您回电。\", \"ResponseSolution\": \"外呼骑手-核实情况\"}"
+          }
+        },
+        {
+          "line": 3,
+          "data": {
+            "session_id": "test_call_03",
+            "model_name": "test",
+            "user_reply": "用户：行",
+            "input": "User: 商品有问题\nSystem signals: {订单配送状态: 已完成}",
+            "target": "{\"Response\": \"我这边会致电您了解详细情况。\", \"ResponseSolution\": \"无\"}"
+          }
+        }
+      ],
+      "session": {
+        "session_id_exists": true,
+        "session_field_used_for_stats": "session_id",
+        "unique_session_count": 10,
+        "duplicate_session_count": 0,
+        "max_duplicate_count": 1,
+        "top_duplicates": [
+          [
+            "test_call_01",
+            1
+          ],
+          [
+            "test_call_02",
+            1
+          ],
+          [
+            "test_call_03",
+            1
+          ],
+          [
+            "test_call_04",
+            1
+          ],
+          [
+            "test_escalate_01",
+            1
+          ],
+          [
+            "test_escalate_02",
+            1
+          ],
+          [
+            "test_escalate_03",
+            1
+          ],
+          [
+            "test_escalate_04",
+            1
+          ],
+          [
+            "test_pass_01",
+            1
+          ],
+          [
+            "test_pass_02",
+            1
+          ]
+        ]
+      },
+      "distributions": {
+        "scene_or_场景_top30": [],
+        "label_or_标签_top30": [],
+        "ResponseSolution_top50": [
+          {
+            "value": "无",
+            "count": 7
+          },
+          {
+            "value": "外呼骑手-核实情况",
+            "count": 2
+          },
+          {
+            "value": "加急调度",
+            "count": 1
+          }
+        ],
+        "DialogueAgreeSolution_top50": [],
+        "model_name_or_模型名称_top30": [
+          {
+            "value": "test",
+            "count": 10
+          }
+        ]
+      },
+      "signals": {
+        "candidate_assessments_sample": [
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "text contains {key:value}-like fragments; not JSON/dict structured",
+            "extracted_count": 1
+          },
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "text contains {key:value}-like fragments; not JSON/dict structured",
+            "extracted_count": 1
+          },
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "text contains {key:value}-like fragments; not JSON/dict structured",
+            "extracted_count": 1
+          },
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "text contains {key:value}-like fragments; not JSON/dict structured",
+            "extracted_count": 1
+          },
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "text contains {key:value}-like fragments; not JSON/dict structured",
+            "extracted_count": 1
+          },
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "text contains {key:value}-like fragments; not JSON/dict structured",
+            "extracted_count": 1
+          },
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "text contains {key:value}-like fragments; not JSON/dict structured",
+            "extracted_count": 1
+          },
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "text contains {key:value}-like fragments; not JSON/dict structured",
+            "extracted_count": 1
+          },
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "text contains {key:value}-like fragments; not JSON/dict structured",
+            "extracted_count": 1
+          },
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "text contains {key:value}-like fragments; not JSON/dict structured",
+            "extracted_count": 1
+          }
+        ],
+        "assessment_summary": {
+          "text contains {key:value}-like fragments; not JSON/dict structured": 10
+        }
+      }
+    },
+    {
+      "file_path": "huiliu-data-processor/huiliu-data-processor/tests/test_call_escalate_output.jsonl",
+      "total_lines": 1,
+      "parsed_lines": 1,
+      "failed_lines": 0,
+      "parse_errors": {},
+      "top_level_fields": [
+        "input",
+        "metadata",
+        "session_id",
+        "target"
+      ],
+      "fields": {
+        "input": {
+          "count": 1,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "str": 1
+          }
+        },
+        "metadata": {
+          "count": 1,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "dict": 1
+          }
+        },
+        "session_id": {
+          "count": 1,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "str": 1
+          }
+        },
+        "target": {
+          "count": 1,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "dict": 1
+          }
+        }
+      },
+      "samples": [
+        {
+          "line": 1,
+          "data": {
+            "input": "User: 订单什么时候到\nSystem signals: {订单配送状态: 配送中}",
+            "target": {
+              "Response": "您的订单预计30分钟内送达，请耐心等待。",
+              "ResponseSolution": "无"
+            },
+            "session_id": "test_pass_01",
+            "metadata": {
+              "model_name": "test",
+              "user_reply": "用户：好的，谢谢"
+            }
+          }
+        }
+      ],
+      "session": {
+        "session_id_exists": true,
+        "session_field_used_for_stats": "session_id",
+        "unique_session_count": 1,
+        "duplicate_session_count": 0,
+        "max_duplicate_count": 1,
+        "top_duplicates": [
+          [
+            "test_pass_01",
+            1
+          ]
+        ]
+      },
+      "distributions": {
+        "scene_or_场景_top30": [],
+        "label_or_标签_top30": [],
+        "ResponseSolution_top50": [
+          {
+            "value": "无",
+            "count": 1
+          }
+        ],
+        "DialogueAgreeSolution_top50": [],
+        "model_name_or_模型名称_top30": []
+      },
+      "signals": {
+        "candidate_assessments_sample": [
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "text contains {key:value}-like fragments; not JSON/dict structured",
+            "extracted_count": 1
+          }
+        ],
+        "assessment_summary": {
+          "text contains {key:value}-like fragments; not JSON/dict structured": 1
+        }
+      }
+    },
+    {
+      "file_path": "huiliu-data-processor/huiliu-data-processor/tests/test_claim_human.jsonl",
+      "total_lines": 6,
+      "parsed_lines": 6,
+      "failed_lines": 0,
+      "parse_errors": {},
+      "top_level_fields": [
+        "context",
+        "input",
+        "model_name",
+        "session_id",
+        "target",
+        "user_reply"
+      ],
+      "fields": {
+        "context": {
+          "count": 6,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "str": 6
+          }
+        },
+        "input": {
+          "count": 6,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "str": 6
+          }
+        },
+        "model_name": {
+          "count": 6,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "str": 6
+          }
+        },
+        "session_id": {
+          "count": 6,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "str": 6
+          }
+        },
+        "target": {
+          "count": 6,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "str": 6
+          }
+        },
+        "user_reply": {
+          "count": 6,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "str": 6
+          }
+        }
+      },
+      "samples": [
+        {
+          "line": 1,
+          "data": {
+            "session_id": "test_human_1",
+            "model_name": "model_a",
+            "user_reply": "用户：好的",
+            "input": "User: ...",
+            "context": "客服：您好，有什么可以帮您的？\n用户：你是人工吗？",
+            "target": "{\"Response\": \"是的，我是真人客服，很高兴为您服务\", \"ResponseSolution\": \"无\", \"DialogueAgreeSolution\": \"是\"}"
+          }
+        },
+        {
+          "line": 2,
+          "data": {
+            "session_id": "test_human_2",
+            "model_name": "model_a",
+            "user_reply": "用户：好的",
+            "input": "User: ...",
+            "context": "客服：您好，有什么可以帮您的？\n用户：你是人工吗？",
+            "target": "{\"Response\": \"我是智能客服，很高兴为您服务\", \"ResponseSolution\": \"无\", \"DialogueAgreeSolution\": \"是\"}"
+          }
+        },
+        {
+          "line": 3,
+          "data": {
+            "session_id": "test_human_3",
+            "model_name": "model_a",
+            "user_reply": "用户：好的",
+            "input": "User: ...",
+            "context": "客服：您好，有什么可以帮您的？",
+            "target": "{\"Response\": \"我就是人工客服，可以帮您处理\", \"ResponseSolution\": \"无\", \"DialogueAgreeSolution\": \"是\"}"
+          }
+        }
+      ],
+      "session": {
+        "session_id_exists": true,
+        "session_field_used_for_stats": "session_id",
+        "unique_session_count": 6,
+        "duplicate_session_count": 0,
+        "max_duplicate_count": 1,
+        "top_duplicates": [
+          [
+            "test_human_1",
+            1
+          ],
+          [
+            "test_human_2",
+            1
+          ],
+          [
+            "test_human_3",
+            1
+          ],
+          [
+            "test_human_4",
+            1
+          ],
+          [
+            "test_human_5",
+            1
+          ],
+          [
+            "test_human_6",
+            1
+          ]
+        ]
+      },
+      "distributions": {
+        "scene_or_场景_top30": [],
+        "label_or_标签_top30": [],
+        "ResponseSolution_top50": [
+          {
+            "value": "无",
+            "count": 5
+          },
+          {
+            "value": "小象整单申请退款",
+            "count": 1
+          }
+        ],
+        "DialogueAgreeSolution_top50": [
+          {
+            "value": "是",
+            "count": 6
+          }
+        ],
+        "model_name_or_模型名称_top30": [
+          {
+            "value": "model_a",
+            "count": 6
+          }
+        ]
+      },
+      "signals": {
+        "candidate_assessments_sample": [
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "no signal marker found in text",
+            "extracted_count": 0
+          },
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "no signal marker found in text",
+            "extracted_count": 0
+          },
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "no signal marker found in text",
+            "extracted_count": 0
+          },
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "no signal marker found in text",
+            "extracted_count": 0
+          },
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "no signal marker found in text",
+            "extracted_count": 0
+          },
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "no signal marker found in text",
+            "extracted_count": 0
+          }
+        ],
+        "assessment_summary": {
+          "no signal marker found in text": 6
+        }
+      }
+    },
+    {
+      "file_path": "huiliu-data-processor/huiliu-data-processor/tests/test_claim_human_output.jsonl",
+      "total_lines": 1,
+      "parsed_lines": 1,
+      "failed_lines": 0,
+      "parse_errors": {},
+      "top_level_fields": [
+        "input",
+        "metadata",
+        "session_id",
+        "target"
+      ],
+      "fields": {
+        "input": {
+          "count": 1,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "str": 1
+          }
+        },
+        "metadata": {
+          "count": 1,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "dict": 1
+          }
+        },
+        "session_id": {
+          "count": 1,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "str": 1
+          }
+        },
+        "target": {
+          "count": 1,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "dict": 1
+          }
+        }
+      },
+      "samples": [
+        {
+          "line": 1,
+          "data": {
+            "input": "User: ...",
+            "target": {
+              "Response": "好的，我会帮您处理退款申请",
+              "ResponseSolution": "小象整单申请退款",
+              "DialogueAgreeSolution": "是"
+            },
+            "session_id": "test_human_5",
+            "metadata": {
+              "model_name": "model_a",
+              "user_reply": "用户：好的"
+            }
+          }
+        }
+      ],
+      "session": {
+        "session_id_exists": true,
+        "session_field_used_for_stats": "session_id",
+        "unique_session_count": 1,
+        "duplicate_session_count": 0,
+        "max_duplicate_count": 1,
+        "top_duplicates": [
+          [
+            "test_human_5",
+            1
+          ]
+        ]
+      },
+      "distributions": {
+        "scene_or_场景_top30": [],
+        "label_or_标签_top30": [],
+        "ResponseSolution_top50": [
+          {
+            "value": "小象整单申请退款",
+            "count": 1
+          }
+        ],
+        "DialogueAgreeSolution_top50": [
+          {
+            "value": "是",
+            "count": 1
+          }
+        ],
+        "model_name_or_模型名称_top30": []
+      },
+      "signals": {
+        "candidate_assessments_sample": [
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "no signal marker found in text",
+            "extracted_count": 0
+          }
+        ],
+        "assessment_summary": {
+          "no signal marker found in text": 1
+        }
+      }
+    },
+    {
+      "file_path": "huiliu-data-processor/huiliu-data-processor/tests/test_data_with_user_reply.jsonl",
+      "total_lines": 7,
+      "parsed_lines": 7,
+      "failed_lines": 0,
+      "parse_errors": {},
+      "top_level_fields": [
+        "input",
+        "model_name",
+        "session_id",
+        "target",
+        "user_reply"
+      ],
+      "fields": {
+        "input": {
+          "count": 7,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "str": 7
+          }
+        },
+        "model_name": {
+          "count": 7,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "str": 7
+          }
+        },
+        "session_id": {
+          "count": 7,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "str": 7
+          }
+        },
+        "target": {
+          "count": 7,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "str": 7
+          }
+        },
+        "user_reply": {
+          "count": 7,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "str": 7
+          }
+        }
+      },
+      "samples": [
+        {
+          "line": 1,
+          "data": {
+            "session_id": "test001",
+            "model_name": "model_a",
+            "user_reply": "用户：好的，谢谢",
+            "input": "User: ...",
+            "target": "{\"Response\": \"好的，我已经为您申请了退款\", \"ResponseSolution\": \"小象整单申请退款\", \"DialogueAgreeSolution\": \"是\"}"
+          }
+        },
+        {
+          "line": 2,
+          "data": {
+            "session_id": "test002",
+            "model_name": "model_a",
+            "user_reply": "用户：不行，我不满意",
+            "input": "User: ...",
+            "target": "{\"Response\": \"好的，我会处理\", \"ResponseSolution\": \"无\", \"DialogueAgreeSolution\": \"否\"}"
+          }
+        },
+        {
+          "line": 3,
+          "data": {
+            "session_id": "test003",
+            "model_name": "model_a",
+            "user_reply": "用户：好的",
+            "input": "User: ...",
+            "target": "{\"Response\": \"您可以安排上门取件，我们会取回商品\", \"ResponseSolution\": \"无\", \"DialogueAgreeSolution\": \"是\"}"
+          }
+        }
+      ],
+      "session": {
+        "session_id_exists": true,
+        "session_field_used_for_stats": "session_id",
+        "unique_session_count": 7,
+        "duplicate_session_count": 0,
+        "max_duplicate_count": 1,
+        "top_duplicates": [
+          [
+            "test001",
+            1
+          ],
+          [
+            "test002",
+            1
+          ],
+          [
+            "test003",
+            1
+          ],
+          [
+            "test004",
+            1
+          ],
+          [
+            "test005",
+            1
+          ],
+          [
+            "test006",
+            1
+          ],
+          [
+            "test007",
+            1
+          ]
+        ]
+      },
+      "distributions": {
+        "scene_or_场景_top30": [],
+        "label_or_标签_top30": [],
+        "ResponseSolution_top50": [
+          {
+            "value": "无",
+            "count": 4
+          },
+          {
+            "value": "操作赔付-优惠券-5元",
+            "count": 2
+          },
+          {
+            "value": "小象整单申请退款",
+            "count": 1
+          }
+        ],
+        "DialogueAgreeSolution_top50": [
+          {
+            "value": "是",
+            "count": 6
+          },
+          {
+            "value": "否",
+            "count": 1
+          }
+        ],
+        "model_name_or_模型名称_top30": [
+          {
+            "value": "model_a",
+            "count": 7
+          }
+        ]
+      },
+      "signals": {
+        "candidate_assessments_sample": [
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "no signal marker found in text",
+            "extracted_count": 0
+          },
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "no signal marker found in text",
+            "extracted_count": 0
+          },
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "no signal marker found in text",
+            "extracted_count": 0
+          },
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "no signal marker found in text",
+            "extracted_count": 0
+          },
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "no signal marker found in text",
+            "extracted_count": 0
+          },
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "no signal marker found in text",
+            "extracted_count": 0
+          },
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "no signal marker found in text",
+            "extracted_count": 0
+          }
+        ],
+        "assessment_summary": {
+          "no signal marker found in text": 7
+        }
+      }
+    },
+    {
+      "file_path": "huiliu-data-processor/huiliu-data-processor/tests/test_new_rules.jsonl",
+      "total_lines": 8,
+      "parsed_lines": 8,
+      "failed_lines": 0,
+      "parse_errors": {},
+      "top_level_fields": [
+        "input",
+        "model_name",
+        "session_id",
+        "target",
+        "user_reply"
+      ],
+      "fields": {
+        "input": {
+          "count": 8,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "str": 8
+          }
+        },
+        "model_name": {
+          "count": 8,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "str": 8
+          }
+        },
+        "session_id": {
+          "count": 8,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "str": 8
+          }
+        },
+        "target": {
+          "count": 8,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "str": 8
+          }
+        },
+        "user_reply": {
+          "count": 8,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "str": 8
+          }
+        }
+      },
+      "samples": [
+        {
+          "line": 1,
+          "data": {
+            "session_id": "test_manual_1",
+            "model_name": "model_a",
+            "user_reply": "用户：好的，转人工",
+            "input": "User: ...",
+            "target": "{\"Response\": \"好的，我会尽快为您处理这个问题\", \"ResponseSolution\": \"无\", \"DialogueAgreeSolution\": \"是\"}"
+          }
+        },
+        {
+          "line": 2,
+          "data": {
+            "session_id": "test_manual_2",
+            "model_name": "model_a",
+            "user_reply": "用户：好的",
+            "input": "User: ...",
+            "target": "{\"Response\": \"我会帮您申诉处理，请稍等片刻\", \"ResponseSolution\": \"无\", \"DialogueAgreeSolution\": \"是\"}"
+          }
+        },
+        {
+          "line": 3,
+          "data": {
+            "session_id": "test_signal_1",
+            "model_name": "model_a",
+            "user_reply": "用户：好的",
+            "input": "User: ...\n{订单骑手状态:配送中}\n{订单门店状态:已接单}\n",
+            "target": "{\"Response\": \"好的，我为您加急调度处理\", \"ResponseSolution\": \"加急调度\", \"DialogueAgreeSolution\": \"是\"}"
+          }
+        }
+      ],
+      "session": {
+        "session_id_exists": true,
+        "session_field_used_for_stats": "session_id",
+        "unique_session_count": 8,
+        "duplicate_session_count": 0,
+        "max_duplicate_count": 1,
+        "top_duplicates": [
+          [
+            "test_manual_1",
+            1
+          ],
+          [
+            "test_manual_2",
+            1
+          ],
+          [
+            "test_signal_1",
+            1
+          ],
+          [
+            "test_signal_2",
+            1
+          ],
+          [
+            "test_compensation_1",
+            1
+          ],
+          [
+            "test_compensation_2",
+            1
+          ],
+          [
+            "test_cancel_1",
+            1
+          ],
+          [
+            "test_cancel_2",
+            1
+          ]
+        ]
+      },
+      "distributions": {
+        "scene_or_场景_top30": [],
+        "label_or_标签_top30": [],
+        "ResponseSolution_top50": [
+          {
+            "value": "无",
+            "count": 2
+          },
+          {
+            "value": "加急调度",
+            "count": 2
+          },
+          {
+            "value": "操作赔付-优惠券-5元",
+            "count": 2
+          },
+          {
+            "value": "取消订单",
+            "count": 2
+          }
+        ],
+        "DialogueAgreeSolution_top50": [
+          {
+            "value": "是",
+            "count": 8
+          }
+        ],
+        "model_name_or_模型名称_top30": [
+          {
+            "value": "model_a",
+            "count": 8
+          }
+        ]
+      },
+      "signals": {
+        "candidate_assessments_sample": [
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "no signal marker found in text",
+            "extracted_count": 0
+          },
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "no signal marker found in text",
+            "extracted_count": 0
+          },
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "text contains {key:value}-like fragments; not JSON/dict structured",
+            "extracted_count": 2
+          },
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "text contains {key:value}-like fragments; not JSON/dict structured",
+            "extracted_count": 1
+          },
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "text contains {key:value}-like fragments; not JSON/dict structured",
+            "extracted_count": 1
+          },
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "text contains {key:value}-like fragments; not JSON/dict structured",
+            "extracted_count": 1
+          },
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "text contains {key:value}-like fragments; not JSON/dict structured",
+            "extracted_count": 1
+          },
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "text contains {key:value}-like fragments; not JSON/dict structured",
+            "extracted_count": 1
+          }
+        ],
+        "assessment_summary": {
+          "text contains {key:value}-like fragments; not JSON/dict structured": 6,
+          "no signal marker found in text": 2
+        }
+      }
+    },
+    {
+      "file_path": "huiliu-data-processor/huiliu-data-processor/tests/test_new_rules_output.jsonl",
+      "total_lines": 3,
+      "parsed_lines": 3,
+      "failed_lines": 0,
+      "parse_errors": {},
+      "top_level_fields": [
+        "input",
+        "metadata",
+        "session_id",
+        "target"
+      ],
+      "fields": {
+        "input": {
+          "count": 3,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "str": 3
+          }
+        },
+        "metadata": {
+          "count": 3,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "dict": 3
+          }
+        },
+        "session_id": {
+          "count": 3,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "str": 3
+          }
+        },
+        "target": {
+          "count": 3,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "dict": 3
+          }
+        }
+      },
+      "samples": [
+        {
+          "line": 1,
+          "data": {
+            "input": "User: ...\n{订单骑手状态:无骑手接单}\n",
+            "target": {
+              "Response": "好的，我为您加急调度处理",
+              "ResponseSolution": "加急调度",
+              "DialogueAgreeSolution": "是"
+            },
+            "session_id": "test_signal_2",
+            "metadata": {
+              "model_name": "model_a",
+              "user_reply": "用户：好的"
+            }
+          }
+        },
+        {
+          "line": 2,
+          "data": {
+            "input": "User: ...\n{订单是否可赔付:是}\n",
+            "target": {
+              "Response": "好的，我为您申请赔付优惠券",
+              "ResponseSolution": "操作赔付-优惠券-5元",
+              "DialogueAgreeSolution": "是"
+            },
+            "session_id": "test_compensation_2",
+            "metadata": {
+              "model_name": "model_a",
+              "user_reply": "用户：好的"
+            }
+          }
+        },
+        {
+          "line": 3,
+          "data": {
+            "input": "User: ...\n{是否可取消订单:是}\n",
+            "target": {
+              "Response": "好的，我为您取消订单处理",
+              "ResponseSolution": "取消订单",
+              "DialogueAgreeSolution": "是"
+            },
+            "session_id": "test_cancel_2",
+            "metadata": {
+              "model_name": "model_a",
+              "user_reply": "用户：好的"
+            }
+          }
+        }
+      ],
+      "session": {
+        "session_id_exists": true,
+        "session_field_used_for_stats": "session_id",
+        "unique_session_count": 3,
+        "duplicate_session_count": 0,
+        "max_duplicate_count": 1,
+        "top_duplicates": [
+          [
+            "test_signal_2",
+            1
+          ],
+          [
+            "test_compensation_2",
+            1
+          ],
+          [
+            "test_cancel_2",
+            1
+          ]
+        ]
+      },
+      "distributions": {
+        "scene_or_场景_top30": [],
+        "label_or_标签_top30": [],
+        "ResponseSolution_top50": [
+          {
+            "value": "加急调度",
+            "count": 1
+          },
+          {
+            "value": "操作赔付-优惠券-5元",
+            "count": 1
+          },
+          {
+            "value": "取消订单",
+            "count": 1
+          }
+        ],
+        "DialogueAgreeSolution_top50": [
+          {
+            "value": "是",
+            "count": 3
+          }
+        ],
+        "model_name_or_模型名称_top30": []
+      },
+      "signals": {
+        "candidate_assessments_sample": [
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "text contains {key:value}-like fragments; not JSON/dict structured",
+            "extracted_count": 1
+          },
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "text contains {key:value}-like fragments; not JSON/dict structured",
+            "extracted_count": 1
+          },
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "text contains {key:value}-like fragments; not JSON/dict structured",
+            "extracted_count": 1
+          }
+        ],
+        "assessment_summary": {
+          "text contains {key:value}-like fragments; not JSON/dict structured": 3
+        }
+      }
+    },
+    {
+      "file_path": "huiliu-data-processor/huiliu-data-processor/tests/test_output.jsonl",
+      "total_lines": 2,
+      "parsed_lines": 2,
+      "failed_lines": 0,
+      "parse_errors": {},
+      "top_level_fields": [
+        "input",
+        "metadata",
+        "session_id",
+        "target"
+      ],
+      "fields": {
+        "input": {
+          "count": 2,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "str": 2
+          }
+        },
+        "metadata": {
+          "count": 2,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "dict": 2
+          }
+        },
+        "session_id": {
+          "count": 2,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "str": 2
+          }
+        },
+        "target": {
+          "count": 2,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "dict": 2
+          }
+        }
+      },
+      "samples": [
+        {
+          "line": 1,
+          "data": {
+            "input": "User: ...",
+            "target": {
+              "Response": "好的，我已经为您申请了退款",
+              "ResponseSolution": "小象整单申请退款",
+              "DialogueAgreeSolution": "是"
+            },
+            "session_id": "test001",
+            "metadata": {
+              "model_name": "model_a",
+              "user_reply": "用户：好的，谢谢"
+            }
+          }
+        },
+        {
+          "line": 2,
+          "data": {
+            "input": "User: ...",
+            "target": {
+              "Response": "已为您申请5元优惠券",
+              "ResponseSolution": "操作赔付-优惠券-5元",
+              "DialogueAgreeSolution": "是"
+            },
+            "session_id": "test007",
+            "metadata": {
+              "model_name": "model_a",
+              "user_reply": "用户：好的"
+            }
+          }
+        }
+      ],
+      "session": {
+        "session_id_exists": true,
+        "session_field_used_for_stats": "session_id",
+        "unique_session_count": 2,
+        "duplicate_session_count": 0,
+        "max_duplicate_count": 1,
+        "top_duplicates": [
+          [
+            "test001",
+            1
+          ],
+          [
+            "test007",
+            1
+          ]
+        ]
+      },
+      "distributions": {
+        "scene_or_场景_top30": [],
+        "label_or_标签_top30": [],
+        "ResponseSolution_top50": [
+          {
+            "value": "小象整单申请退款",
+            "count": 1
+          },
+          {
+            "value": "操作赔付-优惠券-5元",
+            "count": 1
+          }
+        ],
+        "DialogueAgreeSolution_top50": [
+          {
+            "value": "是",
+            "count": 2
+          }
+        ],
+        "model_name_or_模型名称_top30": []
+      },
+      "signals": {
+        "candidate_assessments_sample": [
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "no signal marker found in text",
+            "extracted_count": 0
+          },
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "no signal marker found in text",
+            "extracted_count": 0
+          }
+        ],
+        "assessment_summary": {
+          "no signal marker found in text": 2
+        }
+      }
+    },
+    {
+      "file_path": "huiliu-data-processor/huiliu-data-processor/tests/test_refund_output.jsonl",
+      "total_lines": 3,
+      "parsed_lines": 3,
+      "failed_lines": 0,
+      "parse_errors": {},
+      "top_level_fields": [
+        "input",
+        "metadata",
+        "session_id",
+        "target"
+      ],
+      "fields": {
+        "input": {
+          "count": 3,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "str": 3
+          }
+        },
+        "metadata": {
+          "count": 3,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "dict": 3
+          }
+        },
+        "session_id": {
+          "count": 3,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "str": 3
+          }
+        },
+        "target": {
+          "count": 3,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "dict": 3
+          }
+        }
+      },
+      "samples": [
+        {
+          "line": 1,
+          "data": {
+            "input": "User: ...\n{'商品名称': '苹果', '商品退款状态': '可退款'}\n",
+            "target": {
+              "Response": "好的，已为您申请退款，请耐心等待",
+              "ResponseSolution": "小象整单申请退款",
+              "DialogueAgreeSolution": "是"
+            },
+            "session_id": "test_refund_2",
+            "metadata": {
+              "model_name": "model_a",
+              "user_reply": "用户：好的"
+            }
+          }
+        },
+        {
+          "line": 2,
+          "data": {
+            "input": "User: ...\n{'商品名称': '苹果', '商品退款状态': '不可退款 已全部退款'}\n",
+            "target": {
+              "Response": "好的，已退款成功，请查收",
+              "ResponseSolution": "无",
+              "DialogueAgreeSolution": "是"
+            },
+            "session_id": "test_refund_3",
+            "metadata": {
+              "model_name": "model_a",
+              "user_reply": "用户：好的"
+            }
+          }
+        },
+        {
+          "line": 3,
+          "data": {
+            "input": "User: ...\n{'商品名称': '苹果', '商品退款状态': '可退款'}\n",
+            "target": {
+              "Response": "好的，已操作退款，正在审核中",
+              "ResponseSolution": "小象整单申请退款",
+              "DialogueAgreeSolution": "是"
+            },
+            "session_id": "test_refund_5",
+            "metadata": {
+              "model_name": "model_a",
+              "user_reply": "用户：好的"
+            }
+          }
+        }
+      ],
+      "session": {
+        "session_id_exists": true,
+        "session_field_used_for_stats": "session_id",
+        "unique_session_count": 3,
+        "duplicate_session_count": 0,
+        "max_duplicate_count": 1,
+        "top_duplicates": [
+          [
+            "test_refund_2",
+            1
+          ],
+          [
+            "test_refund_3",
+            1
+          ],
+          [
+            "test_refund_5",
+            1
+          ]
+        ]
+      },
+      "distributions": {
+        "scene_or_场景_top30": [],
+        "label_or_标签_top30": [],
+        "ResponseSolution_top50": [
+          {
+            "value": "小象整单申请退款",
+            "count": 2
+          },
+          {
+            "value": "无",
+            "count": 1
+          }
+        ],
+        "DialogueAgreeSolution_top50": [
+          {
+            "value": "是",
+            "count": 3
+          }
+        ],
+        "model_name_or_模型名称_top30": []
+      },
+      "signals": {
+        "candidate_assessments_sample": [
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "text contains {key:value}-like fragments; not JSON/dict structured",
+            "extracted_count": 1
+          },
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "text contains {key:value}-like fragments; not JSON/dict structured",
+            "extracted_count": 1
+          },
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "text contains {key:value}-like fragments; not JSON/dict structured",
+            "extracted_count": 1
+          }
+        ],
+        "assessment_summary": {
+          "text contains {key:value}-like fragments; not JSON/dict structured": 3
+        }
+      }
+    },
+    {
+      "file_path": "huiliu-data-processor/huiliu-data-processor/tests/test_refund_overpromise.jsonl",
+      "total_lines": 6,
+      "parsed_lines": 6,
+      "failed_lines": 0,
+      "parse_errors": {},
+      "top_level_fields": [
+        "input",
+        "model_name",
+        "session_id",
+        "target",
+        "user_reply"
+      ],
+      "fields": {
+        "input": {
+          "count": 6,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "str": 6
+          }
+        },
+        "model_name": {
+          "count": 6,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "str": 6
+          }
+        },
+        "session_id": {
+          "count": 6,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "str": 6
+          }
+        },
+        "target": {
+          "count": 6,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "str": 6
+          }
+        },
+        "user_reply": {
+          "count": 6,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "str": 6
+          }
+        }
+      },
+      "samples": [
+        {
+          "line": 1,
+          "data": {
+            "session_id": "test_refund_1",
+            "model_name": "model_a",
+            "user_reply": "用户：好的",
+            "input": "User: ...\n{'商品名称': '苹果', '商品退款状态': '可退款'}\n",
+            "target": "{\"Response\": \"好的，已退款成功，请查收\", \"ResponseSolution\": \"小象整单申请退款\", \"DialogueAgreeSolution\": \"是\"}"
+          }
+        },
+        {
+          "line": 2,
+          "data": {
+            "session_id": "test_refund_2",
+            "model_name": "model_a",
+            "user_reply": "用户：好的",
+            "input": "User: ...\n{'商品名称': '苹果', '商品退款状态': '可退款'}\n",
+            "target": "{\"Response\": \"好的，已为您申请退款，请耐心等待\", \"ResponseSolution\": \"小象整单申请退款\", \"DialogueAgreeSolution\": \"是\"}"
+          }
+        },
+        {
+          "line": 3,
+          "data": {
+            "session_id": "test_refund_3",
+            "model_name": "model_a",
+            "user_reply": "用户：好的",
+            "input": "User: ...\n{'商品名称': '苹果', '商品退款状态': '不可退款 已全部退款'}\n",
+            "target": "{\"Response\": \"好的，已退款成功，请查收\", \"ResponseSolution\": \"无\", \"DialogueAgreeSolution\": \"是\"}"
+          }
+        }
+      ],
+      "session": {
+        "session_id_exists": true,
+        "session_field_used_for_stats": "session_id",
+        "unique_session_count": 6,
+        "duplicate_session_count": 0,
+        "max_duplicate_count": 1,
+        "top_duplicates": [
+          [
+            "test_refund_1",
+            1
+          ],
+          [
+            "test_refund_2",
+            1
+          ],
+          [
+            "test_refund_3",
+            1
+          ],
+          [
+            "test_refund_4",
+            1
+          ],
+          [
+            "test_refund_5",
+            1
+          ],
+          [
+            "test_refund_6",
+            1
+          ]
+        ]
+      },
+      "distributions": {
+        "scene_or_场景_top30": [],
+        "label_or_标签_top30": [],
+        "ResponseSolution_top50": [
+          {
+            "value": "小象整单申请退款",
+            "count": 3
+          },
+          {
+            "value": "无",
+            "count": 3
+          }
+        ],
+        "DialogueAgreeSolution_top50": [
+          {
+            "value": "是",
+            "count": 6
+          }
+        ],
+        "model_name_or_模型名称_top30": [
+          {
+            "value": "model_a",
+            "count": 6
+          }
+        ]
+      },
+      "signals": {
+        "candidate_assessments_sample": [
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "text contains {key:value}-like fragments; not JSON/dict structured",
+            "extracted_count": 1
+          },
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "text contains {key:value}-like fragments; not JSON/dict structured",
+            "extracted_count": 1
+          },
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "text contains {key:value}-like fragments; not JSON/dict structured",
+            "extracted_count": 1
+          },
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "text contains {key:value}-like fragments; not JSON/dict structured",
+            "extracted_count": 1
+          },
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "text contains {key:value}-like fragments; not JSON/dict structured",
+            "extracted_count": 1
+          },
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "text contains {key:value}-like fragments; not JSON/dict structured",
+            "extracted_count": 1
+          }
+        ],
+        "assessment_summary": {
+          "text contains {key:value}-like fragments; not JSON/dict structured": 6
+        }
+      }
+    },
+    {
+      "file_path": "huiliu-data-processor/huiliu-data-processor/tests/test_xiaoxiang_refund.jsonl",
+      "total_lines": 7,
+      "parsed_lines": 7,
+      "failed_lines": 0,
+      "parse_errors": {},
+      "top_level_fields": [
+        "context",
+        "input",
+        "model_name",
+        "session_id",
+        "target",
+        "user_reply"
+      ],
+      "fields": {
+        "context": {
+          "count": 7,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "str": 7
+          }
+        },
+        "input": {
+          "count": 7,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "str": 7
+          }
+        },
+        "model_name": {
+          "count": 7,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "str": 7
+          }
+        },
+        "session_id": {
+          "count": 7,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "str": 7
+          }
+        },
+        "target": {
+          "count": 7,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "str": 7
+          }
+        },
+        "user_reply": {
+          "count": 7,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "str": 7
+          }
+        }
+      },
+      "samples": [
+        {
+          "line": 1,
+          "data": {
+            "session_id": "test_xx_fail_01",
+            "model_name": "test",
+            "user_reply": "用户：好的，谢谢",
+            "context": "用户：我要退款\n客服：好的，请稍等",
+            "input": "User: 我要退款\nSystem signals: {订单配送状态: 已完成}",
+            "target": "{\"Response\": \"好的，我帮您申请单商品退款。\", \"ResponseSolution\": \"小象单商品退款-50%\"}"
+          }
+        },
+        {
+          "line": 2,
+          "data": {
+            "session_id": "test_xx_fail_02",
+            "model_name": "test",
+            "user_reply": "用户：好的",
+            "context": "用户：商品有问题\n客服：请问是哪个商品呢？\n用户：就那个",
+            "input": "User: 商品有问题\nSystem signals: {订单配送状态: 已完成}",
+            "target": "{\"Response\": \"好的，我为您操作退款。\", \"ResponseSolution\": \"小象-单商品退款-100%\"}"
+          }
+        },
+        {
+          "line": 3,
+          "data": {
+            "session_id": "test_xx_pass_01",
+            "model_name": "test",
+            "user_reply": "用户：好的，谢谢",
+            "context": "用户：我要退款\n客服：好的，请您选择需要退款的商品\n用户：选择了第一个",
+            "input": "User: 我要退款\nSystem signals: {订单配送状态: 已完成}",
+            "target": "{\"Response\": \"好的，我帮您申请单商品退款。\", \"ResponseSolution\": \"小象单商品退款-50%\"}"
+          }
+        }
+      ],
+      "session": {
+        "session_id_exists": true,
+        "session_field_used_for_stats": "session_id",
+        "unique_session_count": 7,
+        "duplicate_session_count": 0,
+        "max_duplicate_count": 1,
+        "top_duplicates": [
+          [
+            "test_xx_fail_01",
+            1
+          ],
+          [
+            "test_xx_fail_02",
+            1
+          ],
+          [
+            "test_xx_pass_01",
+            1
+          ],
+          [
+            "test_xx_pass_02",
+            1
+          ],
+          [
+            "test_xx_pass_03",
+            1
+          ],
+          [
+            "test_other_solution_01",
+            1
+          ],
+          [
+            "test_other_solution_02",
+            1
+          ]
+        ]
+      },
+      "distributions": {
+        "scene_or_场景_top30": [],
+        "label_or_标签_top30": [],
+        "ResponseSolution_top50": [
+          {
+            "value": "小象单商品退款-50%",
+            "count": 2
+          },
+          {
+            "value": "小象-单商品退款-100%",
+            "count": 2
+          },
+          {
+            "value": "小象单商品退款-80%",
+            "count": 1
+          },
+          {
+            "value": "小象整单申请退款",
+            "count": 1
+          },
+          {
+            "value": "加急调度",
+            "count": 1
+          }
+        ],
+        "DialogueAgreeSolution_top50": [],
+        "model_name_or_模型名称_top30": [
+          {
+            "value": "test",
+            "count": 7
+          }
+        ]
+      },
+      "signals": {
+        "candidate_assessments_sample": [
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "text contains {key:value}-like fragments; not JSON/dict structured",
+            "extracted_count": 1
+          },
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "text contains {key:value}-like fragments; not JSON/dict structured",
+            "extracted_count": 1
+          },
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "text contains {key:value}-like fragments; not JSON/dict structured",
+            "extracted_count": 1
+          },
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "text contains {key:value}-like fragments; not JSON/dict structured",
+            "extracted_count": 1
+          },
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "text contains {key:value}-like fragments; not JSON/dict structured",
+            "extracted_count": 1
+          },
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "text contains {key:value}-like fragments; not JSON/dict structured",
+            "extracted_count": 1
+          },
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "text contains {key:value}-like fragments; not JSON/dict structured",
+            "extracted_count": 1
+          }
+        ],
+        "assessment_summary": {
+          "text contains {key:value}-like fragments; not JSON/dict structured": 7
+        }
+      }
+    },
+    {
+      "file_path": "huiliu-data-processor/huiliu-data-processor/tests/test_xiaoxiang_refund_output.jsonl",
+      "total_lines": 4,
+      "parsed_lines": 4,
+      "failed_lines": 0,
+      "parse_errors": {},
+      "top_level_fields": [
+        "input",
+        "metadata",
+        "session_id",
+        "target"
+      ],
+      "fields": {
+        "input": {
+          "count": 4,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "str": 4
+          }
+        },
+        "metadata": {
+          "count": 4,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "dict": 4
+          }
+        },
+        "session_id": {
+          "count": 4,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "str": 4
+          }
+        },
+        "target": {
+          "count": 4,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "dict": 4
+          }
+        }
+      },
+      "samples": [
+        {
+          "line": 1,
+          "data": {
+            "input": "User: 我要退款\nSystem signals: {订单配送状态: 已完成}",
+            "target": {
+              "Response": "好的，我帮您申请单商品退款。",
+              "ResponseSolution": "小象单商品退款-50%"
+            },
+            "session_id": "test_xx_pass_01",
+            "metadata": {
+              "model_name": "test",
+              "user_reply": "用户：好的，谢谢"
+            }
+          }
+        },
+        {
+          "line": 2,
+          "data": {
+            "input": "User: 商品坏了\nSystem signals: {订单配送状态: 已完成}",
+            "target": {
+              "Response": "好的，我为您操作退款。",
+              "ResponseSolution": "小象-单商品退款-100%"
+            },
+            "session_id": "test_xx_pass_02",
+            "metadata": {
+              "model_name": "test",
+              "user_reply": "用户：好的"
+            }
+          }
+        },
+        {
+          "line": 3,
+          "data": {
+            "input": "User: 退一个商品\nSystem signals: {订单配送状态: 已完成}",
+            "target": {
+              "Response": "好的，我为您操作退款。",
+              "ResponseSolution": "小象单商品退款-80%"
+            },
+            "session_id": "test_xx_pass_03",
+            "metadata": {
+              "model_name": "test",
+              "user_reply": "用户：好的"
+            }
+          }
+        }
+      ],
+      "session": {
+        "session_id_exists": true,
+        "session_field_used_for_stats": "session_id",
+        "unique_session_count": 4,
+        "duplicate_session_count": 0,
+        "max_duplicate_count": 1,
+        "top_duplicates": [
+          [
+            "test_xx_pass_01",
+            1
+          ],
+          [
+            "test_xx_pass_02",
+            1
+          ],
+          [
+            "test_xx_pass_03",
+            1
+          ],
+          [
+            "test_other_solution_01",
+            1
+          ]
+        ]
+      },
+      "distributions": {
+        "scene_or_场景_top30": [],
+        "label_or_标签_top30": [],
+        "ResponseSolution_top50": [
+          {
+            "value": "小象单商品退款-50%",
+            "count": 1
+          },
+          {
+            "value": "小象-单商品退款-100%",
+            "count": 1
+          },
+          {
+            "value": "小象单商品退款-80%",
+            "count": 1
+          },
+          {
+            "value": "小象整单申请退款",
+            "count": 1
+          }
+        ],
+        "DialogueAgreeSolution_top50": [],
+        "model_name_or_模型名称_top30": []
+      },
+      "signals": {
+        "candidate_assessments_sample": [
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "text contains {key:value}-like fragments; not JSON/dict structured",
+            "extracted_count": 1
+          },
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "text contains {key:value}-like fragments; not JSON/dict structured",
+            "extracted_count": 1
+          },
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "text contains {key:value}-like fragments; not JSON/dict structured",
+            "extracted_count": 1
+          },
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "text contains {key:value}-like fragments; not JSON/dict structured",
+            "extracted_count": 1
+          }
+        ],
+        "assessment_summary": {
+          "text contains {key:value}-like fragments; not JSON/dict structured": 4
+        }
+      }
+    },
+    {
+      "file_path": "xx_all_scene_service_v2_0408_signals_sort_process_multiple_chuli.jsonl",
+      "total_lines": 13524,
+      "parsed_lines": 13524,
+      "failed_lines": 0,
+      "parse_errors": {},
+      "top_level_fields": [
+        "input",
+        "sessionId",
+        "source",
+        "target",
+        "问题场景"
+      ],
+      "fields": {
+        "input": {
+          "count": 13524,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "str": 13524
+          }
+        },
+        "sessionId": {
+          "count": 13524,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "int": 13524
+          }
+        },
+        "source": {
+          "count": 13524,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "str": 13524
+          }
+        },
+        "target": {
+          "count": 13524,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "str": 13524
+          }
+        },
+        "问题场景": {
+          "count": 13524,
+          "missing_count": 0,
+          "missing_rate": 0.0,
+          "types": {
+            "str": 13524
+          }
+        }
+      },
+      "samples": [
+        {
+          "line": 1,
+          "data": {
+            "sessionId": 2017995630392295439,
+            "问题场景": "履约场景-配送问题",
+            "source": "",
+            "input": "User:\n你的名字叫团团，你是美团的智能客服助理。用户现在向你反馈美团业务的相关问题，你将收到方案列表、系统信号、对话历史等作为输入。\n请你根据提供的所有信息，按步骤执行以下任务：\n1. 输出客服在下一轮的最佳回复，要求输出格式为“客服:xxx”。\n2. 分析上述最佳回复中是否包含“方案列表”中的方案，输出方案名称或“无”。\n3. 查看对话历史的结尾部分，分析用户和客服是否就某个待执行方案达成一致，输出方案名称或“无”。\n4. 将以上信息整合成JSON格式输出：{\"Response\":\"[最佳回复]\", \"ResponseSolution\":\"[方案名称/无]\", \"DialogueAgreeSolution\":\"[方案名称/无]\"}\n\n## 你查询到的方案列表\n{\"name\": \"加急调度\", \"description\": \"当“订单骑手状态”信号值为“无骑手接单”时，即可向用户表示已经加急扩大调度骑手的范围\"}\n{\"name\": \"系统催单\", \"description\": \"符合催促履约的信号，即可向用户表示已经催促门店分拣/骑手配送\"}\n{\"name\": \"智能跟单\", \"description\": \"符合催促履约的信号，在结束对话时告知用户会持续跟进配送进度\"}\n{\"name\": \"取消订单\", \"description\": \"符合可取消订单的信号，用户同意后执行取消订单\"}\n{\"name\": \"操作赔付-优惠券-xx元\", \"description\": \"符合订单可赔付的信号，以优惠券形式给用户提供赔偿（优惠券仅有六个档位：3元、5元、8元、10元、15元、20元）\"}\n{\"name\": \"操作赔付-运费券-3元\", \"description\": \"符合订单可赔付的信号，以优惠券形式给用户提供赔偿（运费券仅有3元）\"}\n{\"name\": \"选择商品\", \"description\": \"指引用户选择要咨询的商品\"}\n{\"name\": \"发送送达图片\", \"description\": \"若用户反馈未找到包裹，可提供骑手送达时的现场照片，辅助用户寻找\"}\n{\"n...[截断]",
+            "target": "{\"Response\": \"客服:我也是可以帮您处理的，辛苦您详细说下您遇到的问题\", \"ResponseSolution\": \"无\", \"DialogueAgreeSolution\": \"无\"}"
+          }
+        },
+        {
+          "line": 2,
+          "data": {
+            "sessionId": 2017995630392295439,
+            "问题场景": "履约场景-配送问题",
+            "source": "",
+            "input": "User:\n你的名字叫团团，你是美团的智能客服助理。用户现在向你反馈美团业务的相关问题，你将收到方案列表、系统信号、对话历史等作为输入。\n请你根据提供的所有信息，按步骤执行以下任务：\n1. 输出客服在下一轮的最佳回复，要求输出格式为“客服:xxx”。\n2. 分析上述最佳回复中是否包含“方案列表”中的方案，输出方案名称或“无”。\n3. 查看对话历史的结尾部分，分析用户和客服是否就某个待执行方案达成一致，输出方案名称或“无”。\n4. 将以上信息整合成JSON格式输出：{\"Response\":\"[最佳回复]\", \"ResponseSolution\":\"[方案名称/无]\", \"DialogueAgreeSolution\":\"[方案名称/无]\"}\n\n## 你查询到的方案列表\n{\"name\": \"加急调度\", \"description\": \"当“订单骑手状态”信号值为“无骑手接单”时，即可向用户表示已经加急扩大调度骑手的范围\"}\n{\"name\": \"系统催单\", \"description\": \"符合催促履约的信号，即可向用户表示已经催促门店分拣/骑手配送\"}\n{\"name\": \"智能跟单\", \"description\": \"符合催促履约的信号，在结束对话时告知用户会持续跟进配送进度\"}\n{\"name\": \"取消订单\", \"description\": \"符合可取消订单的信号，用户同意后执行取消订单\"}\n{\"name\": \"操作赔付-优惠券-xx元\", \"description\": \"符合订单可赔付的信号，以优惠券形式给用户提供赔偿（优惠券仅有六个档位：3元、5元、8元、10元、15元、20元）\"}\n{\"name\": \"操作赔付-运费券-3元\", \"description\": \"符合订单可赔付的信号，以优惠券形式给用户提供赔偿（运费券仅有3元）\"}\n{\"name\": \"选择商品\", \"description\": \"指引用户选择要咨询的商品\"}\n{\"name\": \"发送送达图片\", \"description\": \"若用户反馈未找到包裹，可提供骑手送达时的现场照片，辅助用户寻找\"}\n{\"n...[截断]",
+            "target": "{\"Response\": \"客服:查询到您的订单已经取消了，您可以重新下单再次购买\", \"ResponseSolution\": \"无\", \"DialogueAgreeSolution\": \"无\"}"
+          }
+        },
+        {
+          "line": 3,
+          "data": {
+            "sessionId": 2017995630392295439,
+            "问题场景": "履约场景-配送问题",
+            "source": "",
+            "input": "User:\n你的名字叫团团，你是美团的智能客服助理。用户现在向你反馈美团业务的相关问题，你将收到方案列表、系统信号、对话历史等作为输入。\n请你根据提供的所有信息，按步骤执行以下任务：\n1. 输出客服在下一轮的最佳回复，要求输出格式为“客服:xxx”。\n2. 分析上述最佳回复中是否包含“方案列表”中的方案，输出方案名称或“无”。\n3. 查看对话历史的结尾部分，分析用户和客服是否就某个待执行方案达成一致，输出方案名称或“无”。\n4. 将以上信息整合成JSON格式输出：{\"Response\":\"[最佳回复]\", \"ResponseSolution\":\"[方案名称/无]\", \"DialogueAgreeSolution\":\"[方案名称/无]\"}\n\n## 你查询到的方案列表\n{\"name\": \"加急调度\", \"description\": \"当“订单骑手状态”信号值为“无骑手接单”时，即可向用户表示已经加急扩大调度骑手的范围\"}\n{\"name\": \"系统催单\", \"description\": \"符合催促履约的信号，即可向用户表示已经催促门店分拣/骑手配送\"}\n{\"name\": \"智能跟单\", \"description\": \"符合催促履约的信号，在结束对话时告知用户会持续跟进配送进度\"}\n{\"name\": \"取消订单\", \"description\": \"符合可取消订单的信号，用户同意后执行取消订单\"}\n{\"name\": \"操作赔付-优惠券-xx元\", \"description\": \"符合订单可赔付的信号，以优惠券形式给用户提供赔偿（优惠券仅有六个档位：3元、5元、8元、10元、15元、20元）\"}\n{\"name\": \"操作赔付-运费券-3元\", \"description\": \"符合订单可赔付的信号，以优惠券形式给用户提供赔偿（运费券仅有3元）\"}\n{\"name\": \"选择商品\", \"description\": \"指引用户选择要咨询的商品\"}\n{\"name\": \"发送送达图片\", \"description\": \"若用户反馈未找到包裹，可提供骑手送达时的现场照片，辅助用户寻找\"}\n{\"n...[截断]",
+            "target": "{\"Response\": \"客服:是的，如您需要可以重新下单再次购买，请问还有什么诉求吗\", \"ResponseSolution\": \"无\", \"DialogueAgreeSolution\": \"无\"}"
+          }
+        }
+      ],
+      "session": {
+        "session_id_exists": false,
+        "session_field_used_for_stats": "sessionId",
+        "unique_session_count": 2384,
+        "duplicate_session_count": 2363,
+        "max_duplicate_count": 24,
+        "top_duplicates": [
+          [
+            "2018259425832247332",
+            24
+          ],
+          [
+            "2035021735775318057",
+            24
+          ],
+          [
+            "2035316938033029202",
+            24
+          ],
+          [
+            "2035675996229328975",
+            22
+          ],
+          [
+            "2035312098712485893",
+            22
+          ],
+          [
+            "2035014669550907486",
+            19
+          ],
+          [
+            "2034963548879282217",
+            19
+          ],
+          [
+            "2018325758863273987",
+            18
+          ],
+          [
+            "2018631580986191888",
+            18
+          ],
+          [
+            "2035555488276459559",
+            18
+          ]
+        ]
+      },
+      "distributions": {
+        "scene_or_场景_top30": [
+          {
+            "value": "收货场景-品质问题",
+            "count": 2565
+          },
+          {
+            "value": "履约场景-修改订单问题",
+            "count": 1933
+          },
+          {
+            "value": "履约场景-配送问题",
+            "count": 1893
+          },
+          {
+            "value": "收货场景-少送问题",
+            "count": 817
+          },
+          {
+            "value": "发票场景",
+            "count": 578
+          },
+          {
+            "value": "",
+            "count": 549
+          },
+          {
+            "value": "收货场景-错送问题",
+            "count": 534
+          },
+          {
+            "value": "会员场景-续费问题",
+            "count": 403
+          },
+          {
+            "value": "收货场景-退款问题",
+            "count": 395
+          },
+          {
+            "value": "活动场景-常规活动问题",
+            "count": 363
+          },
+          {
+            "value": "会员场景-权益问题",
+            "count": 312
+          },
+          {
+            "value": "收货场景-实描不符问题",
+            "count": 266
+          },
+          {
+            "value": "会员场景-退卡问题",
+            "count": 265
+          },
+          {
+            "value": "收货场景-催退款进度",
+            "count": 255
+          },
+          {
+            "value": "活动场景-通用问题",
+            "count": 220
+          },
+          {
+            "value": "收货场景-重量不足问题",
+            "count": 218
+          },
+          {
+            "value": "其他场景-投诉问题",
+            "count": 213
+          },
+          {
+            "value": "履约场景-履约中订单缺货",
+            "count": 209
+          },
+          {
+            "value": "其他场景",
+            "count": 141
+          },
+          {
+            "value": "其他场景-账号问题",
+            "count": 138
+          },
+          {
+            "value": "长尾场景-金融",
+            "count": 126
+          },
+          {
+            "value": "金融场景-支付问题",
+            "count": 109
+          },
+          {
+            "value": "会员场景-退卡问题诉求",
+            "count": 98
+          },
+          {
+            "value": "活动场景-省钱卡问题",
+            "count": 89
+          },
+          {
+            "value": "会员场景-开通问题",
+            "count": 86
+          },
+          {
+            "value": "金融场景-功能问题",
+            "count": 86
+          },
+          {
+            "value": "其他场景-其他问题",
+            "count": 82
+          },
+          {
+            "value": "未识别",
+            "count": 76
+          },
+          {
+            "value": "履约场景-无骑手接单",
+            "count": 70
+          },
+          {
+            "value": "活动场景-常规活动问题诉求",
+            "count": 55
+          }
+        ],
+        "label_or_标签_top30": [],
+        "ResponseSolution_top50": [
+          {
+            "value": "无",
+            "count": 9712
+          },
+          {
+            "value": "选择商品",
+            "count": 734
+          },
+          {
+            "value": "小象单商品退款-100%",
+            "count": 475
+          },
+          {
+            "value": "取消订单",
+            "count": 343
+          },
+          {
+            "value": "操作赔付-优惠券-3元",
+            "count": 188
+          },
+          {
+            "value": "小象单商品退款-50%",
+            "count": 187
+          },
+          {
+            "value": "催促退款审核;退审跟单",
+            "count": 141
+          },
+          {
+            "value": "引导自助修改订单",
+            "count": 121
+          },
+          {
+            "value": "操作赔付-优惠券-8元",
+            "count": 114
+          },
+          {
+            "value": "操作赔付-优惠券-5元",
+            "count": 111
+          },
+          {
+            "value": "会员卡退款",
+            "count": 105
+          },
+          {
+            "value": "外呼骑手-协商调换货品",
+            "count": 98
+          },
+          {
+            "value": "开发票",
+            "count": 96
+          },
+          {
+            "value": "小象单商品退款-30%",
+            "count": 88
+          },
+          {
+            "value": "管理会员自动续费",
+            "count": 88
+          },
+          {
+            "value": "小象单商品退款-20%",
+            "count": 69
+          },
+          {
+            "value": "操作赔付-优惠券-10元",
+            "count": 65
+          },
+          {
+            "value": "小象整单申请退款",
+            "count": 55
+          },
+          {
+            "value": "操作赔付-优惠券-15元",
+            "count": 51
+          },
+          {
+            "value": "小象单商品退款-40%",
+            "count": 50
+          },
+          {
+            "value": "加急催促退款审核",
+            "count": 47
+          },
+          {
+            "value": "系统催单",
+            "count": 44
+          },
+          {
+            "value": "小象单商品退款-10%",
+            "count": 37
+          },
+          {
+            "value": "智能跟单",
+            "count": 36
+          },
+          {
+            "value": "外呼骑手-催促配送",
+            "count": 33
+          },
+          {
+            "value": "小象单商品退款-70%",
+            "count": 32
+          },
+          {
+            "value": "再次外呼骑手-协商调换货品",
+            "count": 31
+          },
+          {
+            "value": "小象单商品退款-80%",
+            "count": 31
+          },
+          {
+            "value": "操作赔付-优惠券-20元",
+            "count": 28
+          },
+          {
+            "value": "引导自助联系骑手",
+            "count": 27
+          },
+          {
+            "value": "外呼骑手-修改订单",
+            "count": 26
+          },
+          {
+            "value": "无骑手接单跟单",
+            "count": 26
+          },
+          {
+            "value": "发送送达图片",
+            "count": 26
+          },
+          {
+            "value": "再次外呼骑手-催促配送",
+            "count": 24
+          },
+          {
+            "value": "小象单商品退款-60%",
+            "count": 23
+          },
+          {
+            "value": "引导自助查看会员权益",
+            "count": 18
+          },
+          {
+            "value": "催促退款审核",
+            "count": 16
+          },
+          {
+            "value": "再次外呼骑手-修改订单",
+            "count": 16
+          },
+          {
+            "value": "外呼门店-修改订单",
+            "count": 15
+          },
+          {
+            "value": "操作赔付-运费券-3元",
+            "count": 15
+          },
+          {
+            "value": "加急调度",
+            "count": 13
+          },
+          {
+            "value": "引导自助查看配送范围",
+            "count": 12
+          },
+          {
+            "value": "外呼骑手-核实情况",
+            "count": 9
+          },
+          {
+            "value": "退审跟单",
+            "count": 7
+          },
+          {
+            "value": "再次外呼门店-修改订单",
+            "count": 7
+          },
+          {
+            "value": "再次外呼骑手-核实情况",
+            "count": 7
+          },
+          {
+            "value": "引导自助开通会员",
+            "count": 5
+          },
+          {
+            "value": "[地址已脱敏]",
+            "count": 5
+          },
+          {
+            "value": "引导自助查看优惠券",
+            "count": 4
+          },
+          {
+            "value": "操作赔付-优惠券-20元;智能跟单",
+            "count": 3
+          }
+        ],
+        "DialogueAgreeSolution_top50": [
+          {
+            "value": "无",
+            "count": 12611
+          },
+          {
+            "value": "小象单商品退款-100%",
+            "count": 273
+          },
+          {
+            "value": "取消订单",
+            "count": 132
+          },
+          {
+            "value": "操作赔付-优惠券-3元",
+            "count": 64
+          },
+          {
+            "value": "小象单商品退款-50%",
+            "count": 60
+          },
+          {
+            "value": "外呼骑手-协商调换货品",
+            "count": 48
+          },
+          {
+            "value": "会员卡退款",
+            "count": 48
+          },
+          {
+            "value": "操作赔付-优惠券-8元",
+            "count": 41
+          },
+          {
+            "value": "操作赔付-优惠券-5元",
+            "count": 35
+          },
+          {
+            "value": "小象整单申请退款",
+            "count": 27
+          },
+          {
+            "value": "操作赔付-优惠券-10元",
+            "count": 21
+          },
+          {
+            "value": "外呼骑手-修改订单",
+            "count": 21
+          },
+          {
+            "value": "小象单商品退款-80%",
+            "count": 20
+          },
+          {
+            "value": "小象单商品退款-30%",
+            "count": 17
+          },
+          {
+            "value": "操作赔付-优惠券-15元",
+            "count": 16
+          },
+          {
+            "value": "小象单商品退款-20%",
+            "count": 15
+          },
+          {
+            "value": "操作赔付-优惠券-20元",
+            "count": 13
+          },
+          {
+            "value": "小象单商品退款-70%",
+            "count": 13
+          },
+          {
+            "value": "催促退款审核",
+            "count": 11
+          },
+          {
+            "value": "小象单商品退款-40%",
+            "count": 10
+          },
+          {
+            "value": "外呼门店-修改订单",
+            "count": 8
+          },
+          {
+            "value": "小象单商品退款-60%",
+            "count": 8
+          },
+          {
+            "value": "操作赔付-运费券-3元",
+            "count": 6
+          },
+          {
+            "value": "小象单商品退款-10%",
+            "count": 6
+          }
+        ],
+        "model_name_or_模型名称_top30": []
+      },
+      "signals": {
+        "candidate_assessments_sample": [
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "text contains {key:value}-like fragments; not JSON/dict structured",
+            "extracted_count": 86
+          },
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "text contains {key:value}-like fragments; not JSON/dict structured",
+            "extracted_count": 86
+          },
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "text contains {key:value}-like fragments; not JSON/dict structured",
+            "extracted_count": 86
+          },
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "text contains {key:value}-like fragments; not JSON/dict structured",
+            "extracted_count": 86
+          },
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "text contains {key:value}-like fragments; not JSON/dict structured",
+            "extracted_count": 81
+          },
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "text contains {key:value}-like fragments; not JSON/dict structured",
+            "extracted_count": 81
+          },
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "text contains {key:value}-like fragments; not JSON/dict structured",
+            "extracted_count": 81
+          },
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "text contains {key:value}-like fragments; not JSON/dict structured",
+            "extracted_count": 81
+          },
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "text contains {key:value}-like fragments; not JSON/dict structured",
+            "extracted_count": 81
+          },
+          {
+            "source": "input",
+            "type": "str",
+            "structured": false,
+            "reason": "text contains {key:value}-like fragments; not JSON/dict structured",
+            "extracted_count": 81
+          }
+        ],
+        "assessment_summary": {
+          "text contains {key:value}-like fragments; not JSON/dict structured": 20
+        }
+      }
+    }
+  ]
+}

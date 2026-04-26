@@ -1,0 +1,21 @@
+[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m
+[0;32m🏷️  回流数据标注数据集构建[0m
+[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m
+📂 输入文件: [1;33manalysis_outputs/pipeline_sample_outputs/fixture_cleaned_data.jsonl[0m
+📁 输出前缀: [1;33manalysis_outputs/pipeline_sample_outputs/annotation[0m
+[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m
+
+
+[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m
+[0;32m📊 处理统计[0m
+[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m
+输入总行数: 2
+✅ 专业度标注数据: 2
+✅ 表达问题标注数据: 2
+✅ 风险问题标注数据: 2
+
+📁 输出文件:
+  - analysis_outputs/pipeline_sample_outputs/annotation_profession.jsonl
+  - analysis_outputs/pipeline_sample_outputs/annotation_exaggeration.jsonl
+  - analysis_outputs/pipeline_sample_outputs/annotation_risk.jsonl
+[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m
