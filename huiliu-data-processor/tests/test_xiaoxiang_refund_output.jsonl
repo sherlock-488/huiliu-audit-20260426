@@ -1,0 +1,4 @@
+{"input": "User: 我要退款\nSystem signals: {订单配送状态: 已完成}", "target": {"Response": "好的，我帮您申请单商品退款。", "ResponseSolution": "小象单商品退款-50%"}, "session_id": "test_xx_pass_01", "metadata": {"model_name": "test", "user_reply": "用户：好的，谢谢"}}
+{"input": "User: 商品坏了\nSystem signals: {订单配送状态: 已完成}", "target": {"Response": "好的，我为您操作退款。", "ResponseSolution": "小象-单商品退款-100%"}, "session_id": "test_xx_pass_02", "metadata": {"model_name": "test", "user_reply": "用户：好的"}}
+{"input": "User: 退一个商品\nSystem signals: {订单配送状态: 已完成}", "target": {"Response": "好的，我为您操作退款。", "ResponseSolution": "小象单商品退款-80%"}, "session_id": "test_xx_pass_03", "metadata": {"model_name": "test", "user_reply": "用户：好的"}}
+{"input": "User: 我要退款\nSystem signals: {订单配送状态: 已完成}", "target": {"Response": "好的，我帮您申请整单退款。", "ResponseSolution": "小象整单申请退款"}, "session_id": "test_other_solution_01", "metadata": {"model_name": "test", "user_reply": "用户：好的，谢谢"}}

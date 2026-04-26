@@ -1,0 +1,1 @@
+{"input": "User: 订单什么时候到\nSystem signals: {订单配送状态: 配送中}", "target": {"Response": "您的订单预计30分钟内送达，请耐心等待。", "ResponseSolution": "无"}, "session_id": "test_pass_01", "metadata": {"model_name": "test", "user_reply": "用户：好的，谢谢"}}

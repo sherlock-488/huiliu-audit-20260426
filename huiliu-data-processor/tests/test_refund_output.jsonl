@@ -1,0 +1,3 @@
+{"input": "User: ...\n{'商品名称': '苹果', '商品退款状态': '可退款'}\n", "target": {"Response": "好的，已为您申请退款，请耐心等待", "ResponseSolution": "小象整单申请退款", "DialogueAgreeSolution": "是"}, "session_id": "test_refund_2", "metadata": {"model_name": "model_a", "user_reply": "用户：好的"}}
+{"input": "User: ...\n{'商品名称': '苹果', '商品退款状态': '不可退款 已全部退款'}\n", "target": {"Response": "好的，已退款成功，请查收", "ResponseSolution": "无", "DialogueAgreeSolution": "是"}, "session_id": "test_refund_3", "metadata": {"model_name": "model_a", "user_reply": "用户：好的"}}
+{"input": "User: ...\n{'商品名称': '苹果', '商品退款状态': '可退款'}\n", "target": {"Response": "好的，已操作退款，正在审核中", "ResponseSolution": "小象整单申请退款", "DialogueAgreeSolution": "是"}, "session_id": "test_refund_5", "metadata": {"model_name": "model_a", "user_reply": "用户：好的"}}

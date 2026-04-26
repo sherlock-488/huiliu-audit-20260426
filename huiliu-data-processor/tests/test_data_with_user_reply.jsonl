@@ -1,0 +1,7 @@
+{"session_id": "test001", "model_name": "model_a", "user_reply": "用户：好的，谢谢", "input": "User: ...", "target": "{\"Response\": \"好的，我已经为您申请了退款\", \"ResponseSolution\": \"小象整单申请退款\", \"DialogueAgreeSolution\": \"是\"}"}
+{"session_id": "test002", "model_name": "model_a", "user_reply": "用户：不行，我不满意", "input": "User: ...", "target": "{\"Response\": \"好的，我会处理\", \"ResponseSolution\": \"无\", \"DialogueAgreeSolution\": \"否\"}"}
+{"session_id": "test003", "model_name": "model_a", "user_reply": "用户：好的", "input": "User: ...", "target": "{\"Response\": \"您可以安排上门取件，我们会取回商品\", \"ResponseSolution\": \"无\", \"DialogueAgreeSolution\": \"是\"}"}
+{"session_id": "test004", "model_name": "model_a", "user_reply": "用户：好的", "input": "User: ...", "target": "{\"Response\": \"建议您试试拼好饭，那边有更多优惠\", \"ResponseSolution\": \"无\", \"DialogueAgreeSolution\": \"是\"}"}
+{"session_id": "test005", "model_name": "model_a", "user_reply": "用户：好的", "input": "User: ...", "target": "{\"Response\": \"我保证一定会帮您解决问题\", \"ResponseSolution\": \"操作赔付-优惠券-5元\", \"DialogueAgreeSolution\": \"是\"}"}
+{"session_id": "test006", "model_name": "model_a", "user_reply": "用户：好的", "input": "User: ...", "target": "{\"Response\": \"好的呢，我知道啦，嗯嗯，没问题哦，放心吧，谢谢哈\", \"ResponseSolution\": \"无\", \"DialogueAgreeSolution\": \"是\"}"}
+{"session_id": "test007", "model_name": "model_a", "user_reply": "用户：好的", "input": "User: ...", "target": "{\"Response\": \"已为您申请5元优惠券\", \"ResponseSolution\": \"操作赔付-优惠券-5元\", \"DialogueAgreeSolution\": \"是\"}"}

@@ -1,0 +1,11 @@
+{
+  "filter_negative": true,
+  "check_compliance": true,
+  "check_quality": true,
+  "max_output_length": 2000,
+  "min_output_length": 10,
+  "allowed_compensation": [3, 5, 8, 10, 15, 20],
+  "allowed_delivery_fee": [3],
+  "max_modal_particles": 5,
+  "max_repetitions": 3
+}

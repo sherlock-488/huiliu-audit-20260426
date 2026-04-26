@@ -1,0 +1,1 @@
+{"input": "User: ...", "target": {"Response": "好的，我会帮您处理退款申请", "ResponseSolution": "小象整单申请退款", "DialogueAgreeSolution": "是"}, "session_id": "test_human_5", "metadata": {"model_name": "model_a", "user_reply": "用户：好的"}}
