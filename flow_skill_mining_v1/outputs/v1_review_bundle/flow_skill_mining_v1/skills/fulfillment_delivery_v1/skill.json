@@ -1,0 +1,198 @@
+{
+  "skill_id": "fulfillment_delivery_v1",
+  "scene": "履约场景-配送问题",
+  "version": "v1.0-replay-draft",
+  "purpose": "约束流程动作，不优化话术",
+  "entry_conditions": [
+    "问题场景 == 履约场景-配送问题"
+  ],
+  "required_signals": [
+    "是否咨询高峰期",
+    "用户分层标签",
+    "是否会员",
+    "订单类型",
+    "配送类型",
+    "商品数量",
+    "订单来源",
+    "是否为配送单",
+    "是否为自提单",
+    "是否外卖单",
+    "门店名称",
+    "城市名称",
+    "订单是否含追加单",
+    "订单是否含加工品",
+    "支付类型",
+    "支付金额",
+    "原价(促销价)",
+    "券减免金额",
+    "配送金额",
+    "服务费价格",
+    "是否配送异常",
+    "订单门店状态",
+    "订单下单时间",
+    "是否有骑手真实手机号",
+    "能否修改备注",
+    "能否修改收货时间",
+    "能否修改收货地址",
+    "能否修改收货联系人",
+    "是否可取消订单",
+    "已退款退款ID金额总和"
+  ],
+  "solution_policy": {
+    "strong_confirmation_required": [
+      "取消订单",
+      "小象单商品退款-xx%",
+      "小象整单申请退款",
+      "操作赔付-优惠券-xx元"
+    ],
+    "user_request_is_enough": [
+      "催促退款审核",
+      "再次外呼骑手-xx",
+      "外呼骑手-xx"
+    ],
+    "no_confirmation_required": [
+      "加急调度",
+      "发送送达图片",
+      "引导自助修改订单",
+      "引导自助联系骑手",
+      "智能跟单",
+      "管理会员自动续费",
+      "系统催单",
+      "选择商品"
+    ]
+  },
+  "action_rules": [
+    {
+      "rule_id": "rule_b2ff9bd0fb33",
+      "scene": "履约场景-配送问题",
+      "state_pattern": {
+        "scene": "履约场景-配送问题",
+        "user_intent": "other",
+        "order_status": "已完成",
+        "rider_status": "已送达",
+        "timeout_state": "是",
+        "can_cancel": false,
+        "already_compensated": false,
+        "refund_state": "订单无退款",
+        "selected_sku_state": "not_selected",
+        "image_state": "unknown",
+        "has_rider_phone": true,
+        "pending_confirmation_solution": "操作赔付-优惠券-10元"
+      },
+      "expected_response_solution": "操作赔付-优惠券-10元",
+      "expected_dialogue_agree_solution": "操作赔付-优惠券-10元",
+      "no_action_reason": "",
+      "support": 5,
+      "confidence": 1.0,
+      "example_sample_ids": [
+        "0d73ab747d87a5817027a0540a061de88c0564d5",
+        "28201719b060442f5545a6684f4c7cadfb68c9fe",
+        "73a89244c2d68429acc727b927254551c131e54c",
+        "97da8c84610881a5d3babb0760e98ed955d6dd92",
+        "9f08b494915832589e179d1993693f696e0ab75d"
+      ],
+      "conflicting_actions": [],
+      "candidate_skill_patch_type": "confirmation_rule",
+      "aggregation_level": "fine",
+      "expected_response_solution_canonical": "操作赔付-优惠券-xx元"
+    }
+  ],
+  "no_action_rules": [
+    {
+      "no_action_reason": "close_conversation",
+      "support": 537,
+      "condition_hint": "see replay cases and checker focus"
+    },
+    {
+      "no_action_reason": "explain_refund_status",
+      "support": 332,
+      "condition_hint": "see replay cases and checker focus"
+    },
+    {
+      "no_action_reason": "explain_status",
+      "support": 143,
+      "condition_hint": "see replay cases and checker focus"
+    },
+    {
+      "no_action_reason": "unknown",
+      "support": 133,
+      "condition_hint": "see replay cases and checker focus"
+    },
+    {
+      "no_action_reason": "ask_user_problem",
+      "support": 102,
+      "condition_hint": "see replay cases and checker focus"
+    },
+    {
+      "no_action_reason": "eta_answer_only",
+      "support": 90,
+      "condition_hint": "see replay cases and checker focus"
+    },
+    {
+      "no_action_reason": "after_action_followup",
+      "support": 33,
+      "condition_hint": "see replay cases and checker focus"
+    },
+    {
+      "no_action_reason": "unavailable_capability",
+      "support": 16,
+      "condition_hint": "see replay cases and checker focus"
+    },
+    {
+      "no_action_reason": "already_compensated",
+      "support": 16,
+      "condition_hint": "see replay cases and checker focus"
+    },
+    {
+      "no_action_reason": "wait_for_tool_result",
+      "support": 15,
+      "condition_hint": "see replay cases and checker focus"
+    },
+    {
+      "no_action_reason": "ask_refund_ratio",
+      "support": 12,
+      "condition_hint": "see replay cases and checker focus"
+    },
+    {
+      "no_action_reason": "clarify_intent",
+      "support": 5,
+      "condition_hint": "see replay cases and checker focus"
+    }
+  ],
+  "confirmation_rules": [
+    "强确认方案：取消订单、退款、赔付、会员卡退款等，只有用户明确同意后 DialogueAgreeSolution 才能非空。",
+    "外呼/催促类方案属于 user_request_is_enough，不要求 DialogueAgreeSolution 非空。"
+  ],
+  "guard_rules": [
+    "不可赔付不得赔付",
+    "已赔付过不得再次主动赔",
+    "赔付金额不得超过信号上限",
+    "不可取消不得取消",
+    "未选商品不得单商品退款",
+    "需要图片前置的质量类问题，未有图片时优先引导上传",
+    "不得输出 available_solutions 中没有的方案，除非命中 alias"
+  ],
+  "forbidden_rules": [
+    "不要把 DialogueAgreeSolution 简单复制 ResponseSolution",
+    "不要在用户未确认强确认方案时填 DialogueAgreeSolution"
+  ],
+  "evidence": {
+    "positive_cases": 1893,
+    "strong_rules": 1,
+    "conflict_rules": 70
+  },
+  "open_questions_for_trainer": [
+    "`rule_157127392e4e` support=6 confidence=0.6667 expected=操作赔付-优惠券-15元",
+    "`rule_abe6bc3cbed1` support=6 confidence=0.6667 expected=无",
+    "`rule_ba7ef72d2208` support=3 confidence=0.6667 expected=无",
+    "`rule_b4d487b81989` support=3 confidence=0.6667 expected=操作赔付-优惠券-15元",
+    "`rule_3167f22f9b37` support=3 confidence=0.6667 expected=无",
+    "`rule_4d3c8981c8eb` support=3 confidence=0.6667 expected=外呼骑手-催促配送",
+    "`rule_0062d4fdcbf5` support=3 confidence=0.6667 expected=无",
+    "`rule_3632a298003c` support=3 confidence=0.6667 expected=引导自助联系骑手",
+    "`rule_4d83f8f7b644` support=3 confidence=0.6667 expected=无",
+    "`rule_3cdcfd7ba820` support=3 confidence=0.6667 expected=操作赔付-优惠券-8元",
+    "`rule_288cb84082f8` support=3 confidence=0.6667 expected=无",
+    "`rule_9b4e78f6cf3e` support=3 confidence=0.6667 expected=无"
+  ]
+}

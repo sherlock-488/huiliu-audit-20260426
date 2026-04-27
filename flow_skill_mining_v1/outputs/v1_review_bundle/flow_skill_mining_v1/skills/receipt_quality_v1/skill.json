@@ -1,0 +1,725 @@
+{
+  "skill_id": "receipt_quality_v1",
+  "scene": "收货场景-品质问题",
+  "version": "v1.0-replay-draft",
+  "purpose": "约束流程动作，不优化话术",
+  "entry_conditions": [
+    "问题场景 == 收货场景-品质问题"
+  ],
+  "required_signals": [
+    "是否咨询高峰期",
+    "用户分层标签",
+    "是否会员",
+    "订单状态",
+    "订单类型",
+    "配送类型",
+    "商品数量",
+    "订单来源",
+    "是否为配送单",
+    "是否为自提单",
+    "是否外卖单",
+    "门店名称",
+    "城市名称",
+    "订单是否超售后",
+    "订单是否含追加单",
+    "订单是否含加工品",
+    "支付类型",
+    "支付金额",
+    "原价(促销价)",
+    "券减免金额",
+    "配送金额",
+    "服务费价格",
+    "是否配送异常",
+    "订单门店状态",
+    "订单下单时间",
+    "是否有骑手真实手机号",
+    "能否修改备注",
+    "能否修改收货时间",
+    "能否修改收货地址",
+    "能否修改收货联系人"
+  ],
+  "solution_policy": {
+    "strong_confirmation_required": [
+      "会员卡退款",
+      "取消订单",
+      "小象单商品退款-xx%",
+      "操作赔付-优惠券-xx元"
+    ],
+    "user_request_is_enough": [
+      "催促退款审核",
+      "再次外呼骑手-xx",
+      "加急催促退款审核",
+      "外呼骑手-xx"
+    ],
+    "no_confirmation_required": [
+      "发送送达图片",
+      "管理会员自动续费",
+      "选择商品"
+    ]
+  },
+  "action_rules": [
+    {
+      "rule_id": "rule_50bf6b0054eb",
+      "scene": "收货场景-品质问题",
+      "state_pattern": {
+        "scene": "收货场景-品质问题",
+        "user_intent": "confirm_compensation",
+        "order_status": "已完成",
+        "rider_status": "已送达",
+        "timeout_state": "否",
+        "can_cancel": false,
+        "already_compensated": false,
+        "refund_state": "订单无退款",
+        "selected_sku_state": "selected",
+        "image_state": "has_image",
+        "has_rider_phone": true,
+        "pending_confirmation_solution": "小象单商品退款-100%"
+      },
+      "expected_response_solution": "小象单商品退款-100%",
+      "expected_dialogue_agree_solution": "小象单商品退款-100%",
+      "no_action_reason": "",
+      "support": 22,
+      "confidence": 1.0,
+      "example_sample_ids": [
+        "78d081483e93c62265dc2a052822db3f70125bd8",
+        "65ae1f15373b587d77666e917b30d03debee388f",
+        "765c0abf79ce50b8cccabbe550b25da6712437fe",
+        "1dbc91d006689deb0c0cfa37f7c66e39837a41db",
+        "9ff9d752ae36437c783eef67b3d8a91c30f44e68",
+        "b4f0ae8cfaf30cb83cec0654013b8231f1452a93",
+        "02ecf07740e14e6bb92e254da7b77790bb7e1613",
+        "83f9e5c261f33a3b208110b36011ec519644f10f",
+        "680036ffd5c738c1a7c60594c19a16315a89c541",
+        "58e1b9ee0d7d6b7c8941ed74d3bd2a31032c783c",
+        "e5bd5ca16a1cb7f43a02ff32e237c9962db69e52",
+        "70f3e1b37f0f749183ed833aaedcacb6cee8e2b6",
+        "42ff62faef40fba812421582d5c41056c8ef2f1b",
+        "2f002d0bf8cebe01bff96533f2f892152b33c2e6",
+        "a2d1e32e7bdc432b09d036f56dccbb0798677d64",
+        "858880fc1bd39411e4c876372b5339c4dd6d1cf6",
+        "67e7b4b7304fa821a75347c955cdc639eb16e6b3",
+        "e218582b0c9bb325ccc1ae4e3a655b12eb64ffb4",
+        "5f4526f0d256fba032669fa1a38c6a1fbcc8ea9f",
+        "fb5b3142e6183162d31bee1e9ea6f846401e76ca"
+      ],
+      "conflicting_actions": [],
+      "candidate_skill_patch_type": "confirmation_rule",
+      "aggregation_level": "fine",
+      "expected_response_solution_canonical": "小象单商品退款-xx%"
+    },
+    {
+      "rule_id": "rule_58c94abfd28d",
+      "scene": "收货场景-品质问题",
+      "state_pattern": {
+        "scene": "收货场景-品质问题",
+        "user_intent": "confirm_compensation",
+        "order_status": "已完成",
+        "rider_status": "已送达",
+        "timeout_state": "否",
+        "can_cancel": false,
+        "already_compensated": false,
+        "refund_state": "未知状态",
+        "selected_sku_state": "selected",
+        "image_state": "has_image",
+        "has_rider_phone": true,
+        "pending_confirmation_solution": "小象单商品退款-100%"
+      },
+      "expected_response_solution": "小象单商品退款-100%",
+      "expected_dialogue_agree_solution": "小象单商品退款-100%",
+      "no_action_reason": "",
+      "support": 19,
+      "confidence": 1.0,
+      "example_sample_ids": [
+        "920efbd71d1751bea3309244b1a068ddedd09fb0",
+        "47ff22cd0e6facd86d97a07cef708eeef7098666",
+        "9bc8fac0cb186914a5320e7fc0b31218016156db",
+        "693da4f8813c3984ba3a477e7c8d72a914baa5a8",
+        "7493e0b24b058e07123aedba3d131e8bcbeb1ee3",
+        "bee8124cd28e29ddef19528a15408e5f23ddf90c",
+        "09475e20f777de4b4d94e2e47187a42fca21dc21",
+        "44f64182641f0c71f758f91de8ead662d5fca433",
+        "6b45bf0eeda7757280df0ec37dd8a05746e2bcbb",
+        "4d5f105bd24d5b2c76a816e575f220086595fb24",
+        "f21657baae55a221d20cdec821b6d4d6ee228d52",
+        "3fe4363ccc0594b69ffa522cbeae7e76658c2f0f",
+        "f086d25e643bbf49b0a64ab4ddd62651d51243f2",
+        "83175c07af400a0ac77fd74b1e4f80770758be0a",
+        "1c32e4ae1d6f37f0be211bc265a5a8238c8b15f0",
+        "4bfb7daa7bcf8c142803db6299175005cede2349",
+        "da0381a365349452d59b3d0b1324d6fa0608780d",
+        "4f109059b0b3e3fbf820779c1d74aa95232fd136",
+        "a62a47ef5b3db8b5e8980a397cf4da7e09790078"
+      ],
+      "conflicting_actions": [],
+      "candidate_skill_patch_type": "confirmation_rule",
+      "aggregation_level": "fine",
+      "expected_response_solution_canonical": "小象单商品退款-xx%"
+    },
+    {
+      "rule_id": "rule_011b5f030c44",
+      "scene": "收货场景-品质问题",
+      "state_pattern": {
+        "scene": "收货场景-品质问题",
+        "user_intent": "confirm_compensation",
+        "order_status": "已完成",
+        "rider_status": "已送达",
+        "timeout_state": "否",
+        "can_cancel": false,
+        "already_compensated": false,
+        "refund_state": "订单无退款",
+        "selected_sku_state": "selected",
+        "image_state": "has_image",
+        "has_rider_phone": true,
+        "pending_confirmation_solution": "小象单商品退款-50%"
+      },
+      "expected_response_solution": "小象单商品退款-50%",
+      "expected_dialogue_agree_solution": "小象单商品退款-50%",
+      "no_action_reason": "",
+      "support": 13,
+      "confidence": 1.0,
+      "example_sample_ids": [
+        "66457965ebb138b6111c0a2ddd17c24a3b6f8cef",
+        "2ba105060ef1926e6165e4e776ddc7d1c1b5e592",
+        "67e2ffdda54e073aac7c28921314b753ba73fd33",
+        "9ec1a79348107a1978803f09ada12def21f0bbf0",
+        "d2b3f5ffc005657484391d11cf259f82f60d2e6d",
+        "debb8af36f2cefee587c732bfb5162cb31743216",
+        "abe4352d45f7b40b9ac43d491a95ed4fc75c6896",
+        "ec270a35cd25f82227299740b3db61b590de5d68",
+        "322e7071ca0ec3883a32bb573d3c23f5957197bf",
+        "c0a81391bf8d1bcfbc67e553f555366930315be1",
+        "5516ea80e6d74a5e031b68b5453f3c446b93e65b",
+        "5b86afee6c6bd6bc89357ec621128319789174fa",
+        "89945c02773c007cc50e4ebe140cf28e9545d6b3"
+      ],
+      "conflicting_actions": [],
+      "candidate_skill_patch_type": "confirmation_rule",
+      "aggregation_level": "fine",
+      "expected_response_solution_canonical": "小象单商品退款-xx%"
+    },
+    {
+      "rule_id": "rule_1a340a256636",
+      "scene": "收货场景-品质问题",
+      "state_pattern": {
+        "scene": "收货场景-品质问题",
+        "user_intent": "other",
+        "order_status": "已完成",
+        "rider_status": "已送达",
+        "timeout_state": "否",
+        "can_cancel": false,
+        "already_compensated": false,
+        "refund_state": "订单无退款",
+        "selected_sku_state": "selected",
+        "image_state": "has_image",
+        "has_rider_phone": true,
+        "pending_confirmation_solution": "小象单商品退款-100%"
+      },
+      "expected_response_solution": "小象单商品退款-100%",
+      "expected_dialogue_agree_solution": "小象单商品退款-100%",
+      "no_action_reason": "",
+      "support": 10,
+      "confidence": 1.0,
+      "example_sample_ids": [
+        "db59e9bccf5a346985eab464c081c38e450b3d16",
+        "c0d32716344dcc850c3b8df02946fc5ed1d92b0f",
+        "6547d257af13fdcbceaa77267a96a854e62a9072",
+        "3516c280404eee39a658d6cca0f2fc595abc8219",
+        "11fe79155ba253cfb17d7bf05f9b2d9b4db4dcdd",
+        "f9029dbda15ad4b14c659a9948d0d9fbae8e0603",
+        "e2955bc5a067816ec40304afc08a3f586edc4ffb",
+        "ecab0048455c83cd82a3e02571e85458adc99172",
+        "b0908a73ae642d0241847ec696282f96a397f4f1",
+        "10bff480f6244f1f4c4960fc15d26ff95cdfa109"
+      ],
+      "conflicting_actions": [],
+      "candidate_skill_patch_type": "confirmation_rule",
+      "aggregation_level": "fine",
+      "expected_response_solution_canonical": "小象单商品退款-xx%"
+    },
+    {
+      "rule_id": "rule_1ef55bf3bf72",
+      "scene": "收货场景-品质问题",
+      "state_pattern": {
+        "scene": "收货场景-品质问题",
+        "user_intent": "confirm_compensation",
+        "order_status": "已完成",
+        "rider_status": "已送达",
+        "timeout_state": "否",
+        "can_cancel": false,
+        "already_compensated": false,
+        "refund_state": "未知状态",
+        "selected_sku_state": "not_selected",
+        "image_state": "has_image",
+        "has_rider_phone": true,
+        "pending_confirmation_solution": "小象单商品退款-100%"
+      },
+      "expected_response_solution": "小象单商品退款-100%",
+      "expected_dialogue_agree_solution": "小象单商品退款-100%",
+      "no_action_reason": "",
+      "support": 10,
+      "confidence": 1.0,
+      "example_sample_ids": [
+        "431e6d6e88d04dc903b0565c4129b26e9930a6b1",
+        "4d8d89e04b734520656603a2f92e6b141f86c269",
+        "b797b99e79afcbf30963656f3de49add07c4600a",
+        "a2a9b1cbbbd7f662e9e7e08d4abc37006bf7cfc7",
+        "9f5ca595b3fa3687a7bbb0988d6abddc94d66bbd",
+        "3dc0381a94ecb6f535d5ee36ec0013811ba4912b",
+        "db0d5338d797ffc9cea58bb8156d15ab9509c0df",
+        "b0176f01011010c8d687f11f4ec0fc6129ef1fa0",
+        "dddf10169701b8ef60f126cfef97cea61618bfd3",
+        "cad799a7da0994f68ae005543900429a4bdbae68"
+      ],
+      "conflicting_actions": [],
+      "candidate_skill_patch_type": "confirmation_rule",
+      "aggregation_level": "fine",
+      "expected_response_solution_canonical": "小象单商品退款-xx%"
+    },
+    {
+      "rule_id": "rule_a32a29c82c34",
+      "scene": "收货场景-品质问题",
+      "state_pattern": {
+        "scene": "收货场景-品质问题",
+        "user_intent": "confirm_compensation",
+        "order_status": "已完成",
+        "rider_status": "已送达",
+        "timeout_state": "否",
+        "can_cancel": false,
+        "already_compensated": false,
+        "refund_state": "订单部分退款",
+        "selected_sku_state": "selected",
+        "image_state": "has_image",
+        "has_rider_phone": true,
+        "pending_confirmation_solution": "小象单商品退款-100%"
+      },
+      "expected_response_solution": "小象单商品退款-100%",
+      "expected_dialogue_agree_solution": "小象单商品退款-100%",
+      "no_action_reason": "",
+      "support": 9,
+      "confidence": 1.0,
+      "example_sample_ids": [
+        "1b32b76646b2df127183aae2af4f50c9bc1b30fe",
+        "b2d90f4d05d44bb35b2fd9ced6d0c1b18b602350",
+        "90239cb1ef3b8caaa8345ce57395e4f20bf7e162",
+        "4fd37daee3108a250e9baa86e6831f05f2a64691",
+        "ab76f0c63a96a932d7f6b13b15f9181cea69eccc",
+        "5f0a5ab2b7adda563f27c62908ba29aab0696e36",
+        "510f23aff78414671ba2d5df820ca50f4b25a6fb",
+        "ed4b94cd3c5a4e7a98770803ae42f860dfeed936",
+        "fd5533ac316c082ed5919ec1ab4c9a797a13755d"
+      ],
+      "conflicting_actions": [],
+      "candidate_skill_patch_type": "confirmation_rule",
+      "aggregation_level": "fine",
+      "expected_response_solution_canonical": "小象单商品退款-xx%"
+    },
+    {
+      "rule_id": "rule_1cab46422c71",
+      "scene": "收货场景-品质问题",
+      "state_pattern": {
+        "scene": "收货场景-品质问题",
+        "user_intent": "other",
+        "order_status": "已完成",
+        "rider_status": "已送达",
+        "timeout_state": "否",
+        "can_cancel": false,
+        "already_compensated": false,
+        "refund_state": "未知状态",
+        "selected_sku_state": "selected",
+        "image_state": "has_image",
+        "has_rider_phone": true,
+        "pending_confirmation_solution": "小象单商品退款-100%"
+      },
+      "expected_response_solution": "小象单商品退款-100%",
+      "expected_dialogue_agree_solution": "小象单商品退款-100%",
+      "no_action_reason": "",
+      "support": 9,
+      "confidence": 1.0,
+      "example_sample_ids": [
+        "e7018b7a9625abf14622aea4e33c1e12a9f73ef7",
+        "68fffeb256dfc62519748d7efda88218ac52e0c4",
+        "84f947bdc15be00873d8b59d26448ee043d6fda5",
+        "3aa4edf1571cb67f86ed68bc2681fea0b34b77eb",
+        "13508f56c356d88925dfc39313a09f476b1d8b1b",
+        "086c9e522662660cf0189b5d097717f6d429faf4",
+        "0d10851c95bddd84b949a36397f6408b63677247",
+        "368ed5879768ebc1892364fffa71155b989b37b1",
+        "0906f1baa50f4fa1c53a6d4857f98994f10016c0"
+      ],
+      "conflicting_actions": [],
+      "candidate_skill_patch_type": "confirmation_rule",
+      "aggregation_level": "fine",
+      "expected_response_solution_canonical": "小象单商品退款-xx%"
+    },
+    {
+      "rule_id": "rule_4d17bf20b4f0",
+      "scene": "收货场景-品质问题",
+      "state_pattern": {
+        "scene": "收货场景-品质问题",
+        "user_intent": "confirm_compensation",
+        "order_status": "已完成",
+        "rider_status": "已送达",
+        "timeout_state": "否",
+        "can_cancel": false,
+        "already_compensated": false,
+        "refund_state": "订单无退款",
+        "selected_sku_state": "selected",
+        "image_state": "has_image",
+        "has_rider_phone": true,
+        "pending_confirmation_solution": "小象单商品退款-20%"
+      },
+      "expected_response_solution": "小象单商品退款-20%",
+      "expected_dialogue_agree_solution": "小象单商品退款-20%",
+      "no_action_reason": "",
+      "support": 8,
+      "confidence": 1.0,
+      "example_sample_ids": [
+        "dae59f669f2bcd56801e901be9009f34303134f2",
+        "43eba88b624e9f9a5b4ce830e082feb9fe9995bc",
+        "a2dec4be63f9c2f9b847e1ea273452d18799c400",
+        "66cebfa3a50488ce7e62051fc7f82236f9f25f05",
+        "4062df08c7d0f31973b99df067ff32717961f309",
+        "afed6d8f7ee3de46539c54bf4df0438b35cc490b",
+        "c1a982278e795d50b81e7a6ff9fae4fc2e6ccc74",
+        "1221e6cb1f816e32cc6a296ba25fd9ff11653146"
+      ],
+      "conflicting_actions": [],
+      "candidate_skill_patch_type": "confirmation_rule",
+      "aggregation_level": "fine",
+      "expected_response_solution_canonical": "小象单商品退款-xx%"
+    },
+    {
+      "rule_id": "rule_c479c44e7089",
+      "scene": "收货场景-品质问题",
+      "state_pattern": {
+        "scene": "收货场景-品质问题",
+        "user_intent": "confirm_compensation",
+        "order_status": "已完成",
+        "rider_status": "已送达",
+        "timeout_state": "否",
+        "can_cancel": false,
+        "already_compensated": false,
+        "refund_state": "订单无退款",
+        "selected_sku_state": "selected",
+        "image_state": "has_image",
+        "has_rider_phone": true,
+        "pending_confirmation_solution": "小象单商品退款-30%"
+      },
+      "expected_response_solution": "小象单商品退款-30%",
+      "expected_dialogue_agree_solution": "小象单商品退款-30%",
+      "no_action_reason": "",
+      "support": 7,
+      "confidence": 1.0,
+      "example_sample_ids": [
+        "d156376fd90844adf48f114992faa62f7272dacd",
+        "0070ca012fad0614026c9af72915a37d2d3df153",
+        "12ff7d38c04a048f7bf4a5bb7c9232546ce699b0",
+        "30099ff91503489025938123e7b93e4ef0c78cea",
+        "38ab138dcd5c89ef021d9a6a5f10fcfac408be78",
+        "43c83bcc6cca004586b57d2001187945a80db6b1",
+        "6e02c7dd5e5538a373732ebea447c747ccef589f"
+      ],
+      "conflicting_actions": [],
+      "candidate_skill_patch_type": "confirmation_rule",
+      "aggregation_level": "fine",
+      "expected_response_solution_canonical": "小象单商品退款-xx%"
+    },
+    {
+      "rule_id": "rule_a267ba1e4411",
+      "scene": "收货场景-品质问题",
+      "state_pattern": {
+        "scene": "收货场景-品质问题",
+        "user_intent": "other",
+        "order_status": "已完成",
+        "rider_status": "已送达",
+        "timeout_state": "是",
+        "can_cancel": false,
+        "already_compensated": false,
+        "refund_state": "订单无退款",
+        "selected_sku_state": "not_selected",
+        "image_state": "unknown",
+        "has_rider_phone": true
+      },
+      "expected_response_solution": "选择商品",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "",
+      "support": 5,
+      "confidence": 1.0,
+      "example_sample_ids": [
+        "19dda9c3581fa430644ab7659bb598c352d8190e",
+        "dcb8f5c48f9ebf8bf21b91b83d4ac66f9888870c",
+        "e838dcc7a880d491a9084b346e74965401047b26",
+        "dc2a40bcc3ddbb7f1d9e62cdb7c13eeb43bc04fe",
+        "7bb1ac870cb26dac307863c86199fd000eba89a3"
+      ],
+      "conflicting_actions": [],
+      "candidate_skill_patch_type": "tool_rule",
+      "aggregation_level": "fine",
+      "expected_response_solution_canonical": "选择商品"
+    },
+    {
+      "rule_id": "rule_3f1d3c12aeee",
+      "scene": "收货场景-品质问题",
+      "state_pattern": {
+        "scene": "收货场景-品质问题",
+        "user_intent": "presale_consult",
+        "order_status": "已完成",
+        "rider_status": "已送达",
+        "timeout_state": "否",
+        "can_cancel": false,
+        "already_compensated": false,
+        "refund_state": "订单无退款",
+        "selected_sku_state": "not_selected",
+        "image_state": "unknown",
+        "has_rider_phone": true
+      },
+      "expected_response_solution": "选择商品",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "",
+      "support": 7,
+      "confidence": 0.8571,
+      "example_sample_ids": [
+        "058d5364bdf45fc9540dad290e978f1ee32d36f7",
+        "c42afed2bc1de83ab6101d55f67f58b566818425",
+        "580d8bbeffd1f68203eed1898e61d84b72e11555",
+        "b5d8fcfcc1a8c00c38a873511f2d13a123473f60",
+        "50c35b6921421e2fdef147046dd0d85553b2fc72",
+        "b9f9e7df6c8cf646c88bba372e3ec9c20e623e7e",
+        "b07a415e51f07490ca4863d6a5ad9aa68d5a1db8"
+      ],
+      "conflicting_actions": [
+        {
+          "action": [
+            "无",
+            "无",
+            "ask_select_product"
+          ],
+          "count": 1
+        }
+      ],
+      "candidate_skill_patch_type": "tool_rule",
+      "aggregation_level": "fine",
+      "expected_response_solution_canonical": "选择商品"
+    },
+    {
+      "rule_id": "rule_e175617a43c2",
+      "scene": "收货场景-品质问题",
+      "state_pattern": {
+        "scene": "收货场景-品质问题",
+        "user_intent": "cancel_request",
+        "order_status": "已完成",
+        "rider_status": "已送达",
+        "timeout_state": "否",
+        "can_cancel": false,
+        "already_compensated": false,
+        "refund_state": "未知状态",
+        "selected_sku_state": "not_selected",
+        "image_state": "unknown",
+        "has_rider_phone": true
+      },
+      "expected_response_solution": "选择商品",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "",
+      "support": 6,
+      "confidence": 0.8333,
+      "example_sample_ids": [
+        "d129cb0e54e29622d193c72ef40f4e11348bc5b5",
+        "8c614019e402952fc38c3ab13f280dd82c9963e8",
+        "756f75ab80d73d7820a4e59d468eebd220fbeef6",
+        "084d1c5325955891d6c9b64c3dda1d244eea8094",
+        "776972d61cc23a1ab9730dd0380d3bae5d7cc6f2",
+        "bfc943e754771ddae7dba5d2443d0519ae2dbd71"
+      ],
+      "conflicting_actions": [
+        {
+          "action": [
+            "无",
+            "无",
+            "ask_select_product"
+          ],
+          "count": 1
+        }
+      ],
+      "candidate_skill_patch_type": "tool_rule",
+      "aggregation_level": "fine",
+      "expected_response_solution_canonical": "选择商品"
+    },
+    {
+      "rule_id": "rule_061fde31fa81",
+      "scene": "收货场景-品质问题",
+      "state_pattern": {
+        "scene": "收货场景-品质问题",
+        "user_intent": "quality_issue",
+        "order_status": "已完成",
+        "rider_status": "已送达",
+        "timeout_state": "否",
+        "can_cancel": false,
+        "already_compensated": false,
+        "refund_state": "未知状态",
+        "selected_sku_state": "not_selected",
+        "image_state": "unknown",
+        "has_rider_phone": true
+      },
+      "expected_response_solution": "选择商品",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "",
+      "support": 43,
+      "confidence": 0.814,
+      "example_sample_ids": [
+        "fea218b63272284040a5c13a111108ceb7b48273",
+        "0e6aca422bab1f7b0e79bce619f0e713296aff43",
+        "57279a3329b7e73ddaab478875c941e8b6377ee3",
+        "3053b186b75b28e47070ffe4d0eae75b2707b35c",
+        "569014dbc0736bf5ec1ad9d226075a95c66b88b9",
+        "f9821909314b0e4cae5e1724029840efd03e9af2",
+        "8b9ec689c7324e28dd440ff42d33da213389b968",
+        "25b6e05645635f33c8face71105426fff9c09e41",
+        "b13ce255613d8f88a2770632449b0a47b8a497f4",
+        "7a7e52dfc70bb220d406d495a6806ddd347f8028",
+        "27e981a1cb4169e2afcc668970c72f5be2fa8823",
+        "0d25233be410bafaaf442631022b44045ee372a5",
+        "9820ec471bffb1b54f40d9ab5433e33c325795b6",
+        "5240d3a500138f73fbc014ccd63daac818e7a4ea",
+        "ae9d7d38306107fbd2ee6f523964a3d62e030f8b",
+        "2a3240a55c5dbc058b0a2ad1073185146a544ea1",
+        "a98b6018e91a7740f38cfd46912393fd08b4dfc8",
+        "34192559684724c882417cbb6aa0deae4236d5a1",
+        "6ace8b466e56a054671656e4aad876ce25ab5cdf",
+        "c145ae918f3946e3d4e6f19d6cb6e921b1a25d8c"
+      ],
+      "conflicting_actions": [
+        {
+          "action": [
+            "无",
+            "无",
+            "ask_select_product"
+          ],
+          "count": 8
+        }
+      ],
+      "candidate_skill_patch_type": "tool_rule",
+      "aggregation_level": "fine",
+      "expected_response_solution_canonical": "选择商品"
+    },
+    {
+      "rule_id": "rule_adfcc95bd33b",
+      "scene": "收货场景-品质问题",
+      "state_pattern": {
+        "scene": "收货场景-品质问题",
+        "user_intent": "quality_issue",
+        "order_status": "已完成",
+        "rider_status": "已送达",
+        "timeout_state": "否",
+        "can_cancel": false,
+        "already_compensated": false,
+        "refund_state": "订单无退款",
+        "selected_sku_state": "not_selected",
+        "image_state": "unknown",
+        "has_rider_phone": true
+      },
+      "expected_response_solution": "选择商品",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "",
+      "support": 61,
+      "confidence": 0.8033,
+      "example_sample_ids": [
+        "4b77bdfb8285c13726bf6e3ecb2c93e087cd0d3a",
+        "2c287773b3172aea983cc270cb2d5d43f8193512",
+        "f72d13982d942f23d339783298580a8cada910b2",
+        "ce590c62b9c93423cd9a795b9eba246806e5b3f4",
+        "76e1d2af1ece3a53a0b4098a4011ba0a0cd3e874",
+        "0c41e9b57653536c3d3c393adbf3b98ca2200270",
+        "0156ccb8b5ccabc614e1215650e3ab38fd3b215d",
+        "a0709d9fb4ba3d26aea58025584bba697555613e",
+        "bad280a2b69b9cb4133a0ec58addc7489a9e8e52",
+        "344d7d8939ee730c6aa823748aefb1cd147aea57",
+        "32e6611d652ebcb11b836f5fcfe5698afbe50665",
+        "3f90aa33a5e293959fbba618881bce18c701fe86",
+        "6da8021bd843bf65671412757497843448ae8b72",
+        "8b2216f76c987a4ef682ba93ae7c2fc1df7fa6d0",
+        "ce6106d2ba29d7070f1780e755464cb5f3de2c6f",
+        "8d87ac856b23aa3ccedc8da146cfb7289a558486",
+        "77d835c584660adedefef8a62873d3a0cce9a273",
+        "a9042c6be867c85a0847a93eca0ec9e03df1360b",
+        "d5cc8856a7055deef18fb7a6d68a96a60351450d",
+        "967a53b981b8113ce52dc424a96410255234e952"
+      ],
+      "conflicting_actions": [
+        {
+          "action": [
+            "无",
+            "无",
+            "ask_select_product"
+          ],
+          "count": 12
+        }
+      ],
+      "candidate_skill_patch_type": "tool_rule",
+      "aggregation_level": "fine",
+      "expected_response_solution_canonical": "选择商品"
+    }
+  ],
+  "no_action_rules": [
+    {
+      "no_action_reason": "close_conversation",
+      "support": 543,
+      "condition_hint": "see replay cases and checker focus"
+    },
+    {
+      "no_action_reason": "ask_select_product",
+      "support": 446,
+      "condition_hint": "see replay cases and checker focus"
+    },
+    {
+      "no_action_reason": "ask_upload_image",
+      "support": 309,
+      "condition_hint": "see replay cases and checker focus"
+    },
+    {
+      "no_action_reason": "explain_refund_status",
+      "support": 185,
+      "condition_hint": "see replay cases and checker focus"
+    },
+    {
+      "no_action_reason": "ask_refund_ratio",
+      "support": 39,
+      "condition_hint": "see replay cases and checker focus"
+    }
+  ],
+  "confirmation_rules": [
+    "强确认方案：取消订单、退款、赔付、会员卡退款等，只有用户明确同意后 DialogueAgreeSolution 才能非空。",
+    "外呼/催促类方案属于 user_request_is_enough，不要求 DialogueAgreeSolution 非空。"
+  ],
+  "guard_rules": [
+    "不可赔付不得赔付",
+    "已赔付过不得再次主动赔",
+    "赔付金额不得超过信号上限",
+    "不可取消不得取消",
+    "未选商品不得单商品退款",
+    "需要图片前置的质量类问题，未有图片时优先引导上传",
+    "不得输出 available_solutions 中没有的方案，除非命中 alias"
+  ],
+  "forbidden_rules": [
+    "不要把 DialogueAgreeSolution 简单复制 ResponseSolution",
+    "不要在用户未确认强确认方案时填 DialogueAgreeSolution"
+  ],
+  "evidence": {
+    "positive_cases": 2565,
+    "strong_rules": 14,
+    "conflict_rules": 71
+  },
+  "open_questions_for_trainer": [
+    "`rule_b1c3b090ac0f` support=3 confidence=0.6667 expected=无",
+    "`rule_8431aed7359f` support=3 confidence=0.6667 expected=取消订单",
+    "`rule_574fc6159dca` support=3 confidence=0.6667 expected=小象单商品退款-50%",
+    "`rule_d0808ef2b6e1` support=3 confidence=0.6667 expected=无",
+    "`rule_3089cead4d15` support=3 confidence=0.6667 expected=无",
+    "`rule_53a47874d847` support=3 confidence=0.6667 expected=催促退款审核;退审跟单",
+    "`rule_267db5438fec` support=3 confidence=0.6667 expected=无",
+    "`rule_fb8f87113d63` support=3 confidence=0.6667 expected=无",
+    "`rule_571ea9fe8577` support=3 confidence=0.6667 expected=选择商品",
+    "`rule_322353636583` support=3 confidence=0.6667 expected=选择商品",
+    "`rule_0d9cddae8cd6` support=3 confidence=0.6667 expected=无",
+    "`rule_aa10fc6c7b72` support=3 confidence=0.6667 expected=无"
+  ]
+}
