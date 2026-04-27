@@ -1,5 +1,6 @@
-{"Response": "客服:好的", "ResponseSolution": "系统催单", "DialogueAgreeSolution": "无", "parse_error": ""}
-{"Response": "客服:好的", "ResponseSolution": "无", "DialogueAgreeSolution": "无", "parse_error": ""}
-{"Response": "客服:好的", "ResponseSolution": "加急调度", "DialogueAgreeSolution": "无", "parse_error": ""}
-{"Response": "客服:好的", "ResponseSolution": "智能跟单", "DialogueAgreeSolution": "无", "parse_error": ""}
-{"Response": "客服:好的", "ResponseSolution": "外呼骑手-催促配送", "DialogueAgreeSolution": "无", "parse_error": ""}
+{"case": "pure_json", "Response": "客服:好的", "ResponseSolution": "系统催单", "DialogueAgreeSolution": "无", "parse_error": "", "raw_output": "{\"Response\":\"客服:好的\",\"ResponseSolution\":\"系统催单\",\"DialogueAgreeSolution\":\"无\"}"}
+{"case": "code_fence_json", "Response": "客服:好的", "ResponseSolution": "无", "DialogueAgreeSolution": "无", "parse_error": "", "raw_output": "```json\n{\"Response\":\"客服:好的\",\"ResponseSolution\":\"无\",\"DialogueAgreeSolution\":\"无\"}\n```"}
+{"case": "prefix_text_json", "Response": "客服:好的", "ResponseSolution": "加急调度", "DialogueAgreeSolution": "无", "parse_error": "", "raw_output": "下面是结果 {\"Response\":\"客服:好的\",\"ResponseSolution\":\"加急调度\",\"DialogueAgreeSolution\":\"无\"} 谢谢"}
+{"case": "non_json_text", "Response": "", "ResponseSolution": "无", "DialogueAgreeSolution": "无", "parse_error": "parse_failed:json:JSONDecodeError,literal:SyntaxError", "raw_output": "客服: 我帮您催一下"}
+{"case": "missing_fields", "Response": "客服:好的", "ResponseSolution": "无", "DialogueAgreeSolution": "无", "parse_error": "", "raw_output": "{\"Response\":\"客服:好的\"}"}
+{"case": "composite_solution", "Response": "客服:好的", "ResponseSolution": "系统催单;智能跟单", "DialogueAgreeSolution": "无", "parse_error": "", "raw_output": "{\"Response\":\"客服:好的\",\"ResponseSolution\":\"系统催单;智能跟单\",\"DialogueAgreeSolution\":\"无\"}"}
