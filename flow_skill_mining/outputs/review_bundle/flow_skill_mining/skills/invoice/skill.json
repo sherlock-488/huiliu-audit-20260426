@@ -1,0 +1,846 @@
+{
+  "skill_id": "invoice",
+  "scene": "发票场景",
+  "version": "v0.1-draft",
+  "source": "trainer_goodcase_mining",
+  "scope": {
+    "scene": "发票场景",
+    "supported_intents": [
+      "other",
+      "invoice_request",
+      "close_conversation",
+      "refund_request",
+      "transfer_request",
+      "member_benefit",
+      "member_auto_renew",
+      "presale_consult",
+      "quality_issue",
+      "modify_order",
+      "activity_coupon",
+      "payment_issue",
+      "compensation_accept",
+      "not_received_after_delivered",
+      "delivery_urge",
+      "cancel_request",
+      "compensation_request"
+    ]
+  },
+  "required_signals": [
+    "是否咨询高峰期",
+    "用户分层标签",
+    "是否会员",
+    "订单状态",
+    "订单类型",
+    "配送类型",
+    "商品数量",
+    "订单来源",
+    "是否为配送单",
+    "是否为自提单",
+    "是否外卖单",
+    "订单是否超售后",
+    "订单是否含追加单",
+    "订单是否含加工品",
+    "支付类型",
+    "支付金额",
+    "原价(促销价)",
+    "券减免金额",
+    "配送金额",
+    "服务费价格",
+    "是否配送异常",
+    "订单门店状态",
+    "是否有骑手真实手机号",
+    "能否修改备注",
+    "能否修改收货时间",
+    "能否修改收货地址",
+    "能否修改收货联系人",
+    "是否可取消订单",
+    "订单取消原因",
+    "订单退款状态"
+  ],
+  "candidate_solutions": [
+    "开发票",
+    "会员卡退款",
+    "引导自助查看会员权益",
+    "选择商品"
+  ],
+  "confirmation_required_solutions": [
+    "会员卡退款"
+  ],
+  "no_confirmation_required_solutions": [
+    "开发票",
+    "引导自助查看会员权益",
+    "选择商品"
+  ],
+  "priority_rules": [
+    {
+      "rule_id": "rule_9662889d9e85",
+      "scene": "发票场景",
+      "state_pattern": {
+        "scene": "发票场景",
+        "user_intent": "quality_issue"
+      },
+      "expected_response_solution": "开发票",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "",
+      "support": 5,
+      "confidence": 1.0,
+      "example_sample_ids": [
+        "8d18604c190e8c458f4aeba92c1e33a64d5d95f4",
+        "2390c3010b642d025ad12647427ba12caa7ffd8b",
+        "556bbb9927538f01a4260ec7e8fa4b14e7049c08",
+        "1b769366a6c01244aa7c427c0e0ebb960df029e8",
+        "c783cbe1b145660c1f3bb951d108b15161e221e8"
+      ],
+      "conflicting_actions": [],
+      "candidate_skill_patch_type": "tool_rule",
+      "aggregation_level": "coarse"
+    },
+    {
+      "rule_id": "rule_6c0eb3cc69bb",
+      "scene": "发票场景",
+      "state_pattern": {
+        "scene": "发票场景",
+        "user_intent": "quality_issue",
+        "order_status": "已完成",
+        "rider_status": "已送达",
+        "timeout_state": "否",
+        "can_cancel": false,
+        "already_compensated": false,
+        "refund_state": "订单无退款",
+        "selected_sku_state": "not_selected",
+        "image_state": "unknown",
+        "has_rider_phone": true
+      },
+      "expected_response_solution": "开发票",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "",
+      "support": 3,
+      "confidence": 1.0,
+      "example_sample_ids": [
+        "8d18604c190e8c458f4aeba92c1e33a64d5d95f4",
+        "2390c3010b642d025ad12647427ba12caa7ffd8b",
+        "556bbb9927538f01a4260ec7e8fa4b14e7049c08"
+      ],
+      "conflicting_actions": [],
+      "candidate_skill_patch_type": "tool_rule",
+      "aggregation_level": "fine"
+    }
+  ],
+  "no_action_rules": [
+    {
+      "rule_id": "rule_55341fe862d3",
+      "scene": "发票场景",
+      "state_pattern": {
+        "scene": "发票场景",
+        "user_intent": "close_conversation"
+      },
+      "expected_response_solution": "无",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "close_conversation",
+      "support": 109,
+      "confidence": 1.0,
+      "example_sample_ids": [
+        "39b29304c6b4bbf90b4f8b0510a9b17842718676",
+        "f9c6f1c4d113b6a568b358f4fdc1cc140ee4841c",
+        "3a41a2d19851c95268bfdce76637a9fd7a54bba6",
+        "d45a3b73ea2509d8b6d0bb31079f75b16a54efd6",
+        "e40379ebd93fb8dbdcfcf0c519c07f9752671060",
+        "a46b826df5873f785c20654fb73792aa8751ac66",
+        "fbc2296ac3ae404926610ce034184869ddde40b5",
+        "68151b35877705cf0c9dbae3d4f4691748bf8a8e",
+        "6fe8d9c575a147f265d462eed2b70352f9fc75d5",
+        "122751a02f79fc428f25d3f5629a02955a9531d9",
+        "86686de8f46dd2d3dd0b4f2fd75b1ea8e92444cf",
+        "49405c1c488d2fc4a90d2a676c1bbc99cd3473d6",
+        "c2d9898e736d57dfb817a275626204e6e8bac794",
+        "3b2babc731d9f536328a713cc7c22efdf73b2dfb",
+        "5463572d4db6867260e608a0d10145082638b6d2",
+        "1f80690c164c6071ebba34997caa35b9acfd0fdd",
+        "f99ec2e368e8c085aae09518e69853ffd4f2f41f",
+        "d64ca472653665cbf7e31a769a70d71ec66b15a2",
+        "590052414be05c7145fd1b9aeede91ceb92e71ec",
+        "a395b15003ba052ab298601f5dbdf8bb42ae374e"
+      ],
+      "conflicting_actions": [],
+      "candidate_skill_patch_type": "no_action_rule",
+      "aggregation_level": "coarse"
+    },
+    {
+      "rule_id": "rule_13133abddc42",
+      "scene": "发票场景",
+      "state_pattern": {
+        "scene": "发票场景",
+        "user_intent": "close_conversation",
+        "order_status": "已完成",
+        "rider_status": "已送达",
+        "timeout_state": "否",
+        "can_cancel": false,
+        "already_compensated": false,
+        "refund_state": "订单无退款",
+        "selected_sku_state": "not_selected",
+        "image_state": "unknown",
+        "has_rider_phone": true
+      },
+      "expected_response_solution": "无",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "close_conversation",
+      "support": 55,
+      "confidence": 1.0,
+      "example_sample_ids": [
+        "68151b35877705cf0c9dbae3d4f4691748bf8a8e",
+        "6fe8d9c575a147f265d462eed2b70352f9fc75d5",
+        "c2d9898e736d57dfb817a275626204e6e8bac794",
+        "f99ec2e368e8c085aae09518e69853ffd4f2f41f",
+        "a395b15003ba052ab298601f5dbdf8bb42ae374e",
+        "63a2c6735f5ca124931e1b2f7df112550394872a",
+        "7c500ee6cd4f4a0d78b7b5d2d1064316bb0ae348",
+        "f173b1b2e209c6ab1c2039acdc53da8495fef1af",
+        "1642f137f5fd9f7dc65057f88cfc3085cf820485",
+        "20c9f37e4bb50f8f0c07fc58e87b05d0e7783f62",
+        "f70b77067a16e8763f813f1b2037871739ef01dc",
+        "5fe30fcff7f6ed9f13d64e688cb62777b4447c4a",
+        "6c0df7d92b5ec216d68c341ee72b20c38f1b9318",
+        "98d83e6434c2ed3b02a2be33a89216f62a537ac9",
+        "77049bddfb3d87f54bbc9ebadae2e79ee1da7ded",
+        "94c0c756f2f27fb67c779fe46354c291adaf7ca7",
+        "7de333019ccea00e6439f21c95028675e6fd936a",
+        "7149d5e60a9cc15eb65eccf983060fa65b925cfa",
+        "01cacbb0d0b82be2d74721f5e6b25713d5ad892f",
+        "fff324c72555674d05c7d62b5efa89b156a5d3ad"
+      ],
+      "conflicting_actions": [],
+      "candidate_skill_patch_type": "no_action_rule",
+      "aggregation_level": "fine"
+    },
+    {
+      "rule_id": "rule_5a9502a47f9c",
+      "scene": "发票场景",
+      "state_pattern": {
+        "scene": "发票场景",
+        "user_intent": "close_conversation",
+        "order_status": "已完成",
+        "rider_status": "已送达",
+        "timeout_state": "否",
+        "can_cancel": false,
+        "already_compensated": false,
+        "refund_state": "未知状态",
+        "selected_sku_state": "not_selected",
+        "image_state": "unknown",
+        "has_rider_phone": true
+      },
+      "expected_response_solution": "无",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "close_conversation",
+      "support": 27,
+      "confidence": 1.0,
+      "example_sample_ids": [
+        "f9c6f1c4d113b6a568b358f4fdc1cc140ee4841c",
+        "3a41a2d19851c95268bfdce76637a9fd7a54bba6",
+        "49405c1c488d2fc4a90d2a676c1bbc99cd3473d6",
+        "d64ca472653665cbf7e31a769a70d71ec66b15a2",
+        "9c39a873820d8405ffd742f9e31f2b9ffefa0489",
+        "66b9b98d03c8e1c5954c183204a902cb8b1de126",
+        "2a2977d66afb6af0872b818332dcd063a20b26c0",
+        "00386414a5ec2dceda29cc5ce7a6b01597e5b904",
+        "0211a373b0732dc42b84afa5b9f594795e02e657",
+        "7a17f35665dc5426438253a2a94fd1e1b7b950cf",
+        "5d7b6482770a96cc83d481cd2e062c719cf373eb",
+        "50c37ef39773330620c95b5772b7b072d5bc83b5",
+        "f53452f7be36eef0e42c7729a15d10c6bada7807",
+        "d260ed887bda58bade5198b271186d0e0d72429a",
+        "6720711fcd828c9474214b2a253e0cc6f967f419",
+        "42c61eb8cde5021ff3265fa3341f750942861c7f",
+        "6618a85af4c1cb4048a2d15fdb8d9ebd071f84ca",
+        "b178787444d5dc2b02c96fb57072f97b9c32a03b",
+        "28fcfe5b23b11ec9ef4395dad032726447ebfb34",
+        "77e90d602ff4a7e9217fc2097217d0e33a25be08"
+      ],
+      "conflicting_actions": [],
+      "candidate_skill_patch_type": "no_action_rule",
+      "aggregation_level": "fine"
+    },
+    {
+      "rule_id": "rule_404951840ace",
+      "scene": "发票场景",
+      "state_pattern": {
+        "scene": "发票场景",
+        "user_intent": "other",
+        "order_status": "已完成",
+        "can_cancel": false,
+        "can_compensate": false,
+        "already_compensated": false,
+        "refund_state": "订单无退款",
+        "selected_sku_state": "unknown",
+        "image_state": "unknown",
+        "has_rider_phone": false
+      },
+      "expected_response_solution": "无",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "explain_refund_status",
+      "support": 25,
+      "confidence": 1.0,
+      "example_sample_ids": [
+        "e10cf6bffefe15b63d8fdc26ba0fd8badd882738",
+        "c957a6ce9cda61fc6139bf200bba5f5fa772cd9f",
+        "e419750e434a557ef4705795ddc16bc7643f4a21",
+        "cd56760aceb231c37b5ea0c608f6ca92060f43d7",
+        "e7367c21bd6067bce69a57cbfb7e22a65472ddd6",
+        "ac7a6667c7f8c8d07b4bec5079a54ff75319479f",
+        "3d7be8ac38ed54efc8a397b3d5ce8219d103f4b5",
+        "e0ee13204745f6889039f76f5fbb1be6cc48d8ba",
+        "b3892cbd8d496e9fcdad6900ebe6e810b4a1ceae",
+        "c912251cf7443639d15c38486286edacecdc1154",
+        "4639062f7775debc64261e6b581a3f2369e895f2",
+        "85b01fe71316e12fc082515eb5c72a4bb76b7c79",
+        "d48c16db7d7df62842bb61aab568e68e825963eb",
+        "6ed4c3d71cdefd96a45aebc50dd32df2c0cbbd79",
+        "a4ea92e7780a925ca6a6376555fccd6228acd425",
+        "2e2c74019b6f90b3fbe5a092d1185c7853023f6b",
+        "f42c1ef902b17f7be1af6017c88109aba68d09eb",
+        "bde71c1ee1f06aff3fb1cabda40c8ad93f9709b2",
+        "138fe5000b33a2f12d329b4e0a33af82124a31ad",
+        "4ba40a0c37dd4b333e52b5fe067a0dcd94e8bb96"
+      ],
+      "conflicting_actions": [],
+      "candidate_skill_patch_type": "no_action_rule",
+      "aggregation_level": "fine"
+    },
+    {
+      "rule_id": "rule_0e562e8f4432",
+      "scene": "发票场景",
+      "state_pattern": {
+        "scene": "发票场景",
+        "user_intent": "refund_request",
+        "order_status": "已完成",
+        "rider_status": "已送达",
+        "timeout_state": "否",
+        "can_cancel": false,
+        "already_compensated": false,
+        "refund_state": "订单无退款",
+        "selected_sku_state": "not_selected",
+        "image_state": "unknown",
+        "has_rider_phone": true
+      },
+      "expected_response_solution": "无",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "explain_refund_status",
+      "support": 11,
+      "confidence": 1.0,
+      "example_sample_ids": [
+        "ef16be4c69685a51788e33e5a789241fdb008705",
+        "8d7414dbce7b743434dcbb71799c09ecf754d56e",
+        "2533e5914c892126547cc875ae1c8b311f2d7a15",
+        "be867475d25995946cbc9bffa4305ef1d9e87a91",
+        "94a182defccc2c7b11bc018555e515628985e092",
+        "c0fb552a4098d209b7f5300b68679c1f7469f157",
+        "a4fdfd33821aea02576076b510c35fa3c83d3be8",
+        "abb270c6198a960b0cdc070ee7769e197ea8e674",
+        "2566482fb9951e68224a3fe178adb35efb19c311",
+        "c67e71b56a860df4d902ceea2da9ce3c5f2d625b",
+        "ccfc99421e2dcab5d279806ddb38afb49d5b176d"
+      ],
+      "conflicting_actions": [],
+      "candidate_skill_patch_type": "no_action_rule",
+      "aggregation_level": "fine"
+    },
+    {
+      "rule_id": "rule_9864e2585d27",
+      "scene": "发票场景",
+      "state_pattern": {
+        "scene": "发票场景",
+        "user_intent": "close_conversation",
+        "order_status": "已完成",
+        "can_cancel": false,
+        "can_compensate": false,
+        "already_compensated": false,
+        "refund_state": "订单无退款",
+        "selected_sku_state": "unknown",
+        "image_state": "unknown",
+        "has_rider_phone": false
+      },
+      "expected_response_solution": "无",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "close_conversation",
+      "support": 8,
+      "confidence": 1.0,
+      "example_sample_ids": [
+        "39b29304c6b4bbf90b4f8b0510a9b17842718676",
+        "3b2babc731d9f536328a713cc7c22efdf73b2dfb",
+        "5463572d4db6867260e608a0d10145082638b6d2",
+        "1f80690c164c6071ebba34997caa35b9acfd0fdd",
+        "54413f57c8a1ea271e5af6fec17e25452972c06e",
+        "7832fa10eec1075649d70213bbd5e727d2cc67b1",
+        "61698f8dc0744d161e55fcb3a9dad2ad8ea8a12e",
+        "d5797c4a3f033bb48c92d0a82962f63917679886"
+      ],
+      "conflicting_actions": [],
+      "candidate_skill_patch_type": "no_action_rule",
+      "aggregation_level": "fine"
+    },
+    {
+      "rule_id": "rule_e75a5679d649",
+      "scene": "发票场景",
+      "state_pattern": {
+        "scene": "发票场景",
+        "user_intent": "member_auto_renew"
+      },
+      "expected_response_solution": "无",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "explain_refund_status",
+      "support": 5,
+      "confidence": 1.0,
+      "example_sample_ids": [
+        "16f9d692daa21e7fdbe0254a4dd9d4dea8768b6d",
+        "25d42fd38a8e76cba5af15204c1d10f419558033",
+        "62e61591f9e516577468735e57a0345c014b131b",
+        "771fc4c9c83890685a531a0953aa3d601cc9ab55",
+        "082c384732c5b683db137bff45a5c787629b4619"
+      ],
+      "conflicting_actions": [],
+      "candidate_skill_patch_type": "no_action_rule",
+      "aggregation_level": "coarse"
+    },
+    {
+      "rule_id": "rule_75a59f65f450",
+      "scene": "发票场景",
+      "state_pattern": {
+        "scene": "发票场景",
+        "user_intent": "modify_order"
+      },
+      "expected_response_solution": "无",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "explain_refund_status",
+      "support": 5,
+      "confidence": 1.0,
+      "example_sample_ids": [
+        "53e7f6c9b0054cdea29203870ef29b3ee30f2cb9",
+        "e50f20af4473843e8ec21aa5bfd6ea6c093531dc",
+        "199c4fa1c6a1b3eca822c2b3ffefa368e11cabc4",
+        "f9f66a31bb3e99f099f309c70f5acd1356903d0b",
+        "7b3d0b81855493b41b69acfbbb736311fdb22ae5"
+      ],
+      "conflicting_actions": [],
+      "candidate_skill_patch_type": "no_action_rule",
+      "aggregation_level": "coarse"
+    },
+    {
+      "rule_id": "rule_0164cdb1a4f9",
+      "scene": "发票场景",
+      "state_pattern": {
+        "scene": "发票场景",
+        "user_intent": "member_auto_renew",
+        "order_status": "已完成",
+        "can_cancel": false,
+        "can_compensate": false,
+        "already_compensated": false,
+        "refund_state": "订单无退款",
+        "selected_sku_state": "unknown",
+        "image_state": "unknown",
+        "has_rider_phone": false
+      },
+      "expected_response_solution": "无",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "explain_refund_status",
+      "support": 5,
+      "confidence": 1.0,
+      "example_sample_ids": [
+        "16f9d692daa21e7fdbe0254a4dd9d4dea8768b6d",
+        "25d42fd38a8e76cba5af15204c1d10f419558033",
+        "62e61591f9e516577468735e57a0345c014b131b",
+        "771fc4c9c83890685a531a0953aa3d601cc9ab55",
+        "082c384732c5b683db137bff45a5c787629b4619"
+      ],
+      "conflicting_actions": [],
+      "candidate_skill_patch_type": "no_action_rule",
+      "aggregation_level": "fine"
+    },
+    {
+      "rule_id": "rule_922b1608ad93",
+      "scene": "发票场景",
+      "state_pattern": {
+        "scene": "发票场景",
+        "user_intent": "close_conversation",
+        "order_status": "已完成",
+        "rider_status": "已送达",
+        "timeout_state": "是",
+        "can_cancel": false,
+        "already_compensated": false,
+        "refund_state": "订单无退款",
+        "selected_sku_state": "not_selected",
+        "image_state": "unknown",
+        "has_rider_phone": true
+      },
+      "expected_response_solution": "无",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "close_conversation",
+      "support": 4,
+      "confidence": 1.0,
+      "example_sample_ids": [
+        "d45a3b73ea2509d8b6d0bb31079f75b16a54efd6",
+        "a46b826df5873f785c20654fb73792aa8751ac66",
+        "fbc2296ac3ae404926610ce034184869ddde40b5",
+        "8a8f90fe03433b9f69a6347df8a3ff97838f028a"
+      ],
+      "conflicting_actions": [],
+      "candidate_skill_patch_type": "no_action_rule",
+      "aggregation_level": "fine"
+    },
+    {
+      "rule_id": "rule_632c6e694549",
+      "scene": "发票场景",
+      "state_pattern": {
+        "scene": "发票场景",
+        "user_intent": "close_conversation",
+        "order_status": "未知状态",
+        "can_cancel": false,
+        "can_compensate": false,
+        "already_compensated": false,
+        "refund_state": "未知状态",
+        "selected_sku_state": "unknown",
+        "image_state": "unknown",
+        "has_rider_phone": false
+      },
+      "expected_response_solution": "无",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "close_conversation",
+      "support": 4,
+      "confidence": 1.0,
+      "example_sample_ids": [
+        "e40379ebd93fb8dbdcfcf0c519c07f9752671060",
+        "62cfc5a107dee5df62789b3258138027653b716e",
+        "69cb2bb4ea9fce5a85144563b972c53aa2a089ff",
+        "ee9cf026427a230df34973a30b0911760367de1e"
+      ],
+      "conflicting_actions": [],
+      "candidate_skill_patch_type": "no_action_rule",
+      "aggregation_level": "fine"
+    },
+    {
+      "rule_id": "rule_97abf093db32",
+      "scene": "发票场景",
+      "state_pattern": {
+        "scene": "发票场景",
+        "user_intent": "refund_request",
+        "order_status": "未知状态",
+        "can_cancel": false,
+        "can_compensate": false,
+        "already_compensated": false,
+        "refund_state": "未知状态",
+        "selected_sku_state": "unknown",
+        "image_state": "unknown",
+        "has_rider_phone": false
+      },
+      "expected_response_solution": "无",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "explain_refund_status",
+      "support": 3,
+      "confidence": 1.0,
+      "example_sample_ids": [
+        "375da78458301cfa452d581cfc4375afe5e58b6f",
+        "40ac502951ebe6d2f72730c4cc745f173231792f",
+        "21d6f1ff43a21d87f5f3ce75d8596db3aaccc1f3"
+      ],
+      "conflicting_actions": [],
+      "candidate_skill_patch_type": "no_action_rule",
+      "aggregation_level": "fine"
+    },
+    {
+      "rule_id": "rule_c753d1b51f92",
+      "scene": "发票场景",
+      "state_pattern": {
+        "scene": "发票场景",
+        "user_intent": "close_conversation",
+        "order_status": "已完成",
+        "rider_status": "已送达",
+        "timeout_state": "否",
+        "can_cancel": false,
+        "already_compensated": false,
+        "refund_state": "订单部分退款",
+        "selected_sku_state": "not_selected",
+        "image_state": "unknown",
+        "has_rider_phone": true
+      },
+      "expected_response_solution": "无",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "close_conversation",
+      "support": 3,
+      "confidence": 1.0,
+      "example_sample_ids": [
+        "590052414be05c7145fd1b9aeede91ceb92e71ec",
+        "61e02c337b304d029ce4dd6ec54be5cafc495618",
+        "08bed527efaf044f8c32b46c8bcb129831acd7c7"
+      ],
+      "conflicting_actions": [],
+      "candidate_skill_patch_type": "no_action_rule",
+      "aggregation_level": "fine"
+    },
+    {
+      "rule_id": "rule_614bb62c8715",
+      "scene": "发票场景",
+      "state_pattern": {
+        "scene": "发票场景",
+        "user_intent": "member_benefit",
+        "order_status": "已完成",
+        "rider_status": "已送达",
+        "timeout_state": "否",
+        "can_cancel": false,
+        "already_compensated": false,
+        "refund_state": "订单无退款",
+        "selected_sku_state": "not_selected",
+        "image_state": "unknown",
+        "has_rider_phone": true
+      },
+      "expected_response_solution": "无",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "explain_refund_status",
+      "support": 3,
+      "confidence": 1.0,
+      "example_sample_ids": [
+        "a73c30419f4892107111983d9e9419cf55496f29",
+        "b35dc7a1969a210e1627d133caa107dd338fe500",
+        "d12365ea3d70684c39f7c1ec181c3d77e03dfa96"
+      ],
+      "conflicting_actions": [],
+      "candidate_skill_patch_type": "no_action_rule",
+      "aggregation_level": "fine"
+    },
+    {
+      "rule_id": "rule_87dbbe0421f1",
+      "scene": "发票场景",
+      "state_pattern": {
+        "scene": "发票场景",
+        "user_intent": "modify_order",
+        "order_status": "已完成",
+        "rider_status": "已送达",
+        "timeout_state": "否",
+        "can_cancel": false,
+        "already_compensated": false,
+        "refund_state": "订单无退款",
+        "selected_sku_state": "not_selected",
+        "image_state": "unknown",
+        "has_rider_phone": true
+      },
+      "expected_response_solution": "无",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "explain_refund_status",
+      "support": 3,
+      "confidence": 1.0,
+      "example_sample_ids": [
+        "53e7f6c9b0054cdea29203870ef29b3ee30f2cb9",
+        "e50f20af4473843e8ec21aa5bfd6ea6c093531dc",
+        "7b3d0b81855493b41b69acfbbb736311fdb22ae5"
+      ],
+      "conflicting_actions": [],
+      "candidate_skill_patch_type": "no_action_rule",
+      "aggregation_level": "fine"
+    }
+  ],
+  "forbidden_rules": [],
+  "clarify_rules": [
+    {
+      "rule_id": "rule_58b60ed43ac5",
+      "scene": "发票场景",
+      "state_pattern": {
+        "scene": "发票场景",
+        "user_intent": "other",
+        "order_status": "已完成",
+        "rider_status": "已送达",
+        "timeout_state": "否",
+        "can_cancel": false,
+        "already_compensated": false,
+        "refund_state": "未知状态",
+        "selected_sku_state": "selected",
+        "image_state": "unknown",
+        "has_rider_phone": true
+      },
+      "expected_response_solution": "无",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "ask_refund_ratio",
+      "support": 3,
+      "confidence": 1.0,
+      "example_sample_ids": [
+        "2ae5cf7f3499bae67725edcdb608e20bd57112ee",
+        "d240a95280e0457bdc3ded49df55c85c9ffa0dae",
+        "25ba37cedddd2c23dee43909ec47fcc11b18a3ef"
+      ],
+      "conflicting_actions": [],
+      "candidate_skill_patch_type": "clarify_rule",
+      "aggregation_level": "fine"
+    },
+    {
+      "rule_id": "rule_a4f845b96078",
+      "scene": "发票场景",
+      "state_pattern": {
+        "scene": "发票场景",
+        "user_intent": "transfer_request",
+        "order_status": "已完成",
+        "rider_status": "已送达",
+        "timeout_state": "否",
+        "can_cancel": false,
+        "already_compensated": false,
+        "refund_state": "未知状态",
+        "selected_sku_state": "not_selected",
+        "image_state": "unknown",
+        "has_rider_phone": true
+      },
+      "expected_response_solution": "无",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "ask_user_problem",
+      "support": 5,
+      "confidence": 0.8,
+      "example_sample_ids": [
+        "7d6e6826aad40e238cebb46f2366905e16450abc",
+        "c6e5962638158c51952f47576fd8a7011b50786c",
+        "c0a142124473e7f6219c1915d11f63363a72a943",
+        "db62b8ccffebb79cdf67a0f47099aa09cb0ac941",
+        "8bd0a6e183b2bebc04b4e826ba7a08059d58ac3c"
+      ],
+      "conflicting_actions": [
+        {
+          "action": [
+            "开发票",
+            "无",
+            ""
+          ],
+          "count": 1
+        }
+      ],
+      "candidate_skill_patch_type": "clarify_rule",
+      "aggregation_level": "fine"
+    },
+    {
+      "rule_id": "rule_6213bbd5b44b",
+      "scene": "发票场景",
+      "state_pattern": {
+        "scene": "发票场景",
+        "user_intent": "transfer_request",
+        "order_status": "已完成",
+        "rider_status": "已送达",
+        "timeout_state": "否",
+        "can_cancel": false,
+        "already_compensated": false,
+        "refund_state": "订单无退款",
+        "selected_sku_state": "not_selected",
+        "image_state": "unknown",
+        "has_rider_phone": true
+      },
+      "expected_response_solution": "无",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "ask_user_problem",
+      "support": 7,
+      "confidence": 0.7143,
+      "example_sample_ids": [
+        "da97990d01f7699d06d049736378a320b9d262d3",
+        "fa86f722217b7205adaa1cbde32987db20d6caef",
+        "2bde8aeac5b64f8c2ffda3553d2642edc633d34a",
+        "87c30c6547e9bd81b4eb0f150ebb5303c2be1a56",
+        "e9533a19cb7794b080673cb54022fec374683cdf",
+        "0ad1acf3f72e3c25c1d33b28d46a0ee31d04fd84",
+        "0d7e49d83eab1c0a1c875e8728bd8b52e3b18259"
+      ],
+      "conflicting_actions": [
+        {
+          "action": [
+            "开发票",
+            "无",
+            ""
+          ],
+          "count": 1
+        },
+        {
+          "action": [
+            "无",
+            "无",
+            "clarify_intent"
+          ],
+          "count": 1
+        }
+      ],
+      "candidate_skill_patch_type": "clarify_rule",
+      "aggregation_level": "fine"
+    },
+    {
+      "rule_id": "rule_360914db1165",
+      "scene": "发票场景",
+      "state_pattern": {
+        "scene": "发票场景",
+        "user_intent": "transfer_request"
+      },
+      "expected_response_solution": "无",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "ask_user_problem",
+      "support": 20,
+      "confidence": 0.7,
+      "example_sample_ids": [
+        "7d6e6826aad40e238cebb46f2366905e16450abc",
+        "28c6b881bfac481b66f8d9e35029c5a904900305",
+        "8d21c57785eb69831cd94b0bb7e6987d0081fff5",
+        "da97990d01f7699d06d049736378a320b9d262d3",
+        "fa86f722217b7205adaa1cbde32987db20d6caef",
+        "f18fdb191be7191c1ac054b4c08547af24850bff",
+        "c6e5962638158c51952f47576fd8a7011b50786c",
+        "2bde8aeac5b64f8c2ffda3553d2642edc633d34a",
+        "8fc66b3d9904bf842eab6d3ae9295b3627bc4ca7",
+        "c0a142124473e7f6219c1915d11f63363a72a943",
+        "87c30c6547e9bd81b4eb0f150ebb5303c2be1a56",
+        "065f1262965e6c99b8e7263d4bf74d7e7446952b",
+        "e9533a19cb7794b080673cb54022fec374683cdf",
+        "0ad1acf3f72e3c25c1d33b28d46a0ee31d04fd84",
+        "08edfbde8c37f3ac36042643ad2a13c31b48e23c",
+        "0d7e49d83eab1c0a1c875e8728bd8b52e3b18259",
+        "db62b8ccffebb79cdf67a0f47099aa09cb0ac941",
+        "8bd0a6e183b2bebc04b4e826ba7a08059d58ac3c",
+        "0541ac0daadad00c07c9e81cda4375968030584f",
+        "79819c6430967986108946dafe179be1012df3f2"
+      ],
+      "conflicting_actions": [
+        {
+          "action": [
+            "开发票",
+            "无",
+            ""
+          ],
+          "count": 4
+        },
+        {
+          "action": [
+            "无",
+            "无",
+            "clarify_intent"
+          ],
+          "count": 2
+        }
+      ],
+      "candidate_skill_patch_type": "clarify_rule",
+      "aggregation_level": "coarse"
+    }
+  ],
+  "evidence": {
+    "support_cases": 578,
+    "example_sample_ids": [
+      "3324e5a59e61a34bbacf1b905d117acfa367f58a",
+      "2559bca1351488b706613922cab56de62daca196",
+      "03355f4d1da3bb86cafdba611e7de3f3ab632ab2",
+      "e10cf6bffefe15b63d8fdc26ba0fd8badd882738",
+      "c957a6ce9cda61fc6139bf200bba5f5fa772cd9f",
+      "65d766cf6658b543bb1f44d43b493519494fdc45",
+      "c58d5339de5e71988d4de752e5012d6611dc7f23",
+      "e419750e434a557ef4705795ddc16bc7643f4a21",
+      "cd56760aceb231c37b5ea0c608f6ca92060f43d7",
+      "e7367c21bd6067bce69a57cbfb7e22a65472ddd6",
+      "ac7a6667c7f8c8d07b4bec5079a54ff75319479f",
+      "39b29304c6b4bbf90b4f8b0510a9b17842718676",
+      "7d6e6826aad40e238cebb46f2366905e16450abc",
+      "1f618bbd1647c31191cb6ce1981b377cc2637297",
+      "484341a7186d925180f68605a6c5a43846f2221f",
+      "f9c6f1c4d113b6a568b358f4fdc1cc140ee4841c",
+      "3a41a2d19851c95268bfdce76637a9fd7a54bba6",
+      "28c6b881bfac481b66f8d9e35029c5a904900305",
+      "1ee5138060447d6e29ee98f09cafa85f5a08be67",
+      "a719036f656a0efc438c805a711d77b5cde65b5b"
+    ]
+  },
+  "open_questions_for_trainer": [
+    "同一状态下 `无` 与其他动作存在分歧，需要确认。"
+  ]
+}

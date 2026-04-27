@@ -1,0 +1,794 @@
+{
+  "skill_id": "activity_regular",
+  "scene": "活动场景-常规活动问题",
+  "version": "v0.1-draft",
+  "source": "trainer_goodcase_mining",
+  "scope": {
+    "scene": "活动场景-常规活动问题",
+    "supported_intents": [
+      "other",
+      "close_conversation",
+      "activity_coupon",
+      "transfer_request",
+      "member_benefit",
+      "date_issue",
+      "compensation_request",
+      "member_auto_renew",
+      "cancel_request",
+      "presale_consult",
+      "compensation_accept",
+      "eta_question"
+    ]
+  },
+  "required_signals": [
+    "是否咨询高峰期",
+    "用户分层标签",
+    "是否会员",
+    "天气",
+    "用户和门店的通话记录",
+    "用户和骑手的通话记录",
+    "订单状态",
+    "订单类型",
+    "配送类型",
+    "商品数量",
+    "订单来源",
+    "是否为配送单",
+    "是否为自提单",
+    "是否外卖单",
+    "订单是否含追加单",
+    "订单是否含加工品",
+    "支付类型",
+    "支付金额",
+    "原价(促销价)",
+    "券减免金额",
+    "配送金额",
+    "服务费价格",
+    "是否配送异常",
+    "订单门店状态",
+    "是否有骑手真实手机号",
+    "能否修改备注",
+    "能否修改收货时间",
+    "能否修改收货地址",
+    "能否修改收货联系人",
+    "是否可取消订单"
+  ],
+  "candidate_solutions": [
+    "操作赔付-优惠券-5元",
+    "引导自助查看会员权益",
+    "引导自助修改订单"
+  ],
+  "confirmation_required_solutions": [
+    "操作赔付-优惠券-xx元"
+  ],
+  "no_confirmation_required_solutions": [
+    "引导自助修改订单",
+    "引导自助查看会员权益"
+  ],
+  "priority_rules": [],
+  "no_action_rules": [
+    {
+      "rule_id": "rule_cafac31978bc",
+      "scene": "活动场景-常规活动问题",
+      "state_pattern": {
+        "scene": "活动场景-常规活动问题",
+        "user_intent": "close_conversation"
+      },
+      "expected_response_solution": "无",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "close_conversation",
+      "support": 66,
+      "confidence": 1.0,
+      "example_sample_ids": [
+        "f803562da72d00847d9eb4187a6f18905356aa8b",
+        "6ed7beb2cdd91dce512a76c5011ac45e1e220aae",
+        "b9f7acdf4f39d13f5ba7f39efa0d7efdd13cebd3",
+        "ee713dfb0dcc46062f6ff4527a0c26b9b5271e13",
+        "0a0a52f9a4c11337969cc95bdfcb11d459842f6d",
+        "1fe01923b70afb3b2ee793dcb4efe54e654b18f0",
+        "4ed70963947b15be28c2b0c40ffcb2a9bacf3dfa",
+        "918fea624962aace51aaeddc1a5eb69f7549b6be",
+        "739176128ab0f68469cd239088f4f37cf2140157",
+        "01fc7f5abb32a889dc3a1e962f1d335dc77d1f25",
+        "99638667e1081a67155f63b0861f22c0fe1a8b9b",
+        "ff9405d6474a4646a70da588566494fbb415c30a",
+        "d57e03325a5d7490f9bb8f66bfdb1e0aa0f45c92",
+        "99879e7105ac7b729e8ec6f35ec9428ffda7c7e2",
+        "1fbea7385850d6128ebaaa27bae6897d46e8e967",
+        "76b79ff599d8b1cbaf5db460614fe1208e9e3fe1",
+        "d8a25f311cbb3f4e06122b23ffe161e56099c3a5",
+        "84bcfbb5e86ecc2b66a439928b586321800bddaf",
+        "8e58e63e19b3274061b32ed35e6901062cea5468",
+        "0113578571f398a2bc92b49e5de53703b6f3baf9"
+      ],
+      "conflicting_actions": [],
+      "candidate_skill_patch_type": "no_action_rule",
+      "aggregation_level": "coarse"
+    },
+    {
+      "rule_id": "rule_d3ad8dc2980b",
+      "scene": "活动场景-常规活动问题",
+      "state_pattern": {
+        "scene": "活动场景-常规活动问题",
+        "user_intent": "close_conversation",
+        "selected_sku_state": "unknown",
+        "image_state": "unknown"
+      },
+      "expected_response_solution": "无",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "close_conversation",
+      "support": 34,
+      "confidence": 1.0,
+      "example_sample_ids": [
+        "1f6f63ac44adab487f827cbd27eb6947b9bf05b4",
+        "a9cb6cddfc9d6356c397a51794d7ae32fe55f18b",
+        "2b335450c8d7dcbd2d95d770472b13c9761c5b3f",
+        "cf9977dd95b181134d69fcc9eecb2221ba72c984",
+        "0e3c5b459544f414abfe6af1fdd4a9a22203680c",
+        "d85cdd2cd11e6f2309835def0ed2b999595d5932",
+        "883b09473ed1eb335200dc794606bca02fbb8ae7",
+        "9c1c0fe89fc6234f2bc90cef9de0ca637b186ae6",
+        "493cd4c9a6ca84df4d68a1165067041412fd402a",
+        "15e36d44021ef99d354c7b69b981339d503565b5",
+        "c632bf98e9d1a2709947f0b7f4d675076244897c",
+        "7e315a6a93671655645b86f595de2d4f364da5ca",
+        "c769a693338c2e9fc73b724534a75f6f8808af11",
+        "989047e5039cf9eaa8e03bffa2c8b726a0b15eba",
+        "4d31fa394cb216c321b08b159604eaa207976dfd",
+        "b8f5b9c07c76295ca14a9b03c32945cb63567790",
+        "e6210956cfaac2e2c7cfc557ce7d46a8b73ffa1f",
+        "61af802639da3a5a500e98fd874cc49839780b27",
+        "71ec9a331ccad346b15bf8ea3304dd6f33b29642",
+        "246ab8395cd4560ce7757875680ab0c78b4c6975"
+      ],
+      "conflicting_actions": [],
+      "candidate_skill_patch_type": "no_action_rule",
+      "aggregation_level": "fine"
+    },
+    {
+      "rule_id": "rule_d5c71d92dbed",
+      "scene": "活动场景-常规活动问题",
+      "state_pattern": {
+        "scene": "活动场景-常规活动问题",
+        "user_intent": "other",
+        "order_status": "已完成",
+        "rider_status": "已送达",
+        "timeout_state": "否",
+        "can_cancel": false,
+        "already_compensated": false,
+        "refund_state": "订单无退款",
+        "selected_sku_state": "not_selected",
+        "image_state": "unknown",
+        "has_rider_phone": true
+      },
+      "expected_response_solution": "无",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "explain_refund_status",
+      "support": 22,
+      "confidence": 1.0,
+      "example_sample_ids": [
+        "dbdadb2d98416b20dd4dec61a5649b46b76ec429",
+        "cb3bec0a26d5a627bb048c3ebe913b6a3cade4ef",
+        "554d8e9e76e415718100dbce38e816800fa2dce2",
+        "cefa9feb530d6578d323f3834e55d0be82cfb6b1",
+        "b3eca541d8e409389d2a1bc12b08d956f9a6aef2",
+        "e4a89e84062c2f6b821b3ee2a77d8c2f38860133",
+        "8b58cb9e677a52ee4a296e90b0eb585efe413c82",
+        "194739e550c7a69582120d7cf4bebca85e892fde",
+        "1add43b88ce65f245db0c4e252b597818b2da992",
+        "8259a142815ad92ccaddd69587af9dc6e3ad9f58",
+        "97618d5e8ef87f4613f1086a39f29bf491bbb7c8",
+        "814e9420d57956ee23f9ccb57874954f415312ba",
+        "29bdb0bce879362a4bfecc99b70206b6e15bbbf3",
+        "dd1c51e9ff788f9e0f36d93b592347874681dc3e",
+        "f40ca55fac541de4679b2ff48316173a150dce7f",
+        "62f14ce02c10b5e453a17e5672dde4c3460c20bc",
+        "2e5940166afc9764ab02fa2dec312f6d6286aad7",
+        "5dcd7b6c36a83390747a3824ec271c9679b6d37f",
+        "30bd42bf5896b6267b25c9a24c06520485466040",
+        "9e5b2d07f1bcae47c431b2825878fa501a42e187"
+      ],
+      "conflicting_actions": [],
+      "candidate_skill_patch_type": "no_action_rule",
+      "aggregation_level": "fine"
+    },
+    {
+      "rule_id": "rule_d00e5c970d43",
+      "scene": "活动场景-常规活动问题",
+      "state_pattern": {
+        "scene": "活动场景-常规活动问题",
+        "user_intent": "close_conversation",
+        "order_status": "已完成",
+        "rider_status": "已送达",
+        "timeout_state": "否",
+        "can_cancel": false,
+        "already_compensated": false,
+        "refund_state": "订单无退款",
+        "selected_sku_state": "not_selected",
+        "image_state": "unknown",
+        "has_rider_phone": true
+      },
+      "expected_response_solution": "无",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "close_conversation",
+      "support": 6,
+      "confidence": 1.0,
+      "example_sample_ids": [
+        "f803562da72d00847d9eb4187a6f18905356aa8b",
+        "6ed7beb2cdd91dce512a76c5011ac45e1e220aae",
+        "d8a25f311cbb3f4e06122b23ffe161e56099c3a5",
+        "84bcfbb5e86ecc2b66a439928b586321800bddaf",
+        "8e58e63e19b3274061b32ed35e6901062cea5468",
+        "ed775ed6d33105e0a681da6914036ea4156900ae"
+      ],
+      "conflicting_actions": [],
+      "candidate_skill_patch_type": "no_action_rule",
+      "aggregation_level": "fine"
+    },
+    {
+      "rule_id": "rule_52a71cf00807",
+      "scene": "活动场景-常规活动问题",
+      "state_pattern": {
+        "scene": "活动场景-常规活动问题",
+        "user_intent": "other",
+        "order_status": "已完成",
+        "rider_status": "已送达",
+        "timeout_state": "否",
+        "can_cancel": false,
+        "already_compensated": false,
+        "refund_state": "订单部分退款",
+        "selected_sku_state": "not_selected",
+        "image_state": "unknown",
+        "has_rider_phone": true
+      },
+      "expected_response_solution": "无",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "explain_refund_status",
+      "support": 6,
+      "confidence": 1.0,
+      "example_sample_ids": [
+        "b51c9d180b0a9f99591a03c944f01aea93755ba9",
+        "74b3f572ead2eec0ad879e0e32c22903465be9fb",
+        "0e124619a8cba72d818875ef683931a24a992af8",
+        "9350343196e6ab2f51e43497374f611649e48ac7",
+        "712702d33e34a2fb72c5c3691737365b80b88092",
+        "156d3137fa1b88b0d73f307849c20b6028952dbc"
+      ],
+      "conflicting_actions": [],
+      "candidate_skill_patch_type": "no_action_rule",
+      "aggregation_level": "fine"
+    },
+    {
+      "rule_id": "rule_8e77a4676279",
+      "scene": "活动场景-常规活动问题",
+      "state_pattern": {
+        "scene": "活动场景-常规活动问题",
+        "user_intent": "other",
+        "order_status": "履约中",
+        "rider_status": "无骑手接单",
+        "timeout_state": "否",
+        "has_timeout_risk": false,
+        "can_cancel": true,
+        "can_compensate": false,
+        "already_compensated": false,
+        "refund_state": "订单无退款",
+        "selected_sku_state": "not_selected",
+        "image_state": "unknown",
+        "has_rider_phone": false
+      },
+      "expected_response_solution": "无",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "explain_refund_status",
+      "support": 5,
+      "confidence": 1.0,
+      "example_sample_ids": [
+        "7bee99b23738e7ed04a04795c43022e3294f2301",
+        "c955b27c4aa9c9893bf426334b9865590baaa6b1",
+        "c68e5d9059d90b4a47345139d3b8f58604982920",
+        "88f3c800b06f42431054a289e1aa8e403c1800a5",
+        "69179f0c1c1f42172bcd564d5a947dd5a2753f27"
+      ],
+      "conflicting_actions": [],
+      "candidate_skill_patch_type": "no_action_rule",
+      "aggregation_level": "fine"
+    },
+    {
+      "rule_id": "rule_e7f3b00ed83e",
+      "scene": "活动场景-常规活动问题",
+      "state_pattern": {
+        "scene": "活动场景-常规活动问题",
+        "user_intent": "other",
+        "order_status": "已完成",
+        "rider_status": "已送达",
+        "timeout_state": "否",
+        "can_cancel": false,
+        "already_compensated": false,
+        "refund_state": "订单无退款",
+        "selected_sku_state": "not_selected",
+        "image_state": "unknown",
+        "has_rider_phone": false
+      },
+      "expected_response_solution": "无",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "explain_refund_status",
+      "support": 5,
+      "confidence": 1.0,
+      "example_sample_ids": [
+        "4f2687680f8614593ed3f5d3f58718b77f2686c6",
+        "cbf6ab6dfc590371ecb2a011757693dfc9220346",
+        "8549c7b501182395877d6ddd896579538f7fbe82",
+        "7ba6735d65984182a5c8a0d0b1c3ab4114bd570c",
+        "46ac8c815e677103eef7a806d0949e9170ff6a4b"
+      ],
+      "conflicting_actions": [],
+      "candidate_skill_patch_type": "no_action_rule",
+      "aggregation_level": "fine"
+    },
+    {
+      "rule_id": "rule_30d2ed9e444a",
+      "scene": "活动场景-常规活动问题",
+      "state_pattern": {
+        "scene": "活动场景-常规活动问题",
+        "user_intent": "close_conversation",
+        "order_status": "已完成",
+        "rider_status": "已送达",
+        "timeout_state": "否",
+        "can_cancel": false,
+        "already_compensated": false,
+        "refund_state": "未知状态",
+        "selected_sku_state": "not_selected",
+        "image_state": "unknown",
+        "has_rider_phone": true
+      },
+      "expected_response_solution": "无",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "close_conversation",
+      "support": 4,
+      "confidence": 1.0,
+      "example_sample_ids": [
+        "4ed70963947b15be28c2b0c40ffcb2a9bacf3dfa",
+        "739176128ab0f68469cd239088f4f37cf2140157",
+        "903007cb3f6b4370bf096c5132b2df2f1536cdd3",
+        "4b9c0250316cc073aa1f7fa86195bf3f8fb73489"
+      ],
+      "conflicting_actions": [],
+      "candidate_skill_patch_type": "no_action_rule",
+      "aggregation_level": "fine"
+    },
+    {
+      "rule_id": "rule_95cc8d8c9bb9",
+      "scene": "活动场景-常规活动问题",
+      "state_pattern": {
+        "scene": "活动场景-常规活动问题",
+        "user_intent": "other",
+        "order_status": "已完成",
+        "can_cancel": false,
+        "can_compensate": false,
+        "already_compensated": false,
+        "refund_state": "订单整单退款",
+        "selected_sku_state": "unknown",
+        "image_state": "unknown",
+        "has_rider_phone": false
+      },
+      "expected_response_solution": "无",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "explain_refund_status",
+      "support": 4,
+      "confidence": 1.0,
+      "example_sample_ids": [
+        "cc2346ced172f5da211522952b70e5002fe0a6c2",
+        "4b530b2c8ba8e8cf8e6518929060e46f5c245996",
+        "2675a0763419ea44c80a442c0705b6450d402e8e",
+        "b7ceeee54734e07e6801f4aecc8f8f51eb0308db"
+      ],
+      "conflicting_actions": [],
+      "candidate_skill_patch_type": "no_action_rule",
+      "aggregation_level": "fine"
+    },
+    {
+      "rule_id": "rule_fe40680be751",
+      "scene": "活动场景-常规活动问题",
+      "state_pattern": {
+        "scene": "活动场景-常规活动问题",
+        "user_intent": "close_conversation",
+        "order_status": "已完成",
+        "rider_status": "已送达",
+        "timeout_state": "否",
+        "can_cancel": false,
+        "already_compensated": false,
+        "refund_state": "订单部分退款",
+        "selected_sku_state": "not_selected",
+        "image_state": "unknown",
+        "has_rider_phone": true
+      },
+      "expected_response_solution": "无",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "close_conversation",
+      "support": 3,
+      "confidence": 1.0,
+      "example_sample_ids": [
+        "01fc7f5abb32a889dc3a1e962f1d335dc77d1f25",
+        "99638667e1081a67155f63b0861f22c0fe1a8b9b",
+        "1e39bc32ca06429855db1b9979cbd7553f778ad5"
+      ],
+      "conflicting_actions": [],
+      "candidate_skill_patch_type": "no_action_rule",
+      "aggregation_level": "fine"
+    },
+    {
+      "rule_id": "rule_76b346f61d08",
+      "scene": "活动场景-常规活动问题",
+      "state_pattern": {
+        "scene": "活动场景-常规活动问题",
+        "user_intent": "member_benefit",
+        "selected_sku_state": "unknown",
+        "image_state": "unknown"
+      },
+      "expected_response_solution": "无",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "unknown",
+      "support": 5,
+      "confidence": 0.8,
+      "example_sample_ids": [
+        "ed0b3da1d645639585f77a9b13f0d15333f06dce",
+        "1ddc3b5c5803c54da06cf19d8f4afb35befbeca4",
+        "ad51bd2e785489e6c7a3195349885effc6989c15",
+        "67a4480903c33d642c2885bfb1aa09b3887f853e",
+        "e1727f95526f6122a1331f6d03a31e9d21803c90"
+      ],
+      "conflicting_actions": [
+        {
+          "action": [
+            "引导自助查看会员权益",
+            "无",
+            ""
+          ],
+          "count": 1
+        }
+      ],
+      "candidate_skill_patch_type": "no_action_rule",
+      "aggregation_level": "fine"
+    },
+    {
+      "rule_id": "rule_1a35103de8fb",
+      "scene": "活动场景-常规活动问题",
+      "state_pattern": {
+        "scene": "活动场景-常规活动问题",
+        "user_intent": "compensation_request",
+        "selected_sku_state": "unknown",
+        "image_state": "unknown"
+      },
+      "expected_response_solution": "无",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "unknown",
+      "support": 5,
+      "confidence": 0.8,
+      "example_sample_ids": [
+        "b3d031d790aaa0255fbf238c2d8ac43c0d5b3fd1",
+        "a401724e9f7cae23d744555dd94494d02ff77f2e",
+        "5f8d7d2d69adbea59feb338fb18f21e19c76741d",
+        "54a673979caca3e3997c84d356105be5cc1ac337",
+        "0d46c2846959bdd962e28c01209600a58c517611"
+      ],
+      "conflicting_actions": [
+        {
+          "action": [
+            "无",
+            "无",
+            "unavailable_capability"
+          ],
+          "count": 1
+        }
+      ],
+      "candidate_skill_patch_type": "no_action_rule",
+      "aggregation_level": "fine"
+    },
+    {
+      "rule_id": "rule_78e060480378",
+      "scene": "活动场景-常规活动问题",
+      "state_pattern": {
+        "scene": "活动场景-常规活动问题",
+        "user_intent": "member_benefit",
+        "order_status": "已完成",
+        "rider_status": "已送达",
+        "timeout_state": "否",
+        "can_cancel": false,
+        "already_compensated": false,
+        "refund_state": "订单无退款",
+        "selected_sku_state": "not_selected",
+        "image_state": "unknown",
+        "has_rider_phone": true
+      },
+      "expected_response_solution": "无",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "explain_refund_status",
+      "support": 4,
+      "confidence": 0.75,
+      "example_sample_ids": [
+        "d0affc484524acac4ded9b91ec26b20c662ee113",
+        "b0a97ea2ac5f2392e3f867b401f680c3e3aa8c65",
+        "1da94cec311bc67af51ae797fa8a888829187ded",
+        "42bd05f64c954e9e16c7459c72f7999537d4eb76"
+      ],
+      "conflicting_actions": [
+        {
+          "action": [
+            "引导自助查看会员权益",
+            "无",
+            ""
+          ],
+          "count": 1
+        }
+      ],
+      "candidate_skill_patch_type": "no_action_rule",
+      "aggregation_level": "fine"
+    },
+    {
+      "rule_id": "rule_5a8a41535249",
+      "scene": "活动场景-常规活动问题",
+      "state_pattern": {
+        "scene": "活动场景-常规活动问题",
+        "user_intent": "activity_coupon",
+        "order_status": "已完成",
+        "rider_status": "已送达",
+        "timeout_state": "否",
+        "can_cancel": false,
+        "already_compensated": false,
+        "refund_state": "订单无退款",
+        "selected_sku_state": "not_selected",
+        "image_state": "unknown",
+        "has_rider_phone": true
+      },
+      "expected_response_solution": "无",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "explain_refund_status",
+      "support": 7,
+      "confidence": 0.7143,
+      "example_sample_ids": [
+        "7c71f2dd703c5ff0597a8e451e62236c7bd4629b",
+        "51b6a778775fe6027fee2a5c4e64258c9db4eab1",
+        "3eed747847d68d393873394c925971c988a990ff",
+        "26469ee1d6526903d9f53c3f59446fd66b8534f2",
+        "369f53cf7e1c03a5d62e2bb50e245851d1134ca0",
+        "9712f33cb06398253bba0597193b05c0df689fb1",
+        "5cc64ad19e1b0542656ccfc3fdee9c98956d7b48"
+      ],
+      "conflicting_actions": [
+        {
+          "action": [
+            "操作赔付-优惠券-5元",
+            "无",
+            ""
+          ],
+          "count": 2
+        }
+      ],
+      "candidate_skill_patch_type": "no_action_rule",
+      "aggregation_level": "fine"
+    },
+    {
+      "rule_id": "rule_ea8143a20d13",
+      "scene": "活动场景-常规活动问题",
+      "state_pattern": {
+        "scene": "活动场景-常规活动问题",
+        "user_intent": "date_issue",
+        "selected_sku_state": "unknown",
+        "image_state": "unknown"
+      },
+      "expected_response_solution": "无",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "unknown",
+      "support": 7,
+      "confidence": 0.7143,
+      "example_sample_ids": [
+        "e3cb7b174fd98d51a4ab49f7e4fb578b2fa1fa3f",
+        "feb3a66e1c411ed6e190e7b297a8d768fa4b42a7",
+        "9a11a1b78177b0d9952886565d0378b9a7084de4",
+        "7017856d21006bfd4c3775706c7a6887ef10931d",
+        "b86446a0fa717ff9b7b60ec27fa19d9788e1a515",
+        "5578ee95866fc7d4e5fc8536799aa1eb463bac1b",
+        "a30c2d4ba6e51ce578ec63ef86902ff87c2cd93c"
+      ],
+      "conflicting_actions": [
+        {
+          "action": [
+            "操作赔付-优惠券-5元",
+            "无",
+            ""
+          ],
+          "count": 2
+        }
+      ],
+      "candidate_skill_patch_type": "no_action_rule",
+      "aggregation_level": "fine"
+    }
+  ],
+  "forbidden_rules": [],
+  "clarify_rules": [
+    {
+      "rule_id": "rule_18a3345dfd85",
+      "scene": "活动场景-常规活动问题",
+      "state_pattern": {
+        "scene": "活动场景-常规活动问题",
+        "user_intent": "other",
+        "order_status": "取消",
+        "can_cancel": false,
+        "can_compensate": false,
+        "already_compensated": false,
+        "refund_state": "订单整单退款",
+        "selected_sku_state": "not_selected",
+        "image_state": "unknown",
+        "has_rider_phone": false
+      },
+      "expected_response_solution": "无",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "ask_refund_ratio",
+      "support": 5,
+      "confidence": 1.0,
+      "example_sample_ids": [
+        "a1c4c9ffb135741e4ab349aa0f3cb0b06b509df1",
+        "689f9c8cfc843e95b415c29f82059048734bc5ca",
+        "8d2070f4af63e5ccd6ff336319325155c2b86b14",
+        "89a6119304304f935636299eb6801cc4ca35306b",
+        "28e0f840e2a92961bd9f216aa96ca3de65351964"
+      ],
+      "conflicting_actions": [],
+      "candidate_skill_patch_type": "clarify_rule",
+      "aggregation_level": "fine"
+    },
+    {
+      "rule_id": "rule_18347cce3caa",
+      "scene": "活动场景-常规活动问题",
+      "state_pattern": {
+        "scene": "活动场景-常规活动问题",
+        "user_intent": "transfer_request",
+        "order_status": "已完成",
+        "rider_status": "已送达",
+        "timeout_state": "否",
+        "can_cancel": false,
+        "already_compensated": false,
+        "refund_state": "订单无退款",
+        "selected_sku_state": "not_selected",
+        "image_state": "unknown",
+        "has_rider_phone": true
+      },
+      "expected_response_solution": "无",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "ask_user_problem",
+      "support": 4,
+      "confidence": 1.0,
+      "example_sample_ids": [
+        "7676c471df7042d13d5712d0996ee51b3cf8fd82",
+        "b3c0e79c1aef9ed1172b74fa1e44a07fcd0dc357",
+        "121cba7be8ba86bacf78a0fdcea5247aa078cb72",
+        "38bb16fc96f2b6a59d2bf6d6db6bd83c57459ed8"
+      ],
+      "conflicting_actions": [],
+      "candidate_skill_patch_type": "clarify_rule",
+      "aggregation_level": "fine"
+    },
+    {
+      "rule_id": "rule_d52e77da59dc",
+      "scene": "活动场景-常规活动问题",
+      "state_pattern": {
+        "scene": "活动场景-常规活动问题",
+        "user_intent": "transfer_request"
+      },
+      "expected_response_solution": "无",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "ask_user_problem",
+      "support": 30,
+      "confidence": 0.9333,
+      "example_sample_ids": [
+        "7676c471df7042d13d5712d0996ee51b3cf8fd82",
+        "0ecce85c63528e6b828235abc5009c1e939bed04",
+        "8bbc9f5794fbd3498f7376ab156ac833f80d7931",
+        "7000b0d16e1d167690b4c41f3248af3db7165254",
+        "7f90938ede8e3c19e2e8ef566ac3ecd5efa94a7c",
+        "700d2487f8a9544cef987d023e8f6f6522996bf9",
+        "424a3e4f9a6cdbfc758b37dc925e5e394bed253b",
+        "631d49dffb5ee1188de58c910ce4a7dca7e3706b",
+        "37af6b8a99451b0e316423b6a4351ede75943157",
+        "b3c0e79c1aef9ed1172b74fa1e44a07fcd0dc357",
+        "e23ec6432db7f0bd0672ef6b1225d6d6e48ac32d",
+        "ee85c368f86e65761aa65b3cf49680a84a011ca6",
+        "fc754e93d1d7f86969e8ee80d1fb6823175f4dbc",
+        "09dab59fb1314e24c8e8b7556e631312afe16a83",
+        "121cba7be8ba86bacf78a0fdcea5247aa078cb72",
+        "98e79618c3b3ad383dfafd27439c3b4b6b7afa23",
+        "be16ec68c7c58aaa1a610d8a7c20a1c2d5dff279",
+        "c4845280b6fa37f74bdbb19b208c9a82cb7049ec",
+        "eb74f973571039df7f520bdf81571a871466f822",
+        "aa37cefa4cdd69bb87f950139e2ae821454860d8"
+      ],
+      "conflicting_actions": [
+        {
+          "action": [
+            "无",
+            "无",
+            "clarify_intent"
+          ],
+          "count": 2
+        }
+      ],
+      "candidate_skill_patch_type": "clarify_rule",
+      "aggregation_level": "coarse"
+    },
+    {
+      "rule_id": "rule_831088663cb1",
+      "scene": "活动场景-常规活动问题",
+      "state_pattern": {
+        "scene": "活动场景-常规活动问题",
+        "user_intent": "transfer_request",
+        "selected_sku_state": "unknown",
+        "image_state": "unknown"
+      },
+      "expected_response_solution": "无",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "ask_user_problem",
+      "support": 13,
+      "confidence": 0.9231,
+      "example_sample_ids": [
+        "98e79618c3b3ad383dfafd27439c3b4b6b7afa23",
+        "be16ec68c7c58aaa1a610d8a7c20a1c2d5dff279",
+        "c4845280b6fa37f74bdbb19b208c9a82cb7049ec",
+        "eb74f973571039df7f520bdf81571a871466f822",
+        "aa37cefa4cdd69bb87f950139e2ae821454860d8",
+        "443bd29a3b74843ea3130fc13d0c5c67d0fe0bfe",
+        "19e89d6b40ba3073dffd52a5fe788af4db7ae188",
+        "a5807bfb46fa01aa96ae128918bb4410e6360845",
+        "f82ee42bf70feaba8e8f6979b0228d472294652c",
+        "59ebebdf93814a69706d13ed2b64ad76720d207b",
+        "6d7a615a3178dd15b493f2a22c204db094d69bc1",
+        "cca8e6184a927f306b82542559254ccdb00efc86",
+        "779db623041a7bb6900bf0fc8837b2222dea2183"
+      ],
+      "conflicting_actions": [
+        {
+          "action": [
+            "无",
+            "无",
+            "clarify_intent"
+          ],
+          "count": 1
+        }
+      ],
+      "candidate_skill_patch_type": "clarify_rule",
+      "aggregation_level": "fine"
+    }
+  ],
+  "evidence": {
+    "support_cases": 363,
+    "example_sample_ids": [
+      "7676c471df7042d13d5712d0996ee51b3cf8fd82",
+      "7c71f2dd703c5ff0597a8e451e62236c7bd4629b",
+      "dbdadb2d98416b20dd4dec61a5649b46b76ec429",
+      "f803562da72d00847d9eb4187a6f18905356aa8b",
+      "cb3bec0a26d5a627bb048c3ebe913b6a3cade4ef",
+      "554d8e9e76e415718100dbce38e816800fa2dce2",
+      "f5a8a6421401238be9d46dbbf79811c810b6d522",
+      "6ed7beb2cdd91dce512a76c5011ac45e1e220aae",
+      "cefa9feb530d6578d323f3834e55d0be82cfb6b1",
+      "51b6a778775fe6027fee2a5c4e64258c9db4eab1",
+      "3eed747847d68d393873394c925971c988a990ff",
+      "7aad37746dd473224a555dad7cee126e3e7e6148",
+      "d65387dd2c3ebc7a845749c8c0e380c11086fbb9",
+      "b9f7acdf4f39d13f5ba7f39efa0d7efdd13cebd3",
+      "0ecce85c63528e6b828235abc5009c1e939bed04",
+      "0c954cdae79a9b23c4c31d0184b416dbca258d59",
+      "1b46d8ec346f8901a309c4dd5bb6ec1d430025ec",
+      "db562c769262c42d5bb7062c3f8e647db198a297",
+      "17202718962ff0e5a08d40b18fe7835f05110f46",
+      "20ee1308f0f70d438df6099c8e69d3136a5e843b"
+    ]
+  },
+  "open_questions_for_trainer": [
+    "同一状态下 `无` 与其他动作存在分歧，需要确认。",
+    "同一状态下 `无` 与其他动作存在分歧，需要确认。",
+    "同一状态下 `无` 与其他动作存在分歧，需要确认。",
+    "同一状态下 `无` 与其他动作存在分歧，需要确认。",
+    "同一状态下 `无` 与其他动作存在分歧，需要确认。",
+    "同一状态下 `无` 与其他动作存在分歧，需要确认。",
+    "同一状态下 `无` 与其他动作存在分歧，需要确认。",
+    "同一状态下 `无` 与其他动作存在分歧，需要确认。"
+  ]
+}

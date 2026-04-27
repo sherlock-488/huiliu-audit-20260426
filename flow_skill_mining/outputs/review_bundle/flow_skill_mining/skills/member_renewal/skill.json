@@ -1,0 +1,874 @@
+{
+  "skill_id": "member_renewal",
+  "scene": "会员场景-续费问题",
+  "version": "v0.1-draft",
+  "source": "trainer_goodcase_mining",
+  "scope": {
+    "scene": "会员场景-续费问题",
+    "supported_intents": [
+      "other",
+      "close_conversation",
+      "member_auto_renew",
+      "transfer_request",
+      "member_benefit",
+      "cancel_request",
+      "payment_issue",
+      "delivery_urge",
+      "refund_request",
+      "activity_coupon",
+      "cannot_refund",
+      "compensation_accept"
+    ]
+  },
+  "required_signals": [
+    "天气",
+    "是否咨询高峰期",
+    "用户分层标签",
+    "是否会员",
+    "用户和门店的通话记录",
+    "用户和骑手的通话记录",
+    "卡数量",
+    "订单状态",
+    "订单类型",
+    "配送类型",
+    "商品数量",
+    "订单来源",
+    "是否为配送单",
+    "是否为自提单",
+    "是否外卖单",
+    "门店名称",
+    "城市名称",
+    "订单是否含追加单",
+    "订单是否含加工品",
+    "支付类型",
+    "支付金额",
+    "原价(促销价)",
+    "券减免金额",
+    "配送金额",
+    "服务费价格",
+    "是否配送异常",
+    "订单下单时间",
+    "是否有骑手真实手机号",
+    "能否修改备注",
+    "能否修改收货时间"
+  ],
+  "candidate_solutions": [
+    "管理会员自动续费",
+    "会员卡退款"
+  ],
+  "confirmation_required_solutions": [
+    "会员卡退款"
+  ],
+  "no_confirmation_required_solutions": [
+    "管理会员自动续费"
+  ],
+  "priority_rules": [
+    {
+      "rule_id": "rule_ae0c1850d585",
+      "scene": "会员场景-续费问题",
+      "state_pattern": {
+        "scene": "会员场景-续费问题",
+        "user_intent": "member_auto_renew",
+        "order_status": "已完成",
+        "can_cancel": false,
+        "can_compensate": false,
+        "already_compensated": false,
+        "refund_state": "订单整单退款",
+        "selected_sku_state": "unknown",
+        "image_state": "unknown",
+        "has_rider_phone": false
+      },
+      "expected_response_solution": "管理会员自动续费",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "",
+      "support": 5,
+      "confidence": 0.8,
+      "example_sample_ids": [
+        "528dc999de8e8734cde0911038723993fa3748e8",
+        "170ef57ae5b9ac607ec82c83637659d395a2a445",
+        "168a3021f899ed3ad2724ca0b10064b9aebacfaf",
+        "0414297d00bdff14397021d35220411cfb5f9d5d",
+        "df9e3fd9cb824b64b2d83256757060191a6742a4"
+      ],
+      "conflicting_actions": [
+        {
+          "action": [
+            "无",
+            "无",
+            "explain_refund_status"
+          ],
+          "count": 1
+        }
+      ],
+      "candidate_skill_patch_type": "tool_rule",
+      "aggregation_level": "fine"
+    },
+    {
+      "rule_id": "rule_50e1ebfd60fe",
+      "scene": "会员场景-续费问题",
+      "state_pattern": {
+        "scene": "会员场景-续费问题",
+        "user_intent": "member_auto_renew",
+        "order_status": "已完成",
+        "can_cancel": false,
+        "can_compensate": false,
+        "already_compensated": false,
+        "refund_state": "订单无退款",
+        "selected_sku_state": "unknown",
+        "image_state": "unknown",
+        "has_rider_phone": false
+      },
+      "expected_response_solution": "管理会员自动续费",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "",
+      "support": 39,
+      "confidence": 0.7179,
+      "example_sample_ids": [
+        "8a8213cd281ad86bc246ca1e53966c48c34f8964",
+        "5c9aac7a140bc0905569d325501db3907d7f021e",
+        "4deb9759dbb4aaf0ccfbeb1fc580ab15b843b473",
+        "ed9a247497b0e33dc6cd419e9b4d60a9cb187226",
+        "0cae0cee3d19053ab90e4eb91754cb41b5b76f80",
+        "3370273d4b871d21c09ecdbbb9609822adacad7e",
+        "401d6f81779bd99d7980049dc44a7c078f93a6c2",
+        "93af2fffc24333028628e745596a4e5d891a1470",
+        "6e43c3d0a9f69295f65fcca515473c05619346f6",
+        "f817a8e9dc97f4974d432942eb6d3baf06bada86",
+        "568ee0e94ad09a6eb6b4dff48a7070d6e3aa6b54",
+        "529d4d20a43f6ae77a0858c4ba9d29143ba428b4",
+        "dfa1a98a3c9bbbb9d31fef6cae3a3ae6f4711770",
+        "7488636aa3f263f9194044da31d4824696189ec1",
+        "370832f8d54570e874f85de466f5b441a2b52818",
+        "de19977953164b3d0cebd39e8c88f58bafc22e29",
+        "6a7118850205e651560fc116d02e90c38c5b46d9",
+        "5159f3717947684caeed177c18e86decba795c45",
+        "6ff93afd11ddd4397b92722b160d2526f71b44e4",
+        "6028e4ecb8f4cc99613cfbca89d66c8dfd0148ec"
+      ],
+      "conflicting_actions": [
+        {
+          "action": [
+            "无",
+            "无",
+            "explain_refund_status"
+          ],
+          "count": 11
+        }
+      ],
+      "candidate_skill_patch_type": "tool_rule",
+      "aggregation_level": "fine"
+    }
+  ],
+  "no_action_rules": [
+    {
+      "rule_id": "rule_15223f839315",
+      "scene": "会员场景-续费问题",
+      "state_pattern": {
+        "scene": "会员场景-续费问题",
+        "user_intent": "close_conversation"
+      },
+      "expected_response_solution": "无",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "close_conversation",
+      "support": 98,
+      "confidence": 1.0,
+      "example_sample_ids": [
+        "2167a2e1ab71a2a141d2128e83d845879d3e643e",
+        "686cebaf8cb5fa6b6a2cc4d077423013435fc2e4",
+        "11a8e6fb7ee834e981a5262ba556542bfb564266",
+        "0c49562e9ac785e7f21dc3035493025ec6453bee",
+        "3d419c6f9ae249dd96b9e99b1637534d9d15075c",
+        "b7709cf9e441a6ca1942338f70694c981a775b5c",
+        "063f2d0c94512d117683baaa774b094df8fa508d",
+        "be172a85789efe1e1709443731f1e83999d15fd8",
+        "758b11fbd526d93148cca9d20afdcd9b4694e439",
+        "73d8864aa3ee4e687ab33f721d8e8422f6ede4e1",
+        "e4c712c51223e894bd9bada406c6f882ff52a1bc",
+        "8cf508692344a0df095ba179611fe7503ef1752e",
+        "ca59f394605a39890da67b16fea44b9f8173171e",
+        "a16607724cd9cd4c4f602a82cec70e21a9b46cab",
+        "2bb361e1066c38ffd26cdff85dcc839355177255",
+        "6aa0578ebe4074b3749d1cf76d385cda25b5bbed",
+        "39721665ea8debc89ffd2b655bd2666460bbf564",
+        "d1d0f43e06ac9a5f664069b83a8e56930c9a0390",
+        "0972fb297af937d6c80ab191c0547b96c29c7e33",
+        "7a8501e12723ccaf1d40c996f07b4fced75a0e2a"
+      ],
+      "conflicting_actions": [],
+      "candidate_skill_patch_type": "no_action_rule",
+      "aggregation_level": "coarse"
+    },
+    {
+      "rule_id": "rule_a42d172fe47c",
+      "scene": "会员场景-续费问题",
+      "state_pattern": {
+        "scene": "会员场景-续费问题",
+        "user_intent": "close_conversation",
+        "order_status": "已完成",
+        "can_cancel": false,
+        "can_compensate": false,
+        "already_compensated": false,
+        "refund_state": "订单无退款",
+        "selected_sku_state": "unknown",
+        "image_state": "unknown",
+        "has_rider_phone": false
+      },
+      "expected_response_solution": "无",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "close_conversation",
+      "support": 47,
+      "confidence": 1.0,
+      "example_sample_ids": [
+        "686cebaf8cb5fa6b6a2cc4d077423013435fc2e4",
+        "11a8e6fb7ee834e981a5262ba556542bfb564266",
+        "0c49562e9ac785e7f21dc3035493025ec6453bee",
+        "063f2d0c94512d117683baaa774b094df8fa508d",
+        "be172a85789efe1e1709443731f1e83999d15fd8",
+        "758b11fbd526d93148cca9d20afdcd9b4694e439",
+        "8cf508692344a0df095ba179611fe7503ef1752e",
+        "ca59f394605a39890da67b16fea44b9f8173171e",
+        "a16607724cd9cd4c4f602a82cec70e21a9b46cab",
+        "2bb361e1066c38ffd26cdff85dcc839355177255",
+        "6aa0578ebe4074b3749d1cf76d385cda25b5bbed",
+        "39721665ea8debc89ffd2b655bd2666460bbf564",
+        "0972fb297af937d6c80ab191c0547b96c29c7e33",
+        "7a8501e12723ccaf1d40c996f07b4fced75a0e2a",
+        "f3b550bcb630fea2465e985958a425fd0aa9e21d",
+        "f42ea2c3975cf488c441101f67f677c80d22708d",
+        "e508129988b92a9aa9421a7a27d9ec81282fbc5f",
+        "6eb0996113c1949f0ef43a0f4b240731d70c4d72",
+        "b282fef568ef17d71f4718c61768d37c6978930c",
+        "a6cda4fff87adaacfaf100993fec99c8df724cc4"
+      ],
+      "conflicting_actions": [],
+      "candidate_skill_patch_type": "no_action_rule",
+      "aggregation_level": "fine"
+    },
+    {
+      "rule_id": "rule_60b9fe7d9d55",
+      "scene": "会员场景-续费问题",
+      "state_pattern": {
+        "scene": "会员场景-续费问题",
+        "user_intent": "close_conversation",
+        "order_status": "已完成",
+        "can_cancel": false,
+        "already_compensated": false,
+        "refund_state": "订单无退款",
+        "selected_sku_state": "unknown",
+        "image_state": "unknown",
+        "has_rider_phone": false
+      },
+      "expected_response_solution": "无",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "close_conversation",
+      "support": 12,
+      "confidence": 1.0,
+      "example_sample_ids": [
+        "4d4bd4229c9f81c78638438bde707cbafb0eb87e",
+        "6c3746d55663649815d8ab7e4bf0791d71f43680",
+        "1e96a4c1274fb3e3f31dd517e5dffda446492d0b",
+        "54f3a68ebb6a03c8981c5ce75939bdbbe7bb0b6f",
+        "1e8369343f36d0ab4307dfe7e4a18100a4b3606c",
+        "0a4e64ef8b0e33117af802f2b9da6a788d8c305a",
+        "a7f807063d6dcb3ab1d6ff505b1fea5eb4dd9be6",
+        "50859b0dc37539c9de29ad73691546249fc0966d",
+        "fc02a2be67468e310245fb867f7f25b7baf4e883",
+        "cd953c6a1031e85363e43ebba4da6a3a4ade2b80",
+        "79f5cba20f8d0d1818f86e22f81d0a42e7dbeda4",
+        "56d7eb26cc1c39d6be7a706f2388396026992a6e"
+      ],
+      "conflicting_actions": [],
+      "candidate_skill_patch_type": "no_action_rule",
+      "aggregation_level": "fine"
+    },
+    {
+      "rule_id": "rule_6b9c1e4bd736",
+      "scene": "会员场景-续费问题",
+      "state_pattern": {
+        "scene": "会员场景-续费问题",
+        "user_intent": "close_conversation",
+        "selected_sku_state": "unknown",
+        "image_state": "unknown"
+      },
+      "expected_response_solution": "无",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "close_conversation",
+      "support": 10,
+      "confidence": 1.0,
+      "example_sample_ids": [
+        "6ee37b06bc47ec78e91b847c4cd43ac1452ff644",
+        "c35828144eb5beb9a615c7fdd14d00ad70b37bfe",
+        "576d44af5972cd459325a127186fc30b82cfed09",
+        "05969c6a6caf1a8c776d32a3e72e6d9c5dc4d0e6",
+        "9c2ecdcf434148a35b24df9da43fb56359e1d256",
+        "1dc8ee397b5b8c679a00b303de934385d2dc15a7",
+        "37bc17426ee4184cbfbb72ce4056ab8bccd40e7d",
+        "064d5e84cb8fb65a2cf3d250b55c6ab0dbc19025",
+        "e7510ed16ea364f9481e9deda2d50322498843ea",
+        "3bed17399c1080a320e45a452b6c39e12d66d055"
+      ],
+      "conflicting_actions": [],
+      "candidate_skill_patch_type": "no_action_rule",
+      "aggregation_level": "fine"
+    },
+    {
+      "rule_id": "rule_b9c99455a9e8",
+      "scene": "会员场景-续费问题",
+      "state_pattern": {
+        "scene": "会员场景-续费问题",
+        "user_intent": "close_conversation",
+        "order_status": "已完成",
+        "can_cancel": false,
+        "can_compensate": false,
+        "already_compensated": false,
+        "refund_state": "订单整单退款",
+        "selected_sku_state": "unknown",
+        "image_state": "unknown",
+        "has_rider_phone": false
+      },
+      "expected_response_solution": "无",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "close_conversation",
+      "support": 8,
+      "confidence": 1.0,
+      "example_sample_ids": [
+        "73d8864aa3ee4e687ab33f721d8e8422f6ede4e1",
+        "e4c712c51223e894bd9bada406c6f882ff52a1bc",
+        "d1d0f43e06ac9a5f664069b83a8e56930c9a0390",
+        "807f27fa986b8f98ca6be9f37bef939cf905155e",
+        "fa11d069f0fcd0e40b90d63c6bbfc00104396e5d",
+        "4b41983dfc71e611eed6007adb85c79a3cd87444",
+        "c1b3ce4f257ad9fcb7ec50e9bd35dd37544fa715",
+        "4cb246c8daaf61f3c8f46ccbb2f24fa04b1d7f21"
+      ],
+      "conflicting_actions": [],
+      "candidate_skill_patch_type": "no_action_rule",
+      "aggregation_level": "fine"
+    },
+    {
+      "rule_id": "rule_c2f43b9eee0f",
+      "scene": "会员场景-续费问题",
+      "state_pattern": {
+        "scene": "会员场景-续费问题",
+        "user_intent": "close_conversation",
+        "order_status": "已完成",
+        "can_cancel": false,
+        "already_compensated": false,
+        "refund_state": "订单部分退款",
+        "selected_sku_state": "unknown",
+        "image_state": "unknown",
+        "has_rider_phone": false
+      },
+      "expected_response_solution": "无",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "close_conversation",
+      "support": 7,
+      "confidence": 1.0,
+      "example_sample_ids": [
+        "57a1b217dd0bfd22185db2e7208f6eb55cd2e1a7",
+        "32997abd6b7aa8144511e99fcb958a35333133e0",
+        "7de42bd250bba1aa6f3e8ef7d3f30b2ca141d041",
+        "e77bf5aea0f39c4208d7030cd46a405512d76eba",
+        "b4130302e191916ad0b97212abea5bf6b5692187",
+        "ec72056b0fc262c9b5392ce14f315fc2fbbe2b1c",
+        "e8d8a0a8923c425ae8d20f872b530c546f217e85"
+      ],
+      "conflicting_actions": [],
+      "candidate_skill_patch_type": "no_action_rule",
+      "aggregation_level": "fine"
+    },
+    {
+      "rule_id": "rule_fdc00e7bf2b2",
+      "scene": "会员场景-续费问题",
+      "state_pattern": {
+        "scene": "会员场景-续费问题",
+        "user_intent": "other",
+        "order_status": "已完成",
+        "rider_status": "已送达",
+        "timeout_state": "否",
+        "can_cancel": false,
+        "already_compensated": false,
+        "refund_state": "订单无退款",
+        "selected_sku_state": "not_selected",
+        "image_state": "unknown",
+        "has_rider_phone": true
+      },
+      "expected_response_solution": "无",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "explain_refund_status",
+      "support": 6,
+      "confidence": 1.0,
+      "example_sample_ids": [
+        "3d7eab8f8d722bce261b432f7ec25156a5946edf",
+        "626a2507ae55169420c8704806a204243ed52018",
+        "e720575be2d4187465ab9c2b488713003fb258d5",
+        "c4ae507d7ac7086a2ef20e4e33aa489757242a0b",
+        "46d007ea7fa4adfb2dabba1e7fafac2e5cb744d3",
+        "bbb2fbcb1c699a1d632760ccbc3bb0d33ce61289"
+      ],
+      "conflicting_actions": [],
+      "candidate_skill_patch_type": "no_action_rule",
+      "aggregation_level": "fine"
+    },
+    {
+      "rule_id": "rule_9b772340e0ea",
+      "scene": "会员场景-续费问题",
+      "state_pattern": {
+        "scene": "会员场景-续费问题",
+        "user_intent": "other",
+        "order_status": "已完成",
+        "can_cancel": false,
+        "can_compensate": false,
+        "already_compensated": false,
+        "refund_state": "订单整单退款",
+        "selected_sku_state": "unknown",
+        "image_state": "unknown",
+        "has_rider_phone": false
+      },
+      "expected_response_solution": "无",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "explain_refund_status",
+      "support": 5,
+      "confidence": 1.0,
+      "example_sample_ids": [
+        "4370e6ae6a07b328a2c0d9a5f545dc64a481bfa6",
+        "201739c69fb12f480073aca73207e083fbee7758",
+        "cf6a6e24b52806612d1b0dc11ac8c95731e15a6a",
+        "29698df60929bb00eec87f6e3d2dfc58b5d5dc6b",
+        "61b745d91abfc8df8c98bb7f774a68b7f0557b17"
+      ],
+      "conflicting_actions": [],
+      "candidate_skill_patch_type": "no_action_rule",
+      "aggregation_level": "fine"
+    },
+    {
+      "rule_id": "rule_e2b4648590b7",
+      "scene": "会员场景-续费问题",
+      "state_pattern": {
+        "scene": "会员场景-续费问题",
+        "user_intent": "other",
+        "order_status": "已完成",
+        "can_cancel": false,
+        "already_compensated": false,
+        "refund_state": "订单部分退款",
+        "selected_sku_state": "unknown",
+        "image_state": "unknown",
+        "has_rider_phone": false
+      },
+      "expected_response_solution": "无",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "explain_refund_status",
+      "support": 5,
+      "confidence": 1.0,
+      "example_sample_ids": [
+        "32fc1b50d492b8ab063f2912b279bf5f07501d98",
+        "ff3ba189e5ad0b281bbe76e4dd651114d9a379c3",
+        "8362ac97bfd673701752e2f5df5447ef4ccaf12e",
+        "8603a90fdda57b00bc7a86ae4c02990c5f6da8c1",
+        "729324dc711a3d32dac5fe8736f65e4f00c737e5"
+      ],
+      "conflicting_actions": [],
+      "candidate_skill_patch_type": "no_action_rule",
+      "aggregation_level": "fine"
+    },
+    {
+      "rule_id": "rule_3cfc91830233",
+      "scene": "会员场景-续费问题",
+      "state_pattern": {
+        "scene": "会员场景-续费问题",
+        "user_intent": "close_conversation",
+        "order_status": "取消",
+        "can_cancel": false,
+        "already_compensated": false,
+        "refund_state": "订单无退款",
+        "selected_sku_state": "unknown",
+        "image_state": "unknown",
+        "has_rider_phone": false
+      },
+      "expected_response_solution": "无",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "close_conversation",
+      "support": 3,
+      "confidence": 1.0,
+      "example_sample_ids": [
+        "2167a2e1ab71a2a141d2128e83d845879d3e643e",
+        "99a0307c4c587879c884e0a66e9fae721882a064",
+        "2741947e058fa38ac903f7b62f5955bc9b5aa350"
+      ],
+      "conflicting_actions": [],
+      "candidate_skill_patch_type": "no_action_rule",
+      "aggregation_level": "fine"
+    },
+    {
+      "rule_id": "rule_2caf38740bf1",
+      "scene": "会员场景-续费问题",
+      "state_pattern": {
+        "scene": "会员场景-续费问题",
+        "user_intent": "close_conversation",
+        "order_status": "已完成",
+        "rider_status": "已送达",
+        "timeout_state": "否",
+        "can_cancel": false,
+        "already_compensated": false,
+        "refund_state": "订单无退款",
+        "selected_sku_state": "not_selected",
+        "image_state": "unknown",
+        "has_rider_phone": true
+      },
+      "expected_response_solution": "无",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "close_conversation",
+      "support": 3,
+      "confidence": 1.0,
+      "example_sample_ids": [
+        "302f0fa76193750764f883b78de61f0ed97dba78",
+        "2d8897b36d3c4ac5a069270aef6f06fe4809cff6",
+        "47a76c804f5310d3023c22dccfb5da84d5f04039"
+      ],
+      "conflicting_actions": [],
+      "candidate_skill_patch_type": "no_action_rule",
+      "aggregation_level": "fine"
+    },
+    {
+      "rule_id": "rule_4e2431d5e549",
+      "scene": "会员场景-续费问题",
+      "state_pattern": {
+        "scene": "会员场景-续费问题",
+        "user_intent": "member_benefit",
+        "order_status": "已完成",
+        "can_cancel": false,
+        "already_compensated": false,
+        "refund_state": "订单无退款",
+        "selected_sku_state": "unknown",
+        "image_state": "unknown",
+        "has_rider_phone": false
+      },
+      "expected_response_solution": "无",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "explain_refund_status",
+      "support": 3,
+      "confidence": 1.0,
+      "example_sample_ids": [
+        "f15755cfade316a2a2954017fe929bf12bfca42e",
+        "75db3f31b0ade16c75beaa727709f808ab1efd75",
+        "cdf3ac9a033469b23f882607fa9e67f68f1b2193"
+      ],
+      "conflicting_actions": [],
+      "candidate_skill_patch_type": "no_action_rule",
+      "aggregation_level": "fine"
+    },
+    {
+      "rule_id": "rule_a38c85ae4c2d",
+      "scene": "会员场景-续费问题",
+      "state_pattern": {
+        "scene": "会员场景-续费问题",
+        "user_intent": "other",
+        "order_status": "已完成",
+        "can_cancel": false,
+        "already_compensated": false,
+        "refund_state": "订单无退款",
+        "selected_sku_state": "unknown",
+        "image_state": "unknown",
+        "has_rider_phone": false
+      },
+      "expected_response_solution": "无",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "explain_refund_status",
+      "support": 14,
+      "confidence": 0.8571,
+      "example_sample_ids": [
+        "154e4bc50c83503da4c7fc09fbce9af493b5396a",
+        "b9421d3c35365b9a8330a8b2c4b0427e407a54eb",
+        "eae0d18a504a13727d62b4fd1255413917d72399",
+        "d63e2b2f4c78efe540761953102f405847ee0029",
+        "1e1a68dd7f95f125cf30988b69e5c32539dd2f76",
+        "542e460a72fdc4a2dd8cd6d3f2f5e5e96e0a2009",
+        "63dc6fd2575d0b7736cff0fe182c9b6d06e2af09",
+        "6cc02f04f2795432a66d6ee09c2a5e26293e8d20",
+        "f176698236d549718ffa5666ac518a1ec556117a",
+        "9f5108e1ae42ca14af5c1959a1a178b34abfd2f2",
+        "d16cfa80a0c48cdbd009039b68da4b9b99ffa024",
+        "5a94f7b4fa1973ced662349e75eebba44927cb72",
+        "3492e6cd4155a250cb865fec30b5dfa3783e2489",
+        "715ffd4567c1a27f9f190a4bc8f8f37ae9960144"
+      ],
+      "conflicting_actions": [
+        {
+          "action": [
+            "管理会员自动续费",
+            "无",
+            ""
+          ],
+          "count": 2
+        }
+      ],
+      "candidate_skill_patch_type": "no_action_rule",
+      "aggregation_level": "fine"
+    },
+    {
+      "rule_id": "rule_180a8bbbf256",
+      "scene": "会员场景-续费问题",
+      "state_pattern": {
+        "scene": "会员场景-续费问题",
+        "user_intent": "other",
+        "order_status": "已完成",
+        "can_cancel": false,
+        "can_compensate": false,
+        "already_compensated": false,
+        "refund_state": "订单无退款",
+        "selected_sku_state": "unknown",
+        "image_state": "unknown",
+        "has_rider_phone": false
+      },
+      "expected_response_solution": "无",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "explain_refund_status",
+      "support": 86,
+      "confidence": 0.8488,
+      "example_sample_ids": [
+        "fb07f8a55fe633d2443ec0c0c60e122985902652",
+        "79c13944b9bc113129b49a65d051a0c09027f53b",
+        "71a2fa350badc891324167068bac2aa09b0f4494",
+        "be05df97242060e9471a00af58a2a6826993bf16",
+        "5ead0bf22cc5879e9e1216ee1bfea920e9ba1680",
+        "5b15c61d05be20923befb256368959c81298c57d",
+        "20a1e707b6838040c61b2acae7ede8685556e2b7",
+        "c9d53e54bc71375d1bbcfde73ecdea1207be0aa1",
+        "8242d49a5936f99e2ffff0edbee48d8a1f34874e",
+        "aa75883fe57d3b14dba36ff40c0350ea0382b922",
+        "5984ce729c459af1e27450d4f45f2f7d9b2856f2",
+        "0b1db5b421a2a686b2ba6a91a8ff4da0d15fc9dd",
+        "152561d37920303e7dd5e874cc07b7d56f5b5fec",
+        "15c797417dd965e625c3071b72f4b13c1cecf2f2",
+        "a55a061f1f404f9dc550ceb181c72b49cdd83437",
+        "1a8c8893bfb2477b9530f8fba549e37aacd6ec2e",
+        "6a38888fe893177c9af767b6ef0d39604fa25c32",
+        "5535c5b91d43fe3228771ce64a6144041348307d",
+        "eb3c5d03a5627915644dad3d04ea7971a5a01735",
+        "ae0577535a12a2ee3331d64098c957b7858f0c39"
+      ],
+      "conflicting_actions": [
+        {
+          "action": [
+            "无",
+            "无",
+            "ask_refund_ratio"
+          ],
+          "count": 7
+        },
+        {
+          "action": [
+            "管理会员自动续费",
+            "无",
+            ""
+          ],
+          "count": 4
+        },
+        {
+          "action": [
+            "会员卡退款",
+            "无",
+            ""
+          ],
+          "count": 2
+        }
+      ],
+      "candidate_skill_patch_type": "no_action_rule",
+      "aggregation_level": "fine"
+    },
+    {
+      "rule_id": "rule_f74bf9029bc6",
+      "scene": "会员场景-续费问题",
+      "state_pattern": {
+        "scene": "会员场景-续费问题",
+        "user_intent": "cancel_request",
+        "order_status": "已完成",
+        "can_cancel": false,
+        "can_compensate": false,
+        "already_compensated": false,
+        "refund_state": "订单无退款",
+        "selected_sku_state": "unknown",
+        "image_state": "unknown",
+        "has_rider_phone": false
+      },
+      "expected_response_solution": "无",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "explain_refund_status",
+      "support": 4,
+      "confidence": 0.75,
+      "example_sample_ids": [
+        "720b8aa8f3760a3577ba7a2648a913f36cbe621d",
+        "7cbeac0f0ac4466edbcf560f784cc2f9c7ff4682",
+        "b249bee76bb129371bc44d1b1922376c5b39c5a8",
+        "ae0a6c701e60a2bc23192db7c1da9dffb6be4e76"
+      ],
+      "conflicting_actions": [
+        {
+          "action": [
+            "管理会员自动续费",
+            "无",
+            ""
+          ],
+          "count": 1
+        }
+      ],
+      "candidate_skill_patch_type": "no_action_rule",
+      "aggregation_level": "fine"
+    }
+  ],
+  "forbidden_rules": [],
+  "clarify_rules": [
+    {
+      "rule_id": "rule_f3f9f52b1d35",
+      "scene": "会员场景-续费问题",
+      "state_pattern": {
+        "scene": "会员场景-续费问题",
+        "user_intent": "transfer_request",
+        "order_status": "已完成",
+        "can_cancel": false,
+        "can_compensate": false,
+        "already_compensated": false,
+        "refund_state": "订单无退款",
+        "selected_sku_state": "unknown",
+        "image_state": "unknown",
+        "has_rider_phone": false
+      },
+      "expected_response_solution": "无",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "ask_user_problem",
+      "support": 28,
+      "confidence": 0.8571,
+      "example_sample_ids": [
+        "9b58cdf286af64f97aff48c9b8202dbe7f602870",
+        "9f305c08865861a64eb8429869f4547b673c750d",
+        "5f7d86cf9acf9c7509424e632dd3bb9a26d68ebf",
+        "506f31d35362f711aca14ba574f915d6a9dec532",
+        "52c2ee506d98183f8e2fc88a25c96276abd59998",
+        "ab36b9233e9a32a0473d052ace3569b69de78de0",
+        "12f2074273bc66ec7850bbd6673795af615ad4a0",
+        "bdee886a1ebdff2b273c5f58b4ca78656bece720",
+        "b07fcf951fcba9a702bab019b49217b06b7795be",
+        "20be9fa6031dd739eb8f3a0a7520c09cce15e345",
+        "e4913657a74a63f0a5f1f7b2fedfb67cb9eabca4",
+        "f6a59d91db9ef8c93747b3a1e04e14b8274d15b7",
+        "df192be2d13b3a7d9a44dfcdc001e95a4f49532f",
+        "1f5189b541c94b10b200cb77ab708704b8b304b4",
+        "ccdbc059f6b5cf11d19b17659293eaf5e53e2721",
+        "38ea7d61acdde7ec72a5225eeb33e1081f9b655b",
+        "274ae6f5c960aac8f7735c875dcd42fa6adc8cb2",
+        "e2031f09116fcd4801aa8cf86484e39e9f909259",
+        "542af2bdffeae36893844d6ab73b429e369082d1",
+        "cd0b09bf16d20027edbdeb6379ba60b8b15099f2"
+      ],
+      "conflicting_actions": [
+        {
+          "action": [
+            "无",
+            "无",
+            "clarify_intent"
+          ],
+          "count": 2
+        },
+        {
+          "action": [
+            "管理会员自动续费",
+            "无",
+            ""
+          ],
+          "count": 2
+        }
+      ],
+      "candidate_skill_patch_type": "clarify_rule",
+      "aggregation_level": "fine"
+    },
+    {
+      "rule_id": "rule_0b59a1427b8d",
+      "scene": "会员场景-续费问题",
+      "state_pattern": {
+        "scene": "会员场景-续费问题",
+        "user_intent": "transfer_request"
+      },
+      "expected_response_solution": "无",
+      "expected_dialogue_agree_solution": "无",
+      "no_action_reason": "ask_user_problem",
+      "support": 44,
+      "confidence": 0.7955,
+      "example_sample_ids": [
+        "9b58cdf286af64f97aff48c9b8202dbe7f602870",
+        "9f305c08865861a64eb8429869f4547b673c750d",
+        "5f7d86cf9acf9c7509424e632dd3bb9a26d68ebf",
+        "506f31d35362f711aca14ba574f915d6a9dec532",
+        "52c2ee506d98183f8e2fc88a25c96276abd59998",
+        "ab36b9233e9a32a0473d052ace3569b69de78de0",
+        "12f2074273bc66ec7850bbd6673795af615ad4a0",
+        "bdee886a1ebdff2b273c5f58b4ca78656bece720",
+        "b07fcf951fcba9a702bab019b49217b06b7795be",
+        "20be9fa6031dd739eb8f3a0a7520c09cce15e345",
+        "e4913657a74a63f0a5f1f7b2fedfb67cb9eabca4",
+        "f6a59d91db9ef8c93747b3a1e04e14b8274d15b7",
+        "df192be2d13b3a7d9a44dfcdc001e95a4f49532f",
+        "1f5189b541c94b10b200cb77ab708704b8b304b4",
+        "93ca0b6f5faf85e4b768bd3aa55551fed960970c",
+        "9a3c01eeb135aa867a0ae6242457a506a7f40fb6",
+        "ccdbc059f6b5cf11d19b17659293eaf5e53e2721",
+        "76c7ed26079a2e2dd92b0315302706ce6cffce5c",
+        "b57e7c1ef6e8605c8e27b86584024f044671c15c",
+        "38ea7d61acdde7ec72a5225eeb33e1081f9b655b"
+      ],
+      "conflicting_actions": [
+        {
+          "action": [
+            "无",
+            "无",
+            "clarify_intent"
+          ],
+          "count": 5
+        },
+        {
+          "action": [
+            "管理会员自动续费",
+            "无",
+            ""
+          ],
+          "count": 4
+        }
+      ],
+      "candidate_skill_patch_type": "clarify_rule",
+      "aggregation_level": "coarse"
+    }
+  ],
+  "evidence": {
+    "support_cases": 405,
+    "example_sample_ids": [
+      "01c35667c1658a5cb3952506cbab5f8f213946fb",
+      "c26807e9db55ef7a1cd251fd09ed9d8758dc3c86",
+      "2167a2e1ab71a2a141d2128e83d845879d3e643e",
+      "8a8213cd281ad86bc246ca1e53966c48c34f8964",
+      "fb07f8a55fe633d2443ec0c0c60e122985902652",
+      "686cebaf8cb5fa6b6a2cc4d077423013435fc2e4",
+      "79c13944b9bc113129b49a65d051a0c09027f53b",
+      "16ea507a6bd384e7524b9bbc328cdd9fc8d425c1",
+      "71a2fa350badc891324167068bac2aa09b0f4494",
+      "11a8e6fb7ee834e981a5262ba556542bfb564266",
+      "9b58cdf286af64f97aff48c9b8202dbe7f602870",
+      "be05df97242060e9471a00af58a2a6826993bf16",
+      "5ead0bf22cc5879e9e1216ee1bfea920e9ba1680",
+      "0c49562e9ac785e7f21dc3035493025ec6453bee",
+      "d4352a71ef49d57dfd14be5f289f50e0a6b964f2",
+      "c90a259360d4fe277c5d88fe60c6a4f3d013d061",
+      "3d419c6f9ae249dd96b9e99b1637534d9d15075c",
+      "b7709cf9e441a6ca1942338f70694c981a775b5c",
+      "9f305c08865861a64eb8429869f4547b673c750d",
+      "e3b4c49c53f5558efed05f92d074ebfddaeba0e9"
+    ]
+  },
+  "open_questions_for_trainer": [
+    "同一状态下 `无` 与其他动作存在分歧，需要确认。",
+    "同一状态下 `无` 与其他动作存在分歧，需要确认。",
+    "同一状态下 `无` 与其他动作存在分歧，需要确认。",
+    "同一状态下 `无` 与其他动作存在分歧，需要确认。",
+    "同一状态下 `管理会员自动续费` 与其他动作存在分歧，需要确认。",
+    "同一状态下 `管理会员自动续费` 与其他动作存在分歧，需要确认。",
+    "同一状态下 `管理会员自动续费` 与其他动作存在分歧，需要确认。"
+  ]
+}
