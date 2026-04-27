@@ -1,0 +1,136 @@
+{
+  "skill_id": "receipt_quality_policy_v2",
+  "scene": "收货场景-品质问题",
+  "version": "v2.0-policy-replay-draft",
+  "purpose": "约束流程动作，不优化话术",
+  "entry_conditions": [
+    "问题场景 == 收货场景-品质问题"
+  ],
+  "required_signals": [
+    "订单状态",
+    "是否为配送单",
+    "订单骑手状态",
+    "订单是否超时",
+    "履约中未超时订单是否有超时风险",
+    "是否可取消订单",
+    "订单是否可赔付",
+    "是否赔付过",
+    "赔付金额",
+    "商品退款状态",
+    "是否已收集图片凭证",
+    "建议退款比例"
+  ],
+  "solution_policy": {
+    "strong_confirmation_required": [
+      "取消订单",
+      "小象单商品退款-xx%",
+      "小象整单申请退款",
+      "操作赔付-优惠券-xx元",
+      "操作赔付-运费券-3元"
+    ],
+    "user_request_is_enough": [
+      "外呼骑手-xx",
+      "再次外呼骑手-xx",
+      "催促退款审核",
+      "加急催促退款审核"
+    ],
+    "no_confirmation_required": [
+      "系统催单",
+      "加急调度",
+      "智能跟单",
+      "选择商品",
+      "发送送达图片",
+      "引导自助联系骑手"
+    ]
+  },
+  "action_rules": [
+    {
+      "rule_id": "RQ-01",
+      "when": "超售后或不可退款",
+      "response_solution": "无",
+      "no_action_reason": "explain_cannot_refund/policy_explain"
+    },
+    {
+      "rule_id": "RQ-02",
+      "when": "质量问题未选商品",
+      "response_solution": "选择商品"
+    },
+    {
+      "rule_id": "RQ-03",
+      "when": "已选商品但缺图片",
+      "response_solution": "无",
+      "no_action_reason": "ask_upload_image"
+    },
+    {
+      "rule_id": "RQ-04",
+      "when": "缺退款原因",
+      "response_solution": "无",
+      "no_action_reason": "ask_refund_reason"
+    },
+    {
+      "rule_id": "RQ-05",
+      "when": "缺退款比例",
+      "response_solution": "无",
+      "no_action_reason": "ask_refund_ratio"
+    },
+    {
+      "rule_id": "RQ-07/RQ-08",
+      "when": "退款前置满足",
+      "response_solution": "小象单商品退款-xx%",
+      "dialogue_agree_solution": "仅用户明确确认后非空"
+    },
+    {
+      "rule_id": "RQ-09",
+      "when": "退款进行中且用户催进度",
+      "response_solution": "催促退款审核;退审跟单/加急催促退款审核"
+    },
+    {
+      "rule_id": "RQ-11",
+      "when": "强烈不满且可赔未赔",
+      "response_solution": "操作赔付-优惠券-xx元",
+      "dialogue_agree_solution": "仅用户明确确认后非空"
+    }
+  ],
+  "no_action_rules": [
+    {
+      "reason": "ask_upload_image"
+    },
+    {
+      "reason": "ask_refund_reason"
+    },
+    {
+      "reason": "ask_refund_ratio"
+    },
+    {
+      "reason": "explain_refund_status"
+    }
+  ],
+  "confirmation_rules": [
+    "取消、退款、赔付等 strong_confirmation_required 方案：ResponseSolution 可提出，DialogueAgreeSolution 只有用户明确同意后才非空。",
+    "外呼/催促/催审类属于 user_request_is_enough，不要求 DialogueAgreeSolution 非空。"
+  ],
+  "guard_rules": [
+    "不可赔付不得赔付",
+    "已赔付过不得再次主动赔",
+    "赔付金额不得超过信号上限",
+    "不可取消不得取消",
+    "未选商品不得单商品退款",
+    "需要图片前置的质量类问题，未有图片时优先引导上传",
+    "不得输出 available_solutions 中没有的方案，除非命中 alias"
+  ],
+  "forbidden_rules": [
+    "不要把 available_solutions 当成当前都可执行",
+    "不要把 DialogueAgreeSolution 简单复制 ResponseSolution"
+  ],
+  "evidence": {
+    "positive_cases": 2565,
+    "policy_rules": 8,
+    "source": "trainer_goodcase + v2 eligibility"
+  },
+  "open_questions_for_trainer": [
+    "哪些品质子类必须图片前置，哪些可以仅凭文字描述进入退款？",
+    "建议退款比例缺失时，是否允许客服先提出经验比例，还是必须追问？",
+    "赔付与退款可以同轮复合输出的边界是什么？",
+    "多数量商品用户只说“这个坏了”时，是否默认 1 件还是必须询问数量？"
+  ]
+}
