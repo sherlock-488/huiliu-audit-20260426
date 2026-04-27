@@ -1,0 +1,28 @@
+# Run Log
+
+## Git
+- branch: main
+- commit: dab4933e68c300e25e6a66b7ec0cef67009860c9
+- status_before_bundle: clean
+
+## Commands already run for v22
+- python3 flow_skill_policy_v22/policies/current_turn_intent.py --report
+- python3 flow_skill_policy_v22/policies/confirmation_resolver.py
+- python3 flow_skill_policy_v22/policies/solution_eligibility.py
+- python3 flow_skill_policy_v22/replay/build_policy_oracle_labels.py
+- python3 flow_skill_policy_v22/generate_skill_packs.py
+- python3 flow_skill_policy_v22/replay/build_replay_sets.py
+- python3 flow_skill_policy_v22/replay/build_replay_prompts_v22.py
+- python3 flow_skill_policy_v22/replay/evaluate_replay_outputs_v22.py ...
+- python3 flow_skill_policy_v22/build_readme_report.py
+- python3 -m py_compile flow_skill_policy_v22/common.py flow_skill_policy_v22/policies/*.py flow_skill_policy_v22/replay/*.py flow_skill_policy_v22/*.py
+
+## Key Metrics
+- FD conflict v21 -> v22: 50 -> 45
+- RQ conflict v21 -> v22: 45 -> 41
+- FD-OTHER v21 -> v22: 27 -> 20
+- RQ-OTHER v21 -> v22: 30 -> 23
+- close/ack over-action v22: 0
+- strong confirmation over-trigger v22: 2
+- FD stable/action/challenge: 76 / 65 / 45
+- RQ stable/action/challenge: 79 / 79 / 41
