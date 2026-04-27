@@ -1,0 +1,52 @@
+{
+  "files": {
+    "xx": "/Users/sherlock/Desktop/01_项目代码/回流/xx_all_scene_service_v2_0408_signals_sort_process_multiple_chuli.jsonl",
+    "case_0420": "/Users/sherlock/Desktop/01_项目代码/回流/case_2026-04-20.txt"
+  },
+  "xx_stats": {
+    "total_lines": 13524,
+    "parse_ok": 13524,
+    "parse_fail": 0
+  },
+  "case_stats": {
+    "total_lines": 95547,
+    "data_rows": 95188,
+    "header_or_bad_rows": 359,
+    "json_target_ok": 95164,
+    "json_target_fail": 24
+  },
+  "unique_counts": {
+    "xx_sessions": 2384,
+    "case_sessions": 21230,
+    "common_sessions": 0,
+    "xx_inputs": 13521,
+    "case_inputs": 95112,
+    "common_inputs": 0,
+    "xx_targets": 10717,
+    "case_targets": 68470,
+    "common_targets": 1002,
+    "xx_input_target_pairs": 13524,
+    "case_input_target_pairs": 95149,
+    "common_input_target_pairs": 0
+  },
+  "row_overlap_counts": {
+    "xx_rows_with_common_session": 0,
+    "case_rows_with_common_session": 0,
+    "xx_rows_with_common_input": 0,
+    "case_rows_with_common_input": 0,
+    "xx_rows_with_common_input_target_pair": 0,
+    "case_rows_with_common_input_target_pair": 0,
+    "case_stream_match_session_rows": 0,
+    "case_stream_match_input_rows": 0,
+    "case_stream_match_target_rows": 12333,
+    "case_stream_match_input_target_pair_rows": 0
+  },
+  "rates": {
+    "xx_pair_overlap_rate": 0.0,
+    "case_pair_overlap_rate": 0.0,
+    "xx_session_overlap_rate": 0.0,
+    "case_session_overlap_rate": 0.0
+  },
+  "matched_session_examples": [],
+  "matched_pair_examples": []
+}
