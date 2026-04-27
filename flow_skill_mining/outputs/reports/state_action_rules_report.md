@@ -1,0 +1,316 @@
+# State -> Action 规则挖掘报告
+
+- draft rules: `1429`
+- strong rules (confidence >= 0.7): `890`
+- conflict/ambiguous rules: `539`
+- confirmation rules: `146`
+- ResponseSolution=无 疑似漏操作样本: `80`
+
+## 按 scene 的 strong rule 数
+- `履约场景-配送问题`: `130`
+- `收货场景-品质问题`: `116`
+- `履约场景-修改订单问题`: `97`
+- `收货场景-少送问题`: `57`
+- `收货场景-退款问题`: `37`
+- `<MISSING>`: `33`
+- `发票场景`: `29`
+- `收货场景-错送问题`: `28`
+- `会员场景-续费问题`: `23`
+- `会员场景-退卡问题`: `22`
+- `收货场景-重量不足问题`: `21`
+- `活动场景-常规活动问题`: `20`
+- `收货场景-实描不符问题`: `19`
+- `其他场景-投诉问题`: `18`
+- `会员场景-权益问题`: `18`
+- `会员场景-退卡问题诉求`: `17`
+- `活动场景-通用问题`: `16`
+- `履约场景-履约中订单缺货`: `15`
+- `收货场景-催退款进度`: `14`
+- `金融场景-功能问题`: `13`
+- `其他场景`: `13`
+- `长尾场景-金融`: `13`
+- `活动场景-省钱卡问题`: `13`
+- `金融场景-支付问题`: `12`
+- `未识别`: `12`
+- `其他场景-账号问题`: `11`
+- `售前场景-服务咨询问题`: `8`
+- `会员场景-开通问题`: `7`
+- `其他场景-其他问题`: `6`
+- `售前场景-下单问题`: `6`
+- `履约场景-无骑手接单`: `6`
+- `会员问题-权益问题`: `6`
+- `活动场景-常规活动问题诉求`: `5`
+- `其他场景-其他问题诉求`: `4`
+- `收货场景-退款问题诉求`: `4`
+- `活动场景-临时活动问题`: `4`
+- `其他场景-合作问题`: `3`
+- `会员场景-开通问题诉求`: `3`
+- `收货场景-差价问题`: `2`
+- `售前场景-商品咨询问题`: `2`
+- `会员场景-续费问题诉求`: `2`
+- `会员场景-退款问题`: `2`
+- `其他场景-APP问题`: `2`
+- `活动场景-省钱卡问题诉求`: `1`
+
+## 按 scene 的 conflict rule 数
+- `收货场景-品质问题`: `71`
+- `履约场景-配送问题`: `70`
+- `履约场景-修改订单问题`: `57`
+- `<MISSING>`: `44`
+- `收货场景-错送问题`: `32`
+- `收货场景-少送问题`: `25`
+- `收货场景-退款问题`: `18`
+- `收货场景-催退款进度`: `17`
+- `活动场景-常规活动问题`: `15`
+- `会员场景-权益问题`: `14`
+- `履约场景-履约中订单缺货`: `14`
+- `发票场景`: `13`
+- `会员场景-续费问题`: `12`
+- `收货场景-重量不足问题`: `12`
+- `活动场景-通用问题`: `11`
+- `其他场景-投诉问题`: `10`
+- `会员场景-退卡问题`: `10`
+- `会员场景-开通问题`: `9`
+- `其他场景-账号问题`: `8`
+- `活动场景-省钱卡问题`: `8`
+- `会员场景-退卡问题诉求`: `6`
+- `收货场景-实描不符问题`: `6`
+- `其他场景-其他问题`: `5`
+- `未识别`: `5`
+- `长尾场景-金融`: `5`
+- `活动场景-常规活动问题诉求`: `4`
+- `履约场景-无骑手接单`: `4`
+- `收货场景-退款问题诉求`: `4`
+- `金融场景-支付问题`: `4`
+- `金融场景-功能问题`: `4`
+- `其他场景`: `3`
+- `售前场景-下单问题`: `2`
+- `售前场景-商品咨询问题`: `2`
+- `履约场景-自提问题`: `2`
+- `活动场景-省钱卡问题诉求`: `2`
+- `收货场景-品质问题诉求`: `2`
+- `其他场景-合作问题`: `1`
+- `会员场景-权益问题诉求`: `1`
+- `收货场景-差价问题`: `1`
+- `活动场景-通用问题诉求`: `1`
+- `会员场景-开通问题诉求`: `1`
+- `售前场景-业务咨询问题`: `1`
+- `其他场景-其他问题诉求`: `1`
+- `会员场景-退款问题`: `1`
+- `收货场景`: `1`
+
+## 同一 state 下 action 分歧最大的 TOP 50
+- `rule_dbf9f546b75a` scene=`履约场景-修改订单问题` support=1022 conf=0.3796 expected=`无` conflicts=[{'action': ['无', '无', 'unknown'], 'count': 132}, {'action': ['取消订单', '无', ''], 'count': 124}, {'action': ['无', '无', 'after_action_followup'], 'count': 79}]
+- `rule_8b3cdd6f1cde` scene=`履约场景-配送问题` support=955 conf=0.4126 expected=`无` conflicts=[{'action': ['无', '无', 'unknown'], 'count': 134}, {'action': ['无', '无', 'after_action_followup'], 'count': 76}, {'action': ['操作赔付-优惠券-15元', '无', ''], 'count': 30}]
+- `rule_89582b30c68e` scene=`收货场景-品质问题` support=890 conf=0.2787 expected=`无` conflicts=[{'action': ['无', '无', 'ask_select_product'], 'count': 156}, {'action': ['无', '无', 'explain_refund_status'], 'count': 100}, {'action': ['选择商品', '无', ''], 'count': 98}]
+- `rule_16094204fae3` scene=`收货场景-品质问题` support=709 conf=0.1946 expected=`无` conflicts=[{'action': ['无', '无', 'ask_select_product'], 'count': 110}, {'action': ['小象单商品退款-100%', '小象单商品退款-100%', ''], 'count': 79}, {'action': ['无', '无', 'close_conversation'], 'count': 78}]
+- `rule_8174f1bf4836` scene=`收货场景-品质问题` support=295 conf=0.4169 expected=`选择商品` conflicts=[{'action': ['无', '无', 'ask_select_product'], 'count': 48}, {'action': ['小象单商品退款-50%', '无', ''], 'count': 21}, {'action': ['无', '无', 'ask_upload_image'], 'count': 20}]
+- `rule_5654c0351b8d` scene=`收货场景-少送问题` support=258 conf=0.2093 expected=`小象单商品退款-100%` conflicts=[{'action': ['无', '无', 'close_conversation'], 'count': 43}, {'action': ['操作赔付-优惠券-3元', '操作赔付-优惠券-3元', ''], 'count': 33}, {'action': ['无', '无', 'explain_refund_status'], 'count': 32}]
+- `rule_54ee79bc1cb8` scene=`收货场景-少送问题` support=252 conf=0.3968 expected=`无` conflicts=[{'action': ['选择商品', '无', ''], 'count': 28}, {'action': ['小象单商品退款-100%', '无', ''], 'count': 28}, {'action': ['无', '无', 'explain_refund_status'], 'count': 27}]
+- `rule_554833a637f1` scene=`<MISSING>` support=249 conf=0.3655 expected=`无` conflicts=[{'action': ['无', '无', 'unknown'], 'count': 27}, {'action': ['小象单商品退款-100%', '小象单商品退款-100%', ''], 'count': 16}, {'action': ['选择商品', '无', ''], 'count': 9}]
+- `rule_70409ba8a0e2` scene=`发票场景` support=203 conf=0.6798 expected=`无` conflicts=[{'action': ['无', '无', 'unknown'], 'count': 19}, {'action': ['开发票', '无', ''], 'count': 14}, {'action': ['无', '无', 'unavailable_capability'], 'count': 10}]
+- `rule_3763771d4512` scene=`活动场景-常规活动问题` support=175 conf=0.36 expected=`无` conflicts=[{'action': ['无', '无', 'explain_refund_status'], 'count': 51}, {'action': ['无', '无', 'unavailable_capability'], 'count': 20}, {'action': ['无', '无', 'ask_refund_ratio'], 'count': 17}]
+- `rule_a619757a5e32` scene=`收货场景-实描不符问题` support=172 conf=0.2674 expected=`无` conflicts=[{'action': ['无', '无', 'explain_refund_status'], 'count': 42}, {'action': ['选择商品', '无', ''], 'count': 21}, {'action': ['小象单商品退款-50%', '无', ''], 'count': 12}]
+- `rule_fe3c38fff51e` scene=`收货场景-错送问题` support=165 conf=0.297 expected=`无` conflicts=[{'action': ['无', '无', 'ask_refund_ratio'], 'count': 32}, {'action': ['无', '无', 'explain_refund_status'], 'count': 13}, {'action': ['再次外呼骑手-协商调换货品', '无', ''], 'count': 12}]
+- `rule_92c37de1247c` scene=`收货场景-错送问题` support=164 conf=0.2561 expected=`无` conflicts=[{'action': ['无', '无', 'close_conversation'], 'count': 27}, {'action': ['外呼骑手-协商调换货品', '外呼骑手-协商调换货品', ''], 'count': 22}, {'action': ['小象单商品退款-100%', '小象单商品退款-100%', ''], 'count': 15}]
+- `rule_424c15a74546` scene=`收货场景-品质问题` support=155 conf=0.5742 expected=`无` conflicts=[{'action': ['无', '无', 'close_conversation'], 'count': 32}, {'action': ['小象单商品退款-50%', '无', ''], 'count': 7}, {'action': ['小象单商品退款-30%', '无', ''], 'count': 5}]
+- `rule_6dca5a8906e2` scene=`会员场景-续费问题` support=150 conf=0.72 expected=`无` conflicts=[{'action': ['无', '无', 'unknown'], 'count': 16}, {'action': ['无', '无', 'ask_refund_ratio'], 'count': 7}, {'action': ['无', '无', 'after_action_followup'], 'count': 6}]
+- `rule_ef0a8954d69f` scene=`收货场景-品质问题` support=147 conf=0.3673 expected=`无` conflicts=[{'action': ['小象单商品退款-50%', '无', ''], 'count': 14}, {'action': ['无', '无', 'ask_refund_ratio'], 'count': 14}, {'action': ['小象单商品退款-30%', '无', ''], 'count': 13}]
+- `rule_347e5540996b` scene=`收货场景-重量不足问题` support=143 conf=0.2587 expected=`无` conflicts=[{'action': ['无', '无', 'explain_refund_status'], 'count': 26}, {'action': ['选择商品', '无', ''], 'count': 22}, {'action': ['小象单商品退款-30%', '无', ''], 'count': 9}]
+- `rule_69c8948ff60e` scene=`履约场景-配送问题` support=141 conf=0.3475 expected=`无` conflicts=[{'action': ['系统催单', '无', ''], 'count': 30}, {'action': ['无', '无', 'eta_answer_only'], 'count': 20}, {'action': ['外呼骑手-催促配送', '无', ''], 'count': 10}]
+- `rule_9be956ae8ec4` scene=`履约场景-配送问题` support=128 conf=0.4766 expected=`无` conflicts=[{'action': ['无', '无', 'eta_answer_only'], 'count': 34}, {'action': ['外呼骑手-催促配送', '无', ''], 'count': 9}, {'action': ['操作赔付-优惠券-10元', '无', ''], 'count': 3}]
+- `rule_5e4d76531171` scene=`履约场景-修改订单问题` support=124 conf=0.379 expected=`无` conflicts=[{'action': ['取消订单', '无', ''], 'count': 30}, {'action': ['引导自助修改订单', '无', ''], 'count': 22}, {'action': ['无', '无', 'ask_refund_ratio'], 'count': 17}]
+- `rule_95c61d3e88c6` scene=`会员场景-权益问题` support=121 conf=0.405 expected=`无` conflicts=[{'action': ['无', '无', 'unknown'], 'count': 37}, {'action': ['无', '无', 'after_action_followup'], 'count': 17}, {'action': ['会员卡退款', '会员卡退款', ''], 'count': 5}]
+- `rule_e417aefb39d5` scene=`履约场景-修改订单问题` support=119 conf=0.2437 expected=`无` conflicts=[{'action': ['引导自助修改订单', '无', ''], 'count': 26}, {'action': ['无骑手接单跟单', '无', ''], 'count': 14}, {'action': ['无', '无', 'unavailable_capability'], 'count': 13}]
+- `rule_2a16fad94ed7` scene=`活动场景-通用问题` support=114 conf=0.4123 expected=`无` conflicts=[{'action': ['无', '无', 'explain_refund_status'], 'count': 33}, {'action': ['无', '无', 'after_action_followup'], 'count': 11}, {'action': ['无', '无', 'unavailable_capability'], 'count': 6}]
+- `rule_d26a83677e3a` scene=`收货场景-退款问题` support=110 conf=0.4818 expected=`无` conflicts=[{'action': ['无', '无', 'ask_select_product'], 'count': 31}, {'action': ['选择商品', '无', ''], 'count': 7}, {'action': ['催促退款审核', '无', ''], 'count': 6}]
+- `rule_1a5c5850bf1b` scene=`履约场景-修改订单问题` support=106 conf=0.5566 expected=`取消订单` conflicts=[{'action': ['无', '无', 'explain_refund_status'], 'count': 24}, {'action': ['取消订单', '无', ''], 'count': 8}, {'action': ['无', '无', 'after_action_followup'], 'count': 3}]
+- `rule_7711fa1a689b` scene=`履约场景-修改订单问题` support=102 conf=0.3137 expected=`无` conflicts=[{'action': ['取消订单', '无', ''], 'count': 20}, {'action': ['无', '无', 'after_action_followup'], 'count': 19}, {'action': ['引导自助修改订单', '无', ''], 'count': 11}]
+- `rule_3c8b6663554e` scene=`履约场景-履约中订单缺货` support=101 conf=0.4752 expected=`无` conflicts=[{'action': ['操作赔付-优惠券-8元', '操作赔付-优惠券-8元', ''], 'count': 10}, {'action': ['操作赔付-优惠券-3元', '无', ''], 'count': 10}, {'action': ['操作赔付-优惠券-5元', '无', ''], 'count': 9}]
+- `rule_6a1aa7f96afa` scene=`履约场景-修改订单问题` support=99 conf=0.5859 expected=`无` conflicts=[{'action': ['引导自助修改订单', '无', ''], 'count': 18}, {'action': ['取消订单', '无', ''], 'count': 17}, {'action': ['无骑手接单跟单', '无', ''], 'count': 2}]
+- `rule_4c9c2b68423b` scene=`其他场景` support=99 conf=0.4343 expected=`无` conflicts=[{'action': ['无', '无', 'explain_refund_status'], 'count': 31}, {'action': ['无', '无', 'after_action_followup'], 'count': 11}, {'action': ['无', '无', 'wait_for_tool_result'], 'count': 5}]
+- `rule_533fe89184dd` scene=`会员场景-退卡问题` support=93 conf=0.5806 expected=`无` conflicts=[{'action': ['无', '无', 'unknown'], 'count': 13}, {'action': ['无', '无', 'after_action_followup'], 'count': 12}, {'action': ['会员卡退款', '会员卡退款', ''], 'count': 5}]
+- `rule_b5a6e7d2acc0` scene=`履约场景-配送问题` support=90 conf=0.4333 expected=`无` conflicts=[{'action': ['无', '无', 'after_action_followup'], 'count': 26}, {'action': ['无', '无', 'unavailable_capability'], 'count': 11}, {'action': ['无', '无', 'explain_status'], 'count': 7}]
+- `rule_d25bc42540d4` scene=`收货场景-错送问题` support=81 conf=0.2963 expected=`无` conflicts=[{'action': ['外呼骑手-协商调换货品', '无', ''], 'count': 24}, {'action': ['选择商品', '无', ''], 'count': 17}, {'action': ['小象单商品退款-100%', '无', ''], 'count': 6}]
+- `rule_bdac13f48862` scene=`收货场景-退款问题` support=74 conf=0.3378 expected=`无` conflicts=[{'action': ['无', '无', 'ask_refund_ratio'], 'count': 21}, {'action': ['无', '无', 'close_conversation'], 'count': 13}, {'action': ['退审跟单', '无', ''], 'count': 2}]
+- `rule_a8a7afb493da` scene=`收货场景-品质问题` support=67 conf=0.3433 expected=`无` conflicts=[{'action': ['选择商品', '无', ''], 'count': 14}, {'action': ['无', '无', 'ask_upload_image'], 'count': 9}, {'action': ['小象单商品退款-100%', '小象单商品退款-100%', ''], 'count': 7}]
+- `rule_6cd74740315b` scene=`收货场景-品质问题` support=63 conf=0.1746 expected=`无` conflicts=[{'action': ['小象单商品退款-100%', '无', ''], 'count': 11}, {'action': ['无', '无', 'ask_refund_ratio'], 'count': 8}, {'action': ['无', '无', 'unknown'], 'count': 7}]
+- `rule_6611f57d7990` scene=`履约场景-修改订单问题` support=59 conf=0.3051 expected=`无` conflicts=[{'action': ['无', '无', 'after_action_followup'], 'count': 15}, {'action': ['无', '无', 'ask_refund_ratio'], 'count': 12}, {'action': ['无', '无', 'unavailable_capability'], 'count': 8}]
+- `rule_153c06ddf408` scene=`收货场景-少送问题` support=57 conf=0.5439 expected=`无` conflicts=[{'action': ['小象单商品退款-100%', '无', ''], 'count': 10}, {'action': ['无', '无', 'unknown'], 'count': 6}, {'action': ['无', '无', 'explain_refund_status'], 'count': 4}]
+- `rule_1297584ee9b3` scene=`<MISSING>` support=56 conf=0.4643 expected=`选择商品` conflicts=[{'action': ['小象单商品退款-100%', '无', ''], 'count': 6}, {'action': ['小象单商品退款-50%', '无', ''], 'count': 6}, {'action': ['无', '无', 'unknown'], 'count': 4}]
+- `rule_928f9e7a390e` scene=`收货场景-实描不符问题` support=56 conf=0.4464 expected=`无` conflicts=[{'action': ['小象单商品退款-30%', '无', ''], 'count': 9}, {'action': ['小象单商品退款-50%', '无', ''], 'count': 9}, {'action': ['小象单商品退款-20%', '无', ''], 'count': 5}]
+- `rule_b31e1cee01bc` scene=`<MISSING>` support=49 conf=0.4082 expected=`无` conflicts=[{'action': ['无', '无', 'after_action_followup'], 'count': 5}, {'action': ['选择商品', '无', ''], 'count': 4}, {'action': ['无', '无', 'explain_refund_status'], 'count': 3}]
+- `rule_6db505ced33b` scene=`收货场景-品质问题` support=49 conf=0.3469 expected=`无` conflicts=[{'action': ['无', '无', 'close_conversation'], 'count': 10}, {'action': ['无', '无', 'after_action_followup'], 'count': 5}, {'action': ['小象单商品退款-100%', '无', ''], 'count': 4}]
+- `rule_0aa5f6aab545` scene=`履约场景-无骑手接单` support=39 conf=0.4103 expected=`无` conflicts=[{'action': ['加急调度', '无', ''], 'count': 4}, {'action': ['无', '无', 'unknown'], 'count': 4}, {'action': ['无', '无', 'after_action_followup'], 'count': 4}]
+- `rule_ad024b89c7e7` scene=`履约场景-配送问题` support=39 conf=0.3077 expected=`操作赔付-优惠券-8元` conflicts=[{'action': ['操作赔付-优惠券-10元', '无', ''], 'count': 4}, {'action': ['无', '无', 'explain_refund_status'], 'count': 3}, {'action': ['操作赔付-优惠券-15元', '操作赔付-优惠券-15元', ''], 'count': 3}]
+- `rule_b2416066ed6a` scene=`履约场景-修改订单问题` support=38 conf=0.4211 expected=`无` conflicts=[{'action': ['取消订单', '无', ''], 'count': 8}, {'action': ['无', '无', 'after_action_followup'], 'count': 7}, {'action': ['引导自助修改订单', '无', ''], 'count': 3}]
+- `rule_1c4a462381f9` scene=`收货场景-品质问题` support=38 conf=0.3421 expected=`选择商品` conflicts=[{'action': ['无', '无', 'ask_select_product'], 'count': 7}, {'action': ['小象单商品退款-100%', '无', ''], 'count': 7}, {'action': ['取消订单', '无', ''], 'count': 4}]
+- `rule_54badc73d5da` scene=`收货场景-品质问题` support=36 conf=0.3333 expected=`操作赔付-优惠券-5元` conflicts=[{'action': ['无', '无', 'ask_select_product'], 'count': 10}, {'action': ['操作赔付-优惠券-3元', '无', ''], 'count': 5}, {'action': ['无', '无', 'explain_refund_status'], 'count': 2}]
+- `rule_3f7e07524409` scene=`履约场景-配送问题` support=36 conf=0.25 expected=`无` conflicts=[{'action': ['取消订单', '无', ''], 'count': 9}, {'action': ['无', '无', 'after_action_followup'], 'count': 6}, {'action': ['无', '无', 'unavailable_capability'], 'count': 4}]
+- `rule_0bb139414660` scene=`收货场景-品质问题` support=35 conf=0.5143 expected=`无` conflicts=[{'action': ['无', '无', 'ask_refund_ratio'], 'count': 4}, {'action': ['小象单商品退款-40%', '无', ''], 'count': 3}, {'action': ['操作赔付-优惠券-8元', '无', ''], 'count': 2}]
+- `rule_8c73898ce6bc` scene=`履约场景-修改订单问题` support=35 conf=0.2571 expected=`无` conflicts=[{'action': ['取消订单', '无', ''], 'count': 8}, {'action': ['无', '无', 'after_action_followup'], 'count': 6}, {'action': ['无', '无', 'unavailable_capability'], 'count': 4}]
+- `rule_bbf931da977e` scene=`履约场景-配送问题` support=33 conf=0.3939 expected=`无` conflicts=[{'action': ['操作赔付-优惠券-15元', '无', ''], 'count': 7}, {'action': ['再次外呼骑手-催促配送', '无', ''], 'count': 4}, {'action': ['智能跟单', '无', ''], 'count': 3}]
+
+## DialogueAgreeSolution 非空的 confirmation rules
+- `rule_50bf6b0054eb` scene=`收货场景-品质问题` agree=`小象单商品退款-100%` support=22 conf=1.0
+- `rule_58c94abfd28d` scene=`收货场景-品质问题` agree=`小象单商品退款-100%` support=19 conf=1.0
+- `rule_e91cd115a385` scene=`收货场景-少送问题` agree=`小象单商品退款-100%` support=18 conf=1.0
+- `rule_de7915fb1aca` scene=`履约场景-修改订单问题` agree=`取消订单` support=17 conf=1.0
+- `rule_5cecb7fe01b9` scene=`收货场景-少送问题` agree=`小象单商品退款-100%` support=16 conf=1.0
+- `rule_011b5f030c44` scene=`收货场景-品质问题` agree=`小象单商品退款-50%` support=13 conf=1.0
+- `rule_6ed944762a22` scene=`收货场景-少送问题` agree=`操作赔付-优惠券-3元` support=11 conf=1.0
+- `rule_1a340a256636` scene=`收货场景-品质问题` agree=`小象单商品退款-100%` support=10 conf=1.0
+- `rule_1ef55bf3bf72` scene=`收货场景-品质问题` agree=`小象单商品退款-100%` support=10 conf=1.0
+- `rule_7d1da703a6f1` scene=`收货场景-少送问题` agree=`操作赔付-优惠券-3元` support=10 conf=1.0
+- `rule_445518f59256` scene=`履约场景-修改订单问题` agree=`取消订单` support=9 conf=1.0
+- `rule_a32a29c82c34` scene=`收货场景-品质问题` agree=`小象单商品退款-100%` support=9 conf=1.0
+- `rule_1cab46422c71` scene=`收货场景-品质问题` agree=`小象单商品退款-100%` support=9 conf=1.0
+- `rule_4d17bf20b4f0` scene=`收货场景-品质问题` agree=`小象单商品退款-20%` support=8 conf=1.0
+- `rule_c479c44e7089` scene=`收货场景-品质问题` agree=`小象单商品退款-30%` support=7 conf=1.0
+- `rule_18287695c076` scene=`收货场景-实描不符问题` agree=`小象单商品退款-50%` support=7 conf=1.0
+- `rule_bf85dbcb4b02` scene=`收货场景-少送问题` agree=`操作赔付-优惠券-3元` support=7 conf=1.0
+- `rule_fe3b62604132` scene=`履约场景-修改订单问题` agree=`取消订单` support=6 conf=1.0
+- `rule_bd155804f91a` scene=`履约场景-修改订单问题` agree=`取消订单` support=6 conf=1.0
+- `rule_5e3b1e02be76` scene=`履约场景-修改订单问题` agree=`取消订单` support=6 conf=1.0
+- `rule_d30bc2befb5d` scene=`收货场景-错送问题` agree=`小象单商品退款-100%` support=6 conf=1.0
+- `rule_75ec6054f48b` scene=`会员场景-权益问题` agree=`会员卡退款` support=5 conf=1.0
+- `rule_b2ff9bd0fb33` scene=`履约场景-配送问题` agree=`操作赔付-优惠券-10元` support=5 conf=1.0
+- `rule_849ed3912646` scene=`收货场景-少送问题` agree=`小象单商品退款-100%` support=5 conf=1.0
+- `rule_39faa9bc5903` scene=`收货场景-少送问题` agree=`小象单商品退款-100%` support=5 conf=1.0
+- `rule_3dbe29ca3f41` scene=`<MISSING>` agree=`小象单商品退款-100%` support=4 conf=1.0
+- `rule_076c660826ef` scene=`履约场景-配送问题` agree=`操作赔付-优惠券-10元` support=4 conf=1.0
+- `rule_91623e67dbbb` scene=`收货场景-品质问题` agree=`小象单商品退款-50%` support=4 conf=1.0
+- `rule_bfd3182ca039` scene=`收货场景-品质问题` agree=`小象单商品退款-40%` support=4 conf=1.0
+- `rule_47500f139f53` scene=`收货场景-品质问题` agree=`小象单商品退款-50%` support=4 conf=1.0
+- `rule_1194f57a3f87` scene=`收货场景-品质问题` agree=`小象单商品退款-50%` support=4 conf=1.0
+- `rule_21e7478ffeaa` scene=`收货场景-品质问题` agree=`小象单商品退款-100%` support=4 conf=1.0
+- `rule_8889b82e5058` scene=`收货场景-错送问题` agree=`小象整单申请退款` support=4 conf=1.0
+- `rule_84ca0d705842` scene=`收货场景-错送问题` agree=`小象单商品退款-100%` support=4 conf=1.0
+- `rule_96d188f5b383` scene=`收货场景-错送问题` agree=`小象单商品退款-100%` support=4 conf=1.0
+- `rule_8abf4dcf0453` scene=`活动场景-常规活动问题` agree=`操作赔付-优惠券-5元` support=4 conf=1.0
+- `rule_2f69206c7e8e` scene=`<MISSING>` agree=`小象整单申请退款` support=3 conf=1.0
+- `rule_e9cc787a237b` scene=`<MISSING>` agree=`操作赔付-优惠券-8元` support=3 conf=1.0
+- `rule_546c3646bcea` scene=`<MISSING>` agree=`小象单商品退款-100%` support=3 conf=1.0
+- `rule_831744ca92df` scene=`会员场景-退卡问题诉求` agree=`会员卡退款` support=3 conf=1.0
+- `rule_8372b9eccb8f` scene=`履约场景-修改订单问题` agree=`取消订单` support=3 conf=1.0
+- `rule_427de561bde2` scene=`履约场景-修改订单问题` agree=`取消订单` support=3 conf=1.0
+- `rule_88f1660cccb7` scene=`履约场景-修改订单问题` agree=`取消订单` support=3 conf=1.0
+- `rule_a9a7339280a1` scene=`履约场景-履约中订单缺货` agree=`操作赔付-优惠券-8元` support=3 conf=1.0
+- `rule_2fe8598b5a18` scene=`收货场景-品质问题` agree=`取消订单` support=3 conf=1.0
+- `rule_6e0bcc339968` scene=`收货场景-品质问题` agree=`小象单商品退款-70%` support=3 conf=1.0
+- `rule_341f1b2cacb8` scene=`收货场景-品质问题` agree=`小象单商品退款-10%` support=3 conf=1.0
+- `rule_117c3b9ec5e6` scene=`收货场景-品质问题` agree=`小象单商品退款-100%` support=3 conf=1.0
+- `rule_7aab396fe4db` scene=`收货场景-品质问题` agree=`小象单商品退款-100%` support=3 conf=1.0
+- `rule_f864ea8cb18c` scene=`收货场景-品质问题` agree=`小象单商品退款-80%` support=3 conf=1.0
+- `rule_d4c3be80daeb` scene=`收货场景-品质问题` agree=`操作赔付-优惠券-5元` support=3 conf=1.0
+- `rule_11da9c7d7789` scene=`收货场景-少送问题` agree=`操作赔付-优惠券-3元` support=3 conf=1.0
+- `rule_3ac9e93b77d4` scene=`收货场景-少送问题` agree=`小象单商品退款-100%` support=3 conf=1.0
+- `rule_21827b46ef01` scene=`收货场景-少送问题` agree=`小象单商品退款-100%` support=3 conf=1.0
+- `rule_8c490d647a19` scene=`收货场景-重量不足问题` agree=`小象单商品退款-100%` support=3 conf=1.0
+- `rule_73ee2a7a92e0` scene=`收货场景-重量不足问题` agree=`小象单商品退款-30%` support=3 conf=1.0
+- `rule_87591ca4c206` scene=`收货场景-错送问题` agree=`小象单商品退款-50%` support=3 conf=1.0
+- `rule_5f75fefd69a2` scene=`<MISSING>` agree=`取消订单` support=2 conf=1.0
+- `rule_29b428e25314` scene=`<MISSING>` agree=`操作赔付-优惠券-3元` support=2 conf=1.0
+- `rule_5bb8104333d7` scene=`<MISSING>` agree=`小象单商品退款-100%` support=2 conf=1.0
+- `rule_a22deaff84a5` scene=`<MISSING>` agree=`小象单商品退款-50%` support=2 conf=1.0
+- `rule_f0790c65db47` scene=`<MISSING>` agree=`操作赔付-优惠券-3元` support=2 conf=1.0
+- `rule_b0067a5f561c` scene=`会员场景-开通问题诉求` agree=`会员卡退款` support=2 conf=1.0
+- `rule_b6aaa12c1fd9` scene=`会员场景-续费问题` agree=`会员卡退款` support=2 conf=1.0
+- `rule_a48f3a29db1d` scene=`会员场景-退卡问题` agree=`会员卡退款` support=2 conf=1.0
+- `rule_67783c4a136d` scene=`会员场景-退卡问题` agree=`会员卡退款` support=2 conf=1.0
+- `rule_0bf2da3de0a3` scene=`会员场景-退卡问题` agree=`会员卡退款` support=2 conf=1.0
+- `rule_01e866cd87e8` scene=`会员场景-退卡问题诉求` agree=`会员卡退款` support=2 conf=1.0
+- `rule_3952ca1481d7` scene=`履约场景-修改订单问题` agree=`取消订单` support=2 conf=1.0
+- `rule_59ce965643b1` scene=`履约场景-修改订单问题` agree=`取消订单` support=2 conf=1.0
+- `rule_c567026b3647` scene=`履约场景-修改订单问题` agree=`取消订单` support=2 conf=1.0
+- `rule_09b8e2f5c29e` scene=`履约场景-修改订单问题` agree=`操作赔付-运费券-3元` support=2 conf=1.0
+- `rule_c15defc03356` scene=`履约场景-修改订单问题` agree=`取消订单` support=2 conf=1.0
+- `rule_4ea3ce3cba2b` scene=`履约场景-修改订单问题` agree=`取消订单` support=2 conf=1.0
+- `rule_f47c0ae2a1a2` scene=`履约场景-修改订单问题` agree=`外呼骑手-修改订单` support=2 conf=1.0
+- `rule_f9130ae0f977` scene=`履约场景-修改订单问题` agree=`取消订单` support=2 conf=1.0
+- `rule_26b9a815713d` scene=`履约场景-配送问题` agree=`操作赔付-优惠券-15元` support=2 conf=1.0
+- `rule_dbdba0715cb7` scene=`履约场景-配送问题` agree=`操作赔付-优惠券-20元` support=2 conf=1.0
+- `rule_35b970f21b66` scene=`履约场景-配送问题` agree=`操作赔付-优惠券-10元` support=2 conf=1.0
+- `rule_fa18415b5e11` scene=`履约场景-配送问题` agree=`取消订单` support=2 conf=1.0
+
+## 需要训练师确认的规则
+- `rule_736750a3af38` scene=`<MISSING>` state={'scene': '<MISSING>', 'user_intent': 'other', 'order_status': '履约中', 'rider_status': '无骑手接单', 'timeout_state': '否', 'has_timeout_risk': False, 'can_cancel': True, 'can_compensate': False, 'already_compensated': False, 'refund_state': '订单无退款', 'selected_sku_state': 'not_selected', 'image_state': 'unknown', 'has_rider_phone': False} expected=`无` confidence=0.6923
+- `rule_981622bdbf78` scene=`其他场景-投诉问题` state={'scene': '其他场景-投诉问题', 'user_intent': 'other', 'selected_sku_state': 'not_selected', 'image_state': 'unknown'} expected=`无` confidence=0.6905
+- `rule_638e9949b4f4` scene=`活动场景-常规活动问题诉求` state={'scene': '活动场景-常规活动问题诉求', 'user_intent': 'other', 'order_status': '已完成', 'rider_status': '已送达', 'timeout_state': '否', 'can_cancel': False, 'already_compensated': False, 'refund_state': '订单无退款', 'selected_sku_state': 'not_selected', 'image_state': 'unknown', 'has_rider_phone': True} expected=`无` confidence=0.6875
+- `rule_b32db8fc92a8` scene=`活动场景-通用问题` state={'scene': '活动场景-通用问题', 'user_intent': 'other', 'selected_sku_state': 'not_selected', 'image_state': 'unknown'} expected=`无` confidence=0.6875
+- `rule_70409ba8a0e2` scene=`发票场景` state={'scene': '发票场景', 'user_intent': 'other'} expected=`无` confidence=0.6798
+- `rule_a6140e791999` scene=`其他场景-账号问题` state={'scene': '其他场景-账号问题', 'user_intent': 'other', 'selected_sku_state': 'unknown', 'image_state': 'unknown'} expected=`无` confidence=0.6735
+- `rule_6758ebba2883` scene=`<MISSING>` state={'scene': '<MISSING>', 'user_intent': 'quality_issue', 'order_status': '已完成', 'rider_status': '已送达', 'timeout_state': '否', 'can_cancel': False, 'can_compensate': False, 'already_compensated': False, 'refund_state': '未知状态', 'selected_sku_state': 'not_selected', 'image_state': 'unknown', 'has_rider_phone': True} expected=`选择商品` confidence=0.6667
+- `rule_3131c17af468` scene=`会员场景-续费问题` state={'scene': '会员场景-续费问题', 'user_intent': 'cancel_request'} expected=`无` confidence=0.6667
+- `rule_83173b35ce4f` scene=`其他场景-合作问题` state={'scene': '其他场景-合作问题', 'user_intent': 'other', 'selected_sku_state': 'unknown', 'image_state': 'unknown'} expected=`无` confidence=0.6667
+- `rule_02171117b391` scene=`收货场景-退款问题` state={'scene': '收货场景-退款问题', 'user_intent': 'cancel_request'} expected=`无` confidence=0.6667
+- `rule_19455b1d2ff8` scene=`<MISSING>` state={'scene': '<MISSING>', 'user_intent': 'other', 'order_status': '已完成', 'rider_status': '已送达', 'timeout_state': '否', 'can_cancel': False, 'already_compensated': False, 'refund_state': '订单无退款', 'selected_sku_state': 'not_selected', 'image_state': 'unknown', 'has_rider_phone': True} expected=`无` confidence=0.6667
+- `rule_6e5a7bf1381f` scene=`会员场景-续费问题` state={'scene': '会员场景-续费问题', 'user_intent': 'member_benefit', 'selected_sku_state': 'unknown', 'image_state': 'unknown'} expected=`无` confidence=0.6667
+- `rule_479a1a5c7c3d` scene=`收货场景-催退款进度` state={'scene': '收货场景-催退款进度', 'user_intent': 'refund_request'} expected=`选择商品` confidence=0.6667
+- `rule_98c0aa164075` scene=`收货场景-错送问题` state={'scene': '收货场景-错送问题', 'user_intent': 'other', 'order_status': '已完成', 'rider_status': '已送达', 'timeout_state': '否', 'can_cancel': False, 'can_compensate': False, 'already_compensated': False, 'refund_state': '未知状态', 'selected_sku_state': 'not_selected', 'image_state': 'unknown', 'has_rider_phone': True} expected=`无` confidence=0.6667
+- `rule_27824c67277c` scene=`活动场景-常规活动问题` state={'scene': '活动场景-常规活动问题', 'user_intent': 'other', 'order_status': '已完成', 'can_cancel': False, 'can_compensate': False, 'already_compensated': False, 'refund_state': '订单无退款', 'selected_sku_state': 'unknown', 'image_state': 'unknown', 'has_rider_phone': False} expected=`无` confidence=0.6667
+- `rule_bed2c46d13bf` scene=`活动场景-常规活动问题诉求` state={'scene': '活动场景-常规活动问题诉求', 'user_intent': 'activity_coupon'} expected=`无` confidence=0.6667
+- `rule_c8138b3bc75f` scene=`<MISSING>` state={'scene': '<MISSING>', 'user_intent': 'invoice_request', 'order_status': '已完成', 'rider_status': '已送达', 'timeout_state': '否', 'can_cancel': False, 'can_compensate': False, 'already_compensated': False, 'refund_state': '未知状态', 'selected_sku_state': 'not_selected', 'image_state': 'unknown', 'has_rider_phone': True} expected=`无` confidence=0.6667
+- `rule_bf251e328e00` scene=`<MISSING>` state={'scene': '<MISSING>', 'user_intent': 'quality_issue', 'order_status': '已完成', 'rider_status': '已送达', 'timeout_state': '否', 'can_cancel': False, 'can_compensate': False, 'already_compensated': False, 'refund_state': '订单部分退款', 'selected_sku_state': 'not_selected', 'image_state': 'unknown', 'has_rider_phone': True} expected=`选择商品` confidence=0.6667
+- `rule_3a747d42ead9` scene=`<MISSING>` state={'scene': '<MISSING>', 'user_intent': 'other', 'order_status': '已完成', 'rider_status': '已送达', 'timeout_state': '否', 'can_cancel': False, 'can_compensate': False, 'already_compensated': True, 'refund_state': '订单无退款', 'selected_sku_state': 'not_selected', 'image_state': 'has_image', 'has_rider_phone': True} expected=`无` confidence=0.6667
+- `rule_6d6f5c7903b6` scene=`会员场景-续费问题` state={'scene': '会员场景-续费问题', 'user_intent': 'transfer_request', 'selected_sku_state': 'unknown', 'image_state': 'unknown'} expected=`无` confidence=0.6667
+- `rule_a5fa50a59d62` scene=`其他场景-其他问题` state={'scene': '其他场景-其他问题', 'user_intent': 'presale_consult'} expected=`无` confidence=0.6667
+- `rule_5ca14b34128f` scene=`其他场景-其他问题` state={'scene': '其他场景-其他问题', 'user_intent': 'presale_consult', 'selected_sku_state': 'unknown', 'image_state': 'unknown'} expected=`无` confidence=0.6667
+- `rule_473fd9c34907` scene=`履约场景-修改订单问题` state={'scene': '履约场景-修改订单问题', 'user_intent': 'date_issue'} expected=`取消订单` confidence=0.6667
+- `rule_9fb0781dee1e` scene=`履约场景-修改订单问题` state={'scene': '履约场景-修改订单问题', 'user_intent': 'transfer_request', 'order_status': '已完成', 'rider_status': '已送达', 'timeout_state': '否', 'can_cancel': False, 'can_compensate': False, 'already_compensated': False, 'refund_state': '订单无退款', 'selected_sku_state': 'not_selected', 'image_state': 'unknown', 'has_rider_phone': True} expected=`无` confidence=0.6667
+- `rule_157127392e4e` scene=`履约场景-配送问题` state={'scene': '履约场景-配送问题', 'user_intent': 'other', 'order_status': '履约中', 'rider_status': '配送中', 'timeout_state': '是', 'can_cancel': True, 'already_compensated': False, 'refund_state': '订单无退款', 'selected_sku_state': 'not_selected', 'image_state': 'unknown', 'has_rider_phone': True, 'pending_confirmation_solution': '操作赔付-优惠券-15元'} expected=`操作赔付-优惠券-15元` confidence=0.6667
+- `rule_abe6bc3cbed1` scene=`履约场景-配送问题` state={'scene': '履约场景-配送问题', 'user_intent': 'close_conversation', 'order_status': '履约中', 'rider_status': '骑手已接单', 'timeout_state': '否', 'has_timeout_risk': False, 'can_cancel': True, 'already_compensated': False, 'refund_state': '订单无退款', 'selected_sku_state': 'not_selected', 'image_state': 'unknown', 'has_rider_phone': True} expected=`无` confidence=0.6667
+- `rule_13ca89a502f5` scene=`收货场景-催退款进度` state={'scene': '收货场景-催退款进度', 'user_intent': 'other', 'order_status': '已完成', 'rider_status': '已送达', 'timeout_state': '是', 'can_cancel': False, 'already_compensated': False, 'refund_state': '订单部分退款', 'selected_sku_state': 'selected', 'image_state': 'unknown', 'has_rider_phone': True} expected=`无` confidence=0.6667
+- `rule_15eee322ba1f` scene=`收货场景-少送问题` state={'scene': '收货场景-少送问题', 'user_intent': 'payment_issue'} expected=`操作赔付-优惠券-3元` confidence=0.6667
+- `rule_aae8cc26e20e` scene=`收货场景-少送问题` state={'scene': '收货场景-少送问题', 'user_intent': 'confirm_compensation', 'order_status': '已完成', 'rider_status': '已送达', 'timeout_state': '否', 'can_cancel': False, 'can_compensate': False, 'already_compensated': False, 'refund_state': '未知状态', 'selected_sku_state': 'selected', 'image_state': 'unknown', 'has_rider_phone': True} expected=`无` confidence=0.6667
+- `rule_e59ba7050277` scene=`收货场景-少送问题` state={'scene': '收货场景-少送问题', 'user_intent': 'confirm_compensation', 'order_status': '已完成', 'rider_status': '已送达', 'timeout_state': '否', 'can_cancel': False, 'already_compensated': False, 'refund_state': '未知状态', 'selected_sku_state': 'not_selected', 'image_state': 'unknown', 'has_rider_phone': True} expected=`选择商品` confidence=0.6667
+- `rule_df2b89da206e` scene=`收货场景-退款问题` state={'scene': '收货场景-退款问题', 'user_intent': 'cannot_refund'} expected=`选择商品` confidence=0.6667
+- `rule_f77e918d8379` scene=`收货场景-退款问题` state={'scene': '收货场景-退款问题', 'user_intent': 'confirm_refund', 'order_status': '已完成', 'rider_status': '已送达', 'timeout_state': '否', 'can_cancel': False, 'already_compensated': False, 'refund_state': '订单无退款', 'selected_sku_state': 'not_selected', 'image_state': 'unknown', 'has_rider_phone': True} expected=`无` confidence=0.6667
+- `rule_a3d4056adc6c` scene=`收货场景-退款问题` state={'scene': '收货场景-退款问题', 'user_intent': 'confirm_refund', 'order_status': '已完成', 'rider_status': '已送达', 'timeout_state': '否', 'can_cancel': False, 'already_compensated': False, 'refund_state': '未知状态', 'selected_sku_state': 'not_selected', 'image_state': 'unknown', 'has_rider_phone': True} expected=`无` confidence=0.6667
+- `rule_83059ea0a576` scene=`<MISSING>` state={'scene': '<MISSING>', 'user_intent': 'cancel_request'} expected=`取消订单` confidence=0.6667
+- `rule_546c49cbbc99` scene=`<MISSING>` state={'scene': '<MISSING>', 'user_intent': 'eta_question'} expected=`无` confidence=0.6667
+- `rule_bfeab9254bc3` scene=`<MISSING>` state={'scene': '<MISSING>', 'user_intent': 'refund_progress'} expected=`无` confidence=0.6667
+- `rule_dd4fc40b13b9` scene=`<MISSING>` state={'scene': '<MISSING>', 'user_intent': 'not_received_after_delivered', 'order_status': '已完成', 'rider_status': '已送达', 'timeout_state': '否', 'can_cancel': False, 'already_compensated': False, 'refund_state': '未知状态', 'selected_sku_state': 'not_selected', 'image_state': 'unknown', 'has_rider_phone': True} expected=`无` confidence=0.6667
+- `rule_dae7fc206820` scene=`<MISSING>` state={'scene': '<MISSING>', 'user_intent': 'delivery_urge', 'order_status': '已完成', 'rider_status': '已送达', 'timeout_state': '否', 'can_cancel': False, 'already_compensated': False, 'refund_state': '订单部分退款', 'selected_sku_state': 'not_selected', 'image_state': 'has_image', 'has_rider_phone': True} expected=`催促退款审核;退审跟单` confidence=0.6667
+- `rule_3a04132998e3` scene=`<MISSING>` state={'scene': '<MISSING>', 'user_intent': 'other', 'order_status': '已完成', 'rider_status': '已送达', 'timeout_state': '否', 'can_cancel': False, 'already_compensated': False, 'refund_state': '订单部分退款', 'selected_sku_state': 'not_selected', 'image_state': 'unknown', 'has_rider_phone': True} expected=`无` confidence=0.6667
+- `rule_b682b1460ff2` scene=`<MISSING>` state={'scene': '<MISSING>', 'user_intent': 'quality_issue', 'order_status': '已完成', 'rider_status': '已送达', 'timeout_state': '是', 'can_cancel': False, 'already_compensated': False, 'refund_state': '订单无退款', 'selected_sku_state': 'not_selected', 'image_state': 'unknown', 'has_rider_phone': True} expected=`选择商品` confidence=0.6667
+- `rule_a19657af5200` scene=`<MISSING>` state={'scene': '<MISSING>', 'user_intent': 'quality_issue', 'order_status': '已完成', 'rider_status': '已送达', 'timeout_state': '否', 'can_cancel': False, 'already_compensated': False, 'refund_state': '订单无退款', 'selected_sku_state': 'not_selected', 'image_state': 'unknown', 'has_rider_phone': True} expected=`选择商品` confidence=0.6667
+- `rule_0e8b79ca2705` scene=`<MISSING>` state={'scene': '<MISSING>', 'user_intent': 'delivery_urge', 'order_status': '已完成', 'rider_status': '已送达', 'timeout_state': '否', 'can_cancel': False, 'can_compensate': False, 'already_compensated': False, 'refund_state': '未知状态', 'selected_sku_state': 'not_selected', 'image_state': 'has_image', 'has_rider_phone': True} expected=`催促退款审核;退审跟单` confidence=0.6667
+- `rule_86cdbec49c5c` scene=`会员场景-开通问题` state={'scene': '会员场景-开通问题', 'user_intent': 'activity_coupon'} expected=`会员卡退款` confidence=0.6667
+- `rule_c8a63244397f` scene=`会员场景-开通问题` state={'scene': '会员场景-开通问题', 'user_intent': 'activity_coupon', 'order_status': '已完成', 'can_cancel': False, 'can_compensate': False, 'already_compensated': False, 'refund_state': '订单无退款', 'selected_sku_state': 'unknown', 'image_state': 'unknown', 'has_rider_phone': False} expected=`会员卡退款` confidence=0.6667
+- `rule_9e18ff3d734c` scene=`会员场景-开通问题` state={'scene': '会员场景-开通问题', 'user_intent': 'payment_issue', 'selected_sku_state': 'unknown', 'image_state': 'unknown'} expected=`无` confidence=0.6667
+- `rule_16c533cba202` scene=`会员场景-权益问题` state={'scene': '会员场景-权益问题', 'user_intent': 'activity_coupon', 'order_status': '已完成', 'can_cancel': False, 'can_compensate': False, 'already_compensated': False, 'refund_state': '订单无退款', 'selected_sku_state': 'unknown', 'image_state': 'unknown', 'has_rider_phone': False} expected=`无` confidence=0.6667
+- `rule_015b0152171c` scene=`会员场景-权益问题` state={'scene': '会员场景-权益问题', 'user_intent': 'member_auto_renew', 'order_status': '已完成', 'can_cancel': False, 'can_compensate': False, 'already_compensated': False, 'refund_state': '订单无退款', 'selected_sku_state': 'unknown', 'image_state': 'unknown', 'has_rider_phone': False} expected=`无` confidence=0.6667
+- `rule_09999482b6e7` scene=`会员场景-权益问题` state={'scene': '会员场景-权益问题', 'user_intent': 'transfer_request', 'order_status': '已完成', 'rider_status': '已送达', 'timeout_state': '否', 'can_cancel': False, 'already_compensated': False, 'refund_state': '订单无退款', 'selected_sku_state': 'not_selected', 'image_state': 'unknown', 'has_rider_phone': True} expected=`无` confidence=0.6667
+- `rule_e9f70e0f069a` scene=`会员场景-权益问题诉求` state={'scene': '会员场景-权益问题诉求', 'user_intent': 'member_benefit'} expected=`无` confidence=0.6667
+- `rule_fc0d0cfffeb8` scene=`会员场景-续费问题` state={'scene': '会员场景-续费问题', 'user_intent': 'transfer_request', 'order_status': '已完成', 'can_cancel': False, 'already_compensated': False, 'refund_state': '订单无退款', 'selected_sku_state': 'unknown', 'image_state': 'unknown', 'has_rider_phone': False} expected=`无` confidence=0.6667
+- `rule_638df9c8e713` scene=`会员场景-续费问题` state={'scene': '会员场景-续费问题', 'user_intent': 'member_auto_renew', 'order_status': '已完成', 'can_cancel': False, 'already_compensated': False, 'refund_state': '订单部分退款', 'selected_sku_state': 'unknown', 'image_state': 'unknown', 'has_rider_phone': False} expected=`管理会员自动续费` confidence=0.6667
+- `rule_43f6482591c4` scene=`会员场景-续费问题` state={'scene': '会员场景-续费问题', 'user_intent': 'cancel_request', 'selected_sku_state': 'unknown', 'image_state': 'unknown'} expected=`管理会员自动续费` confidence=0.6667
+- `rule_60b8c899da65` scene=`会员场景-退卡问题` state={'scene': '会员场景-退卡问题', 'user_intent': 'activity_coupon'} expected=`会员卡退款` confidence=0.6667
+- `rule_5b9457f7f0e3` scene=`会员场景-退卡问题` state={'scene': '会员场景-退卡问题', 'user_intent': 'refund_request', 'order_status': '已完成', 'can_cancel': False, 'can_compensate': False, 'already_compensated': False, 'refund_state': '订单无退款', 'selected_sku_state': 'unknown', 'image_state': 'unknown', 'has_rider_phone': False} expected=`无` confidence=0.6667
+- `rule_a93705c7d026` scene=`会员场景-退卡问题` state={'scene': '会员场景-退卡问题', 'user_intent': 'cancel_request', 'order_status': '已完成', 'can_cancel': False, 'can_compensate': False, 'already_compensated': False, 'refund_state': '订单无退款', 'selected_sku_state': 'unknown', 'image_state': 'unknown', 'has_rider_phone': False} expected=`无` confidence=0.6667
+- `rule_9dbd30e7cb2d` scene=`会员场景-退卡问题` state={'scene': '会员场景-退卡问题', 'user_intent': 'other', 'order_status': '已完成', 'can_cancel': False, 'can_compensate': False, 'already_compensated': False, 'refund_state': '未知状态', 'selected_sku_state': 'unknown', 'image_state': 'unknown', 'has_rider_phone': False} expected=`无` confidence=0.6667
+- `rule_39a906bf21a2` scene=`会员场景-退卡问题诉求` state={'scene': '会员场景-退卡问题诉求', 'user_intent': 'activity_coupon'} expected=`会员卡退款` confidence=0.6667
+- `rule_55eb13189da8` scene=`会员场景-退卡问题诉求` state={'scene': '会员场景-退卡问题诉求', 'user_intent': 'transfer_request', 'order_status': '已完成', 'can_cancel': False, 'already_compensated': False, 'refund_state': '订单无退款', 'selected_sku_state': 'unknown', 'image_state': 'unknown', 'has_rider_phone': False} expected=`无` confidence=0.6667
+- `rule_c46e410b8dc0` scene=`会员场景-退卡问题诉求` state={'scene': '会员场景-退卡问题诉求', 'user_intent': 'other', 'order_status': '已完成', 'can_cancel': False, 'already_compensated': False, 'refund_state': '订单无退款', 'selected_sku_state': 'unknown', 'image_state': 'unknown', 'has_rider_phone': False} expected=`无` confidence=0.6667
+- `rule_e0331cd8e61a` scene=`其他场景` state={'scene': '其他场景', 'user_intent': 'other', 'order_status': '已完成', 'selected_sku_state': 'not_selected', 'image_state': 'unknown'} expected=`无` confidence=0.6667
+- `rule_89efbd9566a2` scene=`其他场景-其他问题` state={'scene': '其他场景-其他问题', 'user_intent': 'other', 'order_status': '履约中', 'selected_sku_state': 'not_selected', 'image_state': 'unknown'} expected=`无` confidence=0.6667
+- `rule_544bb1e2baf2` scene=`其他场景-投诉问题` state={'scene': '其他场景-投诉问题', 'user_intent': 'other', 'order_status': '付款成功', 'selected_sku_state': 'not_selected', 'image_state': 'unknown'} expected=`无` confidence=0.6667
+- `rule_305ec8833248` scene=`其他场景-投诉问题` state={'scene': '其他场景-投诉问题', 'user_intent': 'other', 'order_status': '已完成', 'rider_status': '已送达', 'timeout_state': '否', 'can_cancel': False, 'can_compensate': False, 'already_compensated': False, 'refund_state': '订单无退款', 'selected_sku_state': 'not_selected', 'image_state': 'unknown', 'has_rider_phone': True} expected=`无` confidence=0.6667
+- `rule_7b2eb1efe261` scene=`其他场景-账号问题` state={'scene': '其他场景-账号问题', 'user_intent': 'member_benefit'} expected=`无` confidence=0.6667
+- `rule_f81530f452a2` scene=`其他场景-账号问题` state={'scene': '其他场景-账号问题', 'user_intent': 'other', 'selected_sku_state': 'not_selected', 'image_state': 'unknown'} expected=`无` confidence=0.6667
+- `rule_17af6a996eae` scene=`其他场景-账号问题` state={'scene': '其他场景-账号问题', 'user_intent': 'presale_consult', 'selected_sku_state': 'not_selected', 'image_state': 'unknown'} expected=`引导自助查看配送范围` confidence=0.6667
+- `rule_54121691ac9b` scene=`其他场景-账号问题` state={'scene': '其他场景-账号问题', 'user_intent': 'presale_consult', 'selected_sku_state': 'unknown', 'image_state': 'unknown'} expected=`引导自助查看配送范围` confidence=0.6667
+- `rule_6384cd5f4021` scene=`发票场景` state={'scene': '发票场景', 'user_intent': 'other', 'order_status': '已完成', 'rider_status': '已送达', 'timeout_state': '是', 'can_cancel': False, 'already_compensated': False, 'refund_state': '订单无退款', 'selected_sku_state': 'not_selected', 'image_state': 'unknown', 'has_rider_phone': True} expected=`无` confidence=0.6667
+- `rule_07624fe80b85` scene=`发票场景` state={'scene': '发票场景', 'user_intent': 'invoice_request', 'order_status': '已完成', 'can_cancel': False, 'already_compensated': False, 'refund_state': '订单无退款', 'selected_sku_state': 'not_selected', 'image_state': 'unknown', 'has_rider_phone': False} expected=`无` confidence=0.6667
+- `rule_4d95e011fe29` scene=`售前场景-下单问题` state={'scene': '售前场景-下单问题', 'user_intent': 'member_benefit'} expected=`无` confidence=0.6667
+- `rule_2448f828e12a` scene=`售前场景-下单问题` state={'scene': '售前场景-下单问题', 'user_intent': 'member_benefit', 'order_status': '已完成', 'can_cancel': False, 'can_compensate': False, 'already_compensated': False, 'refund_state': '订单无退款', 'selected_sku_state': 'unknown', 'image_state': 'unknown', 'has_rider_phone': False} expected=`无` confidence=0.6667
+- `rule_7b8e4bdbdf41` scene=`售前场景-商品咨询问题` state={'scene': '售前场景-商品咨询问题', 'user_intent': 'not_received_after_delivered'} expected=`无` confidence=0.6667
+- `rule_dfc70def3fdc` scene=`履约场景-修改订单问题` state={'scene': '履约场景-修改订单问题', 'user_intent': 'other', 'order_status': '履约中', 'rider_status': '配送暂停', 'timeout_state': '否', 'has_timeout_risk': False, 'can_cancel': True, 'already_compensated': False, 'selected_sku_state': 'unknown', 'image_state': 'unknown', 'has_rider_phone': True} expected=`引导自助联系骑手` confidence=0.6667
+- `rule_a7401c79d386` scene=`履约场景-修改订单问题` state={'scene': '履约场景-修改订单问题', 'user_intent': 'other', 'order_status': '履约中', 'rider_status': '配送暂停', 'timeout_state': '否', 'has_timeout_risk': True, 'can_cancel': True, 'already_compensated': False, 'selected_sku_state': 'unknown', 'image_state': 'unknown', 'has_rider_phone': True} expected=`无` confidence=0.6667
+- `rule_6773de66fc35` scene=`履约场景-修改订单问题` state={'scene': '履约场景-修改订单问题', 'user_intent': 'transfer_request', 'order_status': '履约中', 'rider_status': '配送中', 'timeout_state': '否', 'has_timeout_risk': False, 'can_cancel': True, 'already_compensated': False, 'selected_sku_state': 'unknown', 'image_state': 'unknown', 'has_rider_phone': True} expected=`取消订单` confidence=0.6667
+- `rule_a323892c425f` scene=`履约场景-修改订单问题` state={'scene': '履约场景-修改订单问题', 'user_intent': 'delivery_urge', 'order_status': '履约中', 'rider_status': '骑手已接单', 'timeout_state': '否', 'has_timeout_risk': False, 'can_cancel': True, 'already_compensated': False, 'selected_sku_state': 'unknown', 'image_state': 'unknown', 'has_rider_phone': True} expected=`无` confidence=0.6667
+- `rule_a8f5d23d0c69` scene=`履约场景-修改订单问题` state={'scene': '履约场景-修改订单问题', 'user_intent': 'close_conversation', 'order_status': '提交订单', 'can_cancel': True, 'can_compensate': False, 'already_compensated': False, 'refund_state': '订单无退款', 'selected_sku_state': 'not_selected', 'image_state': 'unknown', 'has_rider_phone': False} expected=`无` confidence=0.6667
+- `rule_f2622b3ed9c4` scene=`履约场景-修改订单问题` state={'scene': '履约场景-修改订单问题', 'user_intent': 'transfer_request', 'order_status': '已完成', 'rider_status': '已送达', 'timeout_state': '否', 'can_cancel': False, 'already_compensated': False, 'refund_state': '订单部分退款', 'selected_sku_state': 'not_selected', 'image_state': 'unknown', 'has_rider_phone': True} expected=`无` confidence=0.6667
+- `rule_b71f9fe5462e` scene=`履约场景-修改订单问题` state={'scene': '履约场景-修改订单问题', 'user_intent': 'other', 'order_status': '履约中', 'rider_status': '配送暂停', 'timeout_state': '是', 'can_cancel': True, 'already_compensated': False, 'refund_state': '订单无退款', 'selected_sku_state': 'not_selected', 'image_state': 'unknown', 'has_rider_phone': True} expected=`取消订单` confidence=0.6667
+- `rule_dc789a7c0888` scene=`履约场景-修改订单问题` state={'scene': '履约场景-修改订单问题', 'user_intent': 'other', 'order_status': '提交订单', 'can_cancel': False, 'can_compensate': False, 'already_compensated': False, 'refund_state': '未知状态', 'selected_sku_state': 'unknown', 'image_state': 'unknown', 'has_rider_phone': False} expected=`无` confidence=0.6667

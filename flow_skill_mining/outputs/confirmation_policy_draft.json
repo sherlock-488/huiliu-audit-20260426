@@ -1,0 +1,1152 @@
+{
+  "solutions": [
+    {
+      "solution_name": "小象单商品退款-xx%",
+      "response_solution_count": 992,
+      "dialogue_agree_solution_count": 422,
+      "dialogue_agree_rate": 0.4254,
+      "matched_to_previous_offer_count": 375,
+      "matched_to_current_offer_count": 47,
+      "unmatched_count": 0,
+      "likely_requires_confirmation": true,
+      "evidence_examples": [
+        {
+          "sample_id": "a755499729dfca2fcced951092a105d65e82f375",
+          "session_id": "2018639240321744971",
+          "turn_index": 9,
+          "last_user_query": "我要全额退",
+          "match_type": "current"
+        },
+        {
+          "sample_id": "4658eb80ee3c549222fe8adfd157f8fa981d1e71",
+          "session_id": "2018658095819481162",
+          "turn_index": 4,
+          "last_user_query": "可以",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "c896adecdc18cfe86520d8b6d62cd6f5deedb0cd",
+          "session_id": "2018000359038349316",
+          "turn_index": 6,
+          "last_user_query": "一半吧",
+          "match_type": "current"
+        },
+        {
+          "sample_id": "911acef1389ed325adfa16b213078510234ae4ba",
+          "session_id": "2018138295314509875",
+          "turn_index": 6,
+          "last_user_query": "不能换，就退你说的50%吧，牛奶也能喝",
+          "match_type": "current"
+        },
+        {
+          "sample_id": "8797548c7d7443880656fe11c005a1e75bd30329",
+          "session_id": "2018263599495651412",
+          "turn_index": 5,
+          "last_user_query": "可以给我退了吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "25104ab7cc1b92fe43ba9f02619469b8706e1dfa",
+          "session_id": "2018284690905579600",
+          "turn_index": 5,
+          "last_user_query": "好吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "1a7ca5bb42ba33707e2f0fb85bde51ef0236eea4",
+          "session_id": "2018335215307055159",
+          "turn_index": 5,
+          "last_user_query": "好吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "adc1511519618f3838825f9b622f835a789a81a7",
+          "session_id": "2018678631606300716",
+          "turn_index": 4,
+          "last_user_query": "行",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "57c7f38717badfde8d9a4df4668e4f6350523fbc",
+          "session_id": "2010648613265776708",
+          "turn_index": 5,
+          "last_user_query": "给我全额退",
+          "match_type": "current"
+        },
+        {
+          "sample_id": "c237019c901f8588f466205ffdf50a1e161e8eb2",
+          "session_id": "2010653338903773198",
+          "turn_index": 3,
+          "last_user_query": "不行，怎么也得给我退一半吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "dc1347c2e24130a8a1ccb70bca9e4233ada78e9c",
+          "session_id": "2010662225606819908",
+          "turn_index": 4,
+          "last_user_query": "行",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "8944c6d72821ec198bdc67703dcc92cafc8e9835",
+          "session_id": "2010663485847539734",
+          "turn_index": 4,
+          "last_user_query": "可以",
+          "match_type": "previous"
+        }
+      ],
+      "needs_trainer_confirmation": false,
+      "notes": []
+    },
+    {
+      "solution_name": "操作赔付-优惠券-xx元",
+      "response_solution_count": 565,
+      "dialogue_agree_solution_count": 190,
+      "dialogue_agree_rate": 0.3363,
+      "matched_to_previous_offer_count": 185,
+      "matched_to_current_offer_count": 5,
+      "unmatched_count": 0,
+      "likely_requires_confirmation": true,
+      "evidence_examples": [
+        {
+          "sample_id": "56a2a65b4cd2464ae77033c5933a5bc174ba23db",
+          "session_id": "2018000943472705608",
+          "turn_index": 9,
+          "last_user_query": "行吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "1a684a703b22831654d46cc6611945f29812cb9a",
+          "session_id": "2018122226206253100",
+          "turn_index": 4,
+          "last_user_query": "嗯",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "dce1f4a1adf87edf0997686710d6d506f1c3c81c",
+          "session_id": "2018186089869246494",
+          "turn_index": 4,
+          "last_user_query": "行吧行吧，15就15吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "50ddb828fba700f9df7d2f58f62b1b82ef9aec4b",
+          "session_id": "2018271145422000168",
+          "turn_index": 3,
+          "last_user_query": "行吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "03b1b7a8a30de917956d7dd165fdfef06a2a5844",
+          "session_id": "2018297002332905476",
+          "turn_index": 4,
+          "last_user_query": "那行吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "cb5e2eddfb48f224081443c26296105d2b2bab94",
+          "session_id": "2018541116883075101",
+          "turn_index": 5,
+          "last_user_query": "算了算了，你赔吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "597331f09e5f8d35febd0b26b908996d95995661",
+          "session_id": "2018661328629714979",
+          "turn_index": 3,
+          "last_user_query": "行吧，这还差不多",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "76b6b1fc34676a7bb2a12dc996f203a7aab26145",
+          "session_id": "2018285666879049729",
+          "turn_index": 3,
+          "last_user_query": "可以",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "5a006c4625bf489b979621bb895ad5904b0dab72",
+          "session_id": "2018311686482169939",
+          "turn_index": 4,
+          "last_user_query": "可以",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "fdc84308c81a808e781917b743dec2645fc14c8b",
+          "session_id": "2018658329493315648",
+          "turn_index": 5,
+          "last_user_query": "好吧，可以",
+          "match_type": "current"
+        },
+        {
+          "sample_id": "7aad37746dd473224a555dad7cee126e3e7e6148",
+          "session_id": "2018161010603048979",
+          "turn_index": 3,
+          "last_user_query": "好吧好吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "cb0f103ebf5df1f041dea124577baf32509cce53",
+          "session_id": "2018199866640302112",
+          "turn_index": 1,
+          "last_user_query": "好，也可以",
+          "match_type": "previous"
+        }
+      ],
+      "needs_trainer_confirmation": false,
+      "notes": []
+    },
+    {
+      "solution_name": "取消订单",
+      "response_solution_count": 343,
+      "dialogue_agree_solution_count": 132,
+      "dialogue_agree_rate": 0.3848,
+      "matched_to_previous_offer_count": 95,
+      "matched_to_current_offer_count": 37,
+      "unmatched_count": 0,
+      "likely_requires_confirmation": true,
+      "evidence_examples": [
+        {
+          "sample_id": "c50febd367dd33ab1f97751ae98a39a2f8e1c8ab",
+          "session_id": "2018000943472705608",
+          "turn_index": 5,
+          "last_user_query": "行，取消吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "6910e26f5cd5f2e305ac16be0a35d439eb25ce46",
+          "session_id": "2018216890292736009",
+          "turn_index": 3,
+          "last_user_query": "那取消吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "6fcd3bd2ab639a4b9f2285e743596946b78b4783",
+          "session_id": "2018144605065388079",
+          "turn_index": 2,
+          "last_user_query": "可以",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "1f865b3bf8c6f7d7a1bf518e3f10fd71f650eec8",
+          "session_id": "2018220690197221423",
+          "turn_index": 3,
+          "last_user_query": "好的",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "1a21f3726077c303f3b7e71337bd575fc1f6fb27",
+          "session_id": "2018316610994315294",
+          "turn_index": 2,
+          "last_user_query": "好的",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "4f639e1d4799fe3ef2aceb8ce1a2c55153f2f81f",
+          "session_id": "2018496148352901146",
+          "turn_index": 2,
+          "last_user_query": "噢噢，好的，你帮我取消吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "bd4b24b4fe1f21cdb59b43551f80bdbc5e4bbc21",
+          "session_id": "2018610711379845122",
+          "turn_index": 3,
+          "last_user_query": "那取消吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "b6c7821b303b1d4bed4b963bfec5a64ae15e4eac",
+          "session_id": "2018647581992108082",
+          "turn_index": 3,
+          "last_user_query": "取消吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "b9b042b853ebcc28b92481d18e855fcdbf89d5a0",
+          "session_id": "2018691532727992403",
+          "turn_index": 2,
+          "last_user_query": "取消吧",
+          "match_type": "current"
+        },
+        {
+          "sample_id": "cb10aa75e9325f6d11986a94aec29a15d9fdaf61",
+          "session_id": "2017433570725437516",
+          "turn_index": 0,
+          "last_user_query": "怎么这么慢啊，我要出门了，给我取消订单吧",
+          "match_type": "current"
+        },
+        {
+          "sample_id": "1674824866180d70b94fe5a80d3060c1fb12b900",
+          "session_id": "2017585517848215613",
+          "turn_index": 1,
+          "last_user_query": "送的太慢了，我不要了，给我退款",
+          "match_type": "current"
+        },
+        {
+          "sample_id": "f1f7b651fc2310bef4e4c1d3b87b8eab289aee75",
+          "session_id": "2017620218964897891",
+          "turn_index": 1,
+          "last_user_query": "骑手怎么回事，怎么还没送到，你们要干什么，别送了，我不要了，取消吧",
+          "match_type": "current"
+        }
+      ],
+      "needs_trainer_confirmation": false,
+      "notes": []
+    },
+    {
+      "solution_name": "外呼骑手-xx",
+      "response_solution_count": 166,
+      "dialogue_agree_solution_count": 69,
+      "dialogue_agree_rate": 0.4157,
+      "matched_to_previous_offer_count": 52,
+      "matched_to_current_offer_count": 17,
+      "unmatched_count": 0,
+      "likely_requires_confirmation": true,
+      "evidence_examples": [
+        {
+          "sample_id": "2ba867c287e25f9111d898bd14688ed8f671a5ff",
+          "session_id": "2017997620015255588",
+          "turn_index": 1,
+          "last_user_query": "可",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "dfa4317991fdc463c39697fd1d6ffecbd6b0bc17",
+          "session_id": "2018183382454452288",
+          "turn_index": 1,
+          "last_user_query": "东西没到",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "99023b42ab7c93133d76a61f4e63cb5e4e732e61",
+          "session_id": "2018187850822570073",
+          "turn_index": 1,
+          "last_user_query": "嗯",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "651ca40a2aa18487a3e8eaf8fbf7683b06afe21c",
+          "session_id": "2018223152371048487",
+          "turn_index": 1,
+          "last_user_query": "可以",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "7f705b9ef55344077cc1058ecbeb50fd28bd2644",
+          "session_id": "2018225046527754278",
+          "turn_index": 1,
+          "last_user_query": "三四个小时了",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "5dfb5f553f1397695d615f281e74a273dc7508a6",
+          "session_id": "2018229605215527002",
+          "turn_index": 3,
+          "last_user_query": "行",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "76ed9558419d898354861151ac6c6f877f0864ab",
+          "session_id": "2018299194964103194",
+          "turn_index": 3,
+          "last_user_query": "可以的",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "e88011e55166d0bdef64cea0d01d59eb022ed0ad",
+          "session_id": "2018312352538566742",
+          "turn_index": 3,
+          "last_user_query": "好的",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "9a7edca07bee72f8de0fbeb7b6a6dd1aee3952cf",
+          "session_id": "2018620130603389021",
+          "turn_index": 1,
+          "last_user_query": "可以",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "c6e9832c800d69191f4795401c5bed049a715f3a",
+          "session_id": "2018626869570994255",
+          "turn_index": 1,
+          "last_user_query": "行，麻烦快点吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "846b5c2fbc2e480185c6bc5fcc33849a7edfb2ec",
+          "session_id": "2018662234167463982",
+          "turn_index": 1,
+          "last_user_query": "好",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "6179551a7ad7feecc9e14b538636af3a4e70b154",
+          "session_id": "2018676496571715632",
+          "turn_index": 1,
+          "last_user_query": "也行。那你赶紧联系",
+          "match_type": "previous"
+        }
+      ],
+      "needs_trainer_confirmation": true,
+      "notes": [
+        "initial rule conflicts with data behavior"
+      ]
+    },
+    {
+      "solution_name": "会员卡退款",
+      "response_solution_count": 105,
+      "dialogue_agree_solution_count": 48,
+      "dialogue_agree_rate": 0.4571,
+      "matched_to_previous_offer_count": 45,
+      "matched_to_current_offer_count": 3,
+      "unmatched_count": 0,
+      "likely_requires_confirmation": true,
+      "evidence_examples": [
+        {
+          "sample_id": "6b40637b8fe27e243291f678a2f3c3d092ad4a21",
+          "session_id": "2018149778512793631",
+          "turn_index": 2,
+          "last_user_query": "可以，你帮我退了吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "873c65582107502d12687c06d6316d52a951be37",
+          "session_id": "2018280465731698770",
+          "turn_index": 3,
+          "last_user_query": "好的，退吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "d4aa19359b1486749c8c9f533f08a7e44a7a9176",
+          "session_id": "2018282651564515420",
+          "turn_index": 2,
+          "last_user_query": "需要",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "eb0d807121c4c4ccae2425b48df009763a2ba7eb",
+          "session_id": "2018282755792924726",
+          "turn_index": 5,
+          "last_user_query": "退吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "2559bca1351488b706613922cab56de62daca196",
+          "session_id": "2018515477467594786",
+          "turn_index": 1,
+          "last_user_query": "嗯退了吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "ca03d2beb2e1bae58fba7bf8cc066100313dfa4d",
+          "session_id": "2018638796694446161",
+          "turn_index": 2,
+          "last_user_query": "好的",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "862e59b55d9c4934d3e33139f50340153699981a",
+          "session_id": "2018691150245122120",
+          "turn_index": 2,
+          "last_user_query": "行吧退款吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "bd25668123f266781d76c4686aed5c23e2acd962",
+          "session_id": "2018134877707493435",
+          "turn_index": 2,
+          "last_user_query": "是的，退吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "f64ad6ec692b39db546043da17f0c828d794247f",
+          "session_id": "2018140315966718018",
+          "turn_index": 2,
+          "last_user_query": "退了吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "16ea507a6bd384e7524b9bbc328cdd9fc8d425c1",
+          "session_id": "2018177377851826196",
+          "turn_index": 1,
+          "last_user_query": "退，赶紧退了",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "0eaa738e194e9a1c63b234cc38c4dbaceb9a6c8c",
+          "session_id": "2018250953316864071",
+          "turn_index": 2,
+          "last_user_query": "嗯，退",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "83a061df10349367046b710cc67e908c48f15b0a",
+          "session_id": "2018270069583638606",
+          "turn_index": 2,
+          "last_user_query": "退了吧",
+          "match_type": "previous"
+        }
+      ],
+      "needs_trainer_confirmation": false,
+      "notes": []
+    },
+    {
+      "solution_name": "小象整单申请退款",
+      "response_solution_count": 55,
+      "dialogue_agree_solution_count": 27,
+      "dialogue_agree_rate": 0.4909,
+      "matched_to_previous_offer_count": 20,
+      "matched_to_current_offer_count": 7,
+      "unmatched_count": 0,
+      "likely_requires_confirmation": true,
+      "evidence_examples": [
+        {
+          "sample_id": "b013f9d0d588ca38416288a981d1d907d0a413fb",
+          "session_id": "2017997620015255588",
+          "turn_index": 6,
+          "last_user_query": "好吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "5955b26dda852730f654cd39f94ac2a63111dc72",
+          "session_id": "2018187850822570073",
+          "turn_index": 6,
+          "last_user_query": "先这样吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "0ea43e79e635de46d3abd1cbbf7bd5a830adda25",
+          "session_id": "2018229605215527002",
+          "turn_index": 7,
+          "last_user_query": "行吧，真服了",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "91ad0401c09eb186aa0c2c958df8b5305e9373e9",
+          "session_id": "2018299194964103194",
+          "turn_index": 7,
+          "last_user_query": "那行吧，只能这样了",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "4c783a6cbdbb0f5b96d3200751f5c16e769fe31f",
+          "session_id": "2018626869570994255",
+          "turn_index": 5,
+          "last_user_query": "行，我填一下吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "3780072e9352a349fbd652474bf3080705624752",
+          "session_id": "2018676496571715632",
+          "turn_index": 5,
+          "last_user_query": "给我退款",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "e5cd7b89492457341a06ba0b14dff12a4a25c349",
+          "session_id": "2018149104886665234",
+          "turn_index": 6,
+          "last_user_query": "已经好几个小时了，退款吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "ae507fb63d33efa70a5fb962f9757333287a60b5",
+          "session_id": "2010661560003579932",
+          "turn_index": 5,
+          "last_user_query": "行吧行吧，那你退吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "7e5d42c60ecab43dd02bd68640f59893cf7a9b96",
+          "session_id": "2010674785395486737",
+          "turn_index": 5,
+          "last_user_query": "行，行",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "36039e2fe43eb4d123fd8ba307cf5c351c6a433d",
+          "session_id": "2010677981023272983",
+          "turn_index": 6,
+          "last_user_query": "[白眼]",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "3ffc4f7538ba15e8ebd668f1591cc06ac2764349",
+          "session_id": "2010696674486681619",
+          "turn_index": 4,
+          "last_user_query": "已经好几个小时了",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "6a0243c241288a4ccf576f4bc12ae80a2d7dac8e",
+          "session_id": "2010714127769624675",
+          "turn_index": 5,
+          "last_user_query": "好",
+          "match_type": "previous"
+        }
+      ],
+      "needs_trainer_confirmation": false,
+      "notes": []
+    },
+    {
+      "solution_name": "催促退款审核",
+      "response_solution_count": 158,
+      "dialogue_agree_solution_count": 11,
+      "dialogue_agree_rate": 0.0696,
+      "matched_to_previous_offer_count": 9,
+      "matched_to_current_offer_count": 2,
+      "unmatched_count": 0,
+      "likely_requires_confirmation": true,
+      "evidence_examples": [
+        {
+          "sample_id": "3fda30726dc18867f24e399bce4bac6a11fc4324",
+          "session_id": "2018238520096280672",
+          "turn_index": 3,
+          "last_user_query": "当然可以，快点",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "d6d5d53a5f8a596ae8054e7216d43530c4d05d6e",
+          "session_id": "2018238520096280672",
+          "turn_index": 10,
+          "last_user_query": "好的，谢谢",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "0e42491d7ae92f672c887ac98f635c10bd19920d",
+          "session_id": "2018279763660398643",
+          "turn_index": 2,
+          "last_user_query": "快去快去，等多久了",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "db85174657fc59dc88e10cf54bd84ad42906a1a3",
+          "session_id": "2018279763660398643",
+          "turn_index": 9,
+          "last_user_query": "需要，麻烦了",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "b80305aad2cca4e21070b5d4851e1d4f4bf70ea0",
+          "session_id": "2018473808092667954",
+          "turn_index": 3,
+          "last_user_query": "帮我催促一下",
+          "match_type": "current"
+        },
+        {
+          "sample_id": "5e795149b00003c935bd5dd1921ed6b931d1f1d7",
+          "session_id": "2018630350997696565",
+          "turn_index": 10,
+          "last_user_query": "可以的",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "9ec34141b8a9071ee3cc9a68936b237d3d09e33d",
+          "session_id": "2018630350997696565",
+          "turn_index": 13,
+          "last_user_query": "行",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "7caab61119d3cde93233f772e59e3f134d5641f1",
+          "session_id": "2018679099266654258",
+          "turn_index": 2,
+          "last_user_query": "嗯嗯",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "67e530ee4b94160fee14778a0cf72a5ad8d86886",
+          "session_id": "2018294838940426262",
+          "turn_index": 4,
+          "last_user_query": "给我催下退款审核",
+          "match_type": "current"
+        },
+        {
+          "sample_id": "48340ff2f0146148e4888c928fcfbf4ffe89ab4d",
+          "session_id": "2010657564875075630",
+          "turn_index": 2,
+          "last_user_query": "催，谢谢",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "e9569efecebe0ff511f427b0aacccb18d738b274",
+          "session_id": "2010662778290172001",
+          "turn_index": 3,
+          "last_user_query": "好",
+          "match_type": "previous"
+        }
+      ],
+      "needs_trainer_confirmation": true,
+      "notes": [
+        "initial rule conflicts with data behavior"
+      ]
+    },
+    {
+      "solution_name": "外呼门店-xx",
+      "response_solution_count": 15,
+      "dialogue_agree_solution_count": 8,
+      "dialogue_agree_rate": 0.5333,
+      "matched_to_previous_offer_count": 7,
+      "matched_to_current_offer_count": 1,
+      "unmatched_count": 0,
+      "likely_requires_confirmation": true,
+      "evidence_examples": [
+        {
+          "sample_id": "0bf8ab6ba76f00651cf483e9633663c815561a20",
+          "session_id": "2009593401557975111",
+          "turn_index": 2,
+          "last_user_query": "好的",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "e688e4366469cafab325f2b2a361ea5d733740f0",
+          "session_id": "2009130490460352584",
+          "turn_index": 1,
+          "last_user_query": "麻烦你帮我联系商家说一下备注，我的啤酒都要常温的，不要冰的",
+          "match_type": "current"
+        },
+        {
+          "sample_id": "dcbec581992a40a6503bc402e3c88eaeb4a3b1a8",
+          "session_id": "2013593401140318299",
+          "turn_index": 1,
+          "last_user_query": "好吧，麻烦了",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "a945b0b4230843bafa118dc236222691e2467c4f",
+          "session_id": "2013577682051518530",
+          "turn_index": 2,
+          "last_user_query": "行",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "b6996c7f39a47c846898e11c5c9362e399f9b12d",
+          "session_id": "2018332844410425401",
+          "turn_index": 2,
+          "last_user_query": "行",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "6eb0ec31f105fa4e3f3442532b3ea89543d7eda9",
+          "session_id": "2018562086623936541",
+          "turn_index": 2,
+          "last_user_query": "可以",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "d37b5d56c08392e90a3b2d9807059a59d2b9fbde",
+          "session_id": "2018150816092114986",
+          "turn_index": 2,
+          "last_user_query": "可以",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "8cff7c0c284d293a3f8e85f918f2b796f4a1cf49",
+          "session_id": "2018673394425921635",
+          "turn_index": 2,
+          "last_user_query": "行，谢谢",
+          "match_type": "previous"
+        }
+      ],
+      "needs_trainer_confirmation": true,
+      "notes": [
+        "initial rule conflicts with data behavior"
+      ]
+    },
+    {
+      "solution_name": "操作赔付-运费券-3元",
+      "response_solution_count": 15,
+      "dialogue_agree_solution_count": 6,
+      "dialogue_agree_rate": 0.4,
+      "matched_to_previous_offer_count": 5,
+      "matched_to_current_offer_count": 1,
+      "unmatched_count": 0,
+      "likely_requires_confirmation": true,
+      "evidence_examples": [
+        {
+          "sample_id": "fb3a9a8fba86cbbd6bfd31d4b6515ef62c205d3f",
+          "session_id": "2009250084869681196",
+          "turn_index": 1,
+          "last_user_query": "我试试",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "3ef214c6770c0fb598e7403f66be9327534d7788",
+          "session_id": "2009263368578662487",
+          "turn_index": 2,
+          "last_user_query": "可以",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "80a0a51b2bf12cfcc3d95755cd450ca42c17b13f",
+          "session_id": "2009219121732517912",
+          "turn_index": 4,
+          "last_user_query": "那你把券给我吧",
+          "match_type": "current"
+        },
+        {
+          "sample_id": "525ea940aab3ea74a498876d11cc778d38965b58",
+          "session_id": "2012315809729732692",
+          "turn_index": 4,
+          "last_user_query": "嗯，好吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "e2a3dd4a1e3787f86b6bdec5ddb8aa65493a8693",
+          "session_id": "2013111041408008194",
+          "turn_index": 2,
+          "last_user_query": "好吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "0114813d10675f2c71e4aa8523c905761e7c26b3",
+          "session_id": "2018558590361968738",
+          "turn_index": 3,
+          "last_user_query": "好吧",
+          "match_type": "previous"
+        }
+      ],
+      "needs_trainer_confirmation": false,
+      "notes": []
+    },
+    {
+      "solution_name": "选择商品",
+      "response_solution_count": 734,
+      "dialogue_agree_solution_count": 0,
+      "dialogue_agree_rate": 0.0,
+      "matched_to_previous_offer_count": 0,
+      "matched_to_current_offer_count": 0,
+      "unmatched_count": 0,
+      "likely_requires_confirmation": false,
+      "evidence_examples": [],
+      "needs_trainer_confirmation": false,
+      "notes": []
+    },
+    {
+      "solution_name": "退审跟单",
+      "response_solution_count": 149,
+      "dialogue_agree_solution_count": 0,
+      "dialogue_agree_rate": 0.0,
+      "matched_to_previous_offer_count": 0,
+      "matched_to_current_offer_count": 0,
+      "unmatched_count": 0,
+      "likely_requires_confirmation": false,
+      "evidence_examples": [],
+      "needs_trainer_confirmation": false,
+      "notes": []
+    },
+    {
+      "solution_name": "引导自助修改订单",
+      "response_solution_count": 121,
+      "dialogue_agree_solution_count": 0,
+      "dialogue_agree_rate": 0.0,
+      "matched_to_previous_offer_count": 0,
+      "matched_to_current_offer_count": 0,
+      "unmatched_count": 0,
+      "likely_requires_confirmation": false,
+      "evidence_examples": [],
+      "needs_trainer_confirmation": false,
+      "notes": []
+    },
+    {
+      "solution_name": "开发票",
+      "response_solution_count": 96,
+      "dialogue_agree_solution_count": 0,
+      "dialogue_agree_rate": 0.0,
+      "matched_to_previous_offer_count": 0,
+      "matched_to_current_offer_count": 0,
+      "unmatched_count": 0,
+      "likely_requires_confirmation": false,
+      "evidence_examples": [],
+      "needs_trainer_confirmation": false,
+      "notes": []
+    },
+    {
+      "solution_name": "管理会员自动续费",
+      "response_solution_count": 88,
+      "dialogue_agree_solution_count": 0,
+      "dialogue_agree_rate": 0.0,
+      "matched_to_previous_offer_count": 0,
+      "matched_to_current_offer_count": 0,
+      "unmatched_count": 0,
+      "likely_requires_confirmation": false,
+      "evidence_examples": [],
+      "needs_trainer_confirmation": false,
+      "notes": []
+    },
+    {
+      "solution_name": "再次外呼骑手-xx",
+      "response_solution_count": 78,
+      "dialogue_agree_solution_count": 0,
+      "dialogue_agree_rate": 0.0,
+      "matched_to_previous_offer_count": 0,
+      "matched_to_current_offer_count": 0,
+      "unmatched_count": 0,
+      "likely_requires_confirmation": false,
+      "evidence_examples": [],
+      "needs_trainer_confirmation": false,
+      "notes": []
+    },
+    {
+      "solution_name": "加急催促退款审核",
+      "response_solution_count": 47,
+      "dialogue_agree_solution_count": 0,
+      "dialogue_agree_rate": 0.0,
+      "matched_to_previous_offer_count": 0,
+      "matched_to_current_offer_count": 0,
+      "unmatched_count": 0,
+      "likely_requires_confirmation": false,
+      "evidence_examples": [],
+      "needs_trainer_confirmation": false,
+      "notes": []
+    },
+    {
+      "solution_name": "智能跟单",
+      "response_solution_count": 44,
+      "dialogue_agree_solution_count": 0,
+      "dialogue_agree_rate": 0.0,
+      "matched_to_previous_offer_count": 0,
+      "matched_to_current_offer_count": 0,
+      "unmatched_count": 0,
+      "likely_requires_confirmation": false,
+      "evidence_examples": [],
+      "needs_trainer_confirmation": false,
+      "notes": []
+    },
+    {
+      "solution_name": "系统催单",
+      "response_solution_count": 44,
+      "dialogue_agree_solution_count": 0,
+      "dialogue_agree_rate": 0.0,
+      "matched_to_previous_offer_count": 0,
+      "matched_to_current_offer_count": 0,
+      "unmatched_count": 0,
+      "likely_requires_confirmation": false,
+      "evidence_examples": [],
+      "needs_trainer_confirmation": false,
+      "notes": []
+    },
+    {
+      "solution_name": "引导自助联系骑手",
+      "response_solution_count": 27,
+      "dialogue_agree_solution_count": 0,
+      "dialogue_agree_rate": 0.0,
+      "matched_to_previous_offer_count": 0,
+      "matched_to_current_offer_count": 0,
+      "unmatched_count": 0,
+      "likely_requires_confirmation": false,
+      "evidence_examples": [],
+      "needs_trainer_confirmation": false,
+      "notes": []
+    },
+    {
+      "solution_name": "发送送达图片",
+      "response_solution_count": 26,
+      "dialogue_agree_solution_count": 0,
+      "dialogue_agree_rate": 0.0,
+      "matched_to_previous_offer_count": 0,
+      "matched_to_current_offer_count": 0,
+      "unmatched_count": 0,
+      "likely_requires_confirmation": false,
+      "evidence_examples": [],
+      "needs_trainer_confirmation": false,
+      "notes": []
+    },
+    {
+      "solution_name": "无骑手接单跟单",
+      "response_solution_count": 26,
+      "dialogue_agree_solution_count": 0,
+      "dialogue_agree_rate": 0.0,
+      "matched_to_previous_offer_count": 0,
+      "matched_to_current_offer_count": 0,
+      "unmatched_count": 0,
+      "likely_requires_confirmation": false,
+      "evidence_examples": [],
+      "needs_trainer_confirmation": false,
+      "notes": []
+    },
+    {
+      "solution_name": "引导自助查看会员权益",
+      "response_solution_count": 18,
+      "dialogue_agree_solution_count": 0,
+      "dialogue_agree_rate": 0.0,
+      "matched_to_previous_offer_count": 0,
+      "matched_to_current_offer_count": 0,
+      "unmatched_count": 0,
+      "likely_requires_confirmation": false,
+      "evidence_examples": [],
+      "needs_trainer_confirmation": false,
+      "notes": []
+    },
+    {
+      "solution_name": "加急调度",
+      "response_solution_count": 13,
+      "dialogue_agree_solution_count": 0,
+      "dialogue_agree_rate": 0.0,
+      "matched_to_previous_offer_count": 0,
+      "matched_to_current_offer_count": 0,
+      "unmatched_count": 0,
+      "likely_requires_confirmation": false,
+      "evidence_examples": [],
+      "needs_trainer_confirmation": false,
+      "notes": []
+    },
+    {
+      "solution_name": "引导自助查看配送范围",
+      "response_solution_count": 12,
+      "dialogue_agree_solution_count": 0,
+      "dialogue_agree_rate": 0.0,
+      "matched_to_previous_offer_count": 0,
+      "matched_to_current_offer_count": 0,
+      "unmatched_count": 0,
+      "likely_requires_confirmation": false,
+      "evidence_examples": [],
+      "needs_trainer_confirmation": false,
+      "notes": []
+    },
+    {
+      "solution_name": "再次外呼门店-xx",
+      "response_solution_count": 7,
+      "dialogue_agree_solution_count": 0,
+      "dialogue_agree_rate": 0.0,
+      "matched_to_previous_offer_count": 0,
+      "matched_to_current_offer_count": 0,
+      "unmatched_count": 0,
+      "likely_requires_confirmation": false,
+      "evidence_examples": [],
+      "needs_trainer_confirmation": false,
+      "notes": []
+    },
+    {
+      "solution_name": "引导自助开通会员",
+      "response_solution_count": 5,
+      "dialogue_agree_solution_count": 0,
+      "dialogue_agree_rate": 0.0,
+      "matched_to_previous_offer_count": 0,
+      "matched_to_current_offer_count": 0,
+      "unmatched_count": 0,
+      "likely_requires_confirmation": false,
+      "evidence_examples": [],
+      "needs_trainer_confirmation": false,
+      "notes": []
+    },
+    {
+      "solution_name": "引导自助查看小象开通城市",
+      "response_solution_count": 5,
+      "dialogue_agree_solution_count": 0,
+      "dialogue_agree_rate": 0.0,
+      "matched_to_previous_offer_count": 0,
+      "matched_to_current_offer_count": 0,
+      "unmatched_count": 0,
+      "likely_requires_confirmation": null,
+      "evidence_examples": [],
+      "needs_trainer_confirmation": false,
+      "notes": []
+    },
+    {
+      "solution_name": "引导自助查看优惠券",
+      "response_solution_count": 4,
+      "dialogue_agree_solution_count": 0,
+      "dialogue_agree_rate": 0.0,
+      "matched_to_previous_offer_count": 0,
+      "matched_to_current_offer_count": 0,
+      "unmatched_count": 0,
+      "likely_requires_confirmation": null,
+      "evidence_examples": [],
+      "needs_trainer_confirmation": false,
+      "notes": []
+    },
+    {
+      "solution_name": "引导自助管理地址",
+      "response_solution_count": 2,
+      "dialogue_agree_solution_count": 0,
+      "dialogue_agree_rate": 0.0,
+      "matched_to_previous_offer_count": 0,
+      "matched_to_current_offer_count": 0,
+      "unmatched_count": 0,
+      "likely_requires_confirmation": false,
+      "evidence_examples": [],
+      "needs_trainer_confirmation": false,
+      "notes": []
+    },
+    {
+      "solution_name": "投诉骑手",
+      "response_solution_count": 1,
+      "dialogue_agree_solution_count": 0,
+      "dialogue_agree_rate": 0.0,
+      "matched_to_previous_offer_count": 0,
+      "matched_to_current_offer_count": 0,
+      "unmatched_count": 0,
+      "likely_requires_confirmation": null,
+      "evidence_examples": [],
+      "needs_trainer_confirmation": false,
+      "notes": []
+    },
+    {
+      "solution_name": "操作赔付-优惠券-8元:智能跟单",
+      "response_solution_count": 1,
+      "dialogue_agree_solution_count": 0,
+      "dialogue_agree_rate": 0.0,
+      "matched_to_previous_offer_count": 0,
+      "matched_to_current_offer_count": 0,
+      "unmatched_count": 0,
+      "likely_requires_confirmation": null,
+      "evidence_examples": [],
+      "needs_trainer_confirmation": false,
+      "notes": []
+    },
+    {
+      "solution_name": "引导自助查看-xx",
+      "response_solution_count": 0,
+      "dialogue_agree_solution_count": 0,
+      "dialogue_agree_rate": 0.0,
+      "matched_to_previous_offer_count": 0,
+      "matched_to_current_offer_count": 0,
+      "unmatched_count": 0,
+      "likely_requires_confirmation": false,
+      "evidence_examples": [],
+      "needs_trainer_confirmation": false,
+      "notes": []
+    }
+  ],
+  "must_confirm": [
+    "会员卡退款",
+    "催促退款审核",
+    "取消订单",
+    "外呼门店-xx",
+    "外呼骑手-xx",
+    "小象单商品退款-xx%",
+    "小象整单申请退款",
+    "操作赔付-优惠券-xx元",
+    "操作赔付-运费券-3元"
+  ],
+  "no_confirm": [
+    "再次外呼门店-xx",
+    "再次外呼骑手-xx",
+    "加急催促退款审核",
+    "加急调度",
+    "发送送达图片",
+    "开发票",
+    "引导自助修改订单",
+    "引导自助开通会员",
+    "引导自助查看-xx",
+    "引导自助查看会员权益",
+    "引导自助查看配送范围",
+    "引导自助管理地址",
+    "引导自助联系骑手",
+    "无骑手接单跟单",
+    "智能跟单",
+    "管理会员自动续费",
+    "系统催单",
+    "退审跟单",
+    "选择商品"
+  ],
+  "unclear": [
+    "引导自助查看优惠券",
+    "引导自助查看小象开通城市",
+    "投诉骑手",
+    "操作赔付-优惠券-8元:智能跟单"
+  ]
+}

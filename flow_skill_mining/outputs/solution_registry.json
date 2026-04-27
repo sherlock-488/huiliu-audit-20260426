@@ -1,0 +1,543 @@
+[
+  {
+    "solution_name": "小象单商品退款-xx%",
+    "normalized_name": "小象单商品退款-xx%",
+    "pattern_type": "refund_percent",
+    "count_in_available_solutions": 13524,
+    "count_in_response_solution": 992,
+    "count_in_dialogue_agree_solution": 422,
+    "appears_as_component": 1414,
+    "is_composite_only": false,
+    "example_raw_values": [
+      "小象单商品退款-xx%",
+      "小象单商品退款-30%",
+      "小象单商品退款-20%",
+      "小象单商品退款-40%",
+      "小象单商品退款-50%",
+      "小象单商品退款-100%",
+      "小象单商品退款-80%",
+      "小象单商品退款-70%",
+      "小象单商品退款-60%",
+      "小象单商品退款-10%"
+    ],
+    "requires_user_agreement_by_rule": true,
+    "requires_user_agreement_by_data": true,
+    "notes": []
+  },
+  {
+    "solution_name": "选择商品",
+    "normalized_name": "选择商品",
+    "pattern_type": "exact",
+    "count_in_available_solutions": 13524,
+    "count_in_response_solution": 734,
+    "count_in_dialogue_agree_solution": 0,
+    "appears_as_component": 734,
+    "is_composite_only": false,
+    "example_raw_values": [
+      "选择商品"
+    ],
+    "requires_user_agreement_by_rule": false,
+    "requires_user_agreement_by_data": false,
+    "notes": []
+  },
+  {
+    "solution_name": "操作赔付-优惠券-xx元",
+    "normalized_name": "操作赔付-优惠券-xx元",
+    "pattern_type": "compensation_coupon",
+    "count_in_available_solutions": 13524,
+    "count_in_response_solution": 565,
+    "count_in_dialogue_agree_solution": 190,
+    "appears_as_component": 755,
+    "is_composite_only": false,
+    "example_raw_values": [
+      "操作赔付-优惠券-xx元",
+      "操作赔付-优惠券-10元",
+      "操作赔付-优惠券-15元",
+      "操作赔付-优惠券-20元",
+      "操作赔付-优惠券-8元",
+      "操作赔付-优惠券-5元",
+      "操作赔付-优惠券-3元"
+    ],
+    "requires_user_agreement_by_rule": true,
+    "requires_user_agreement_by_data": true,
+    "notes": []
+  },
+  {
+    "solution_name": "取消订单",
+    "normalized_name": "取消订单",
+    "pattern_type": "exact",
+    "count_in_available_solutions": 13524,
+    "count_in_response_solution": 343,
+    "count_in_dialogue_agree_solution": 132,
+    "appears_as_component": 475,
+    "is_composite_only": false,
+    "example_raw_values": [
+      "取消订单"
+    ],
+    "requires_user_agreement_by_rule": true,
+    "requires_user_agreement_by_data": true,
+    "notes": []
+  },
+  {
+    "solution_name": "外呼骑手-xx",
+    "normalized_name": "外呼骑手-xx",
+    "pattern_type": "call_rider",
+    "count_in_available_solutions": 13524,
+    "count_in_response_solution": 166,
+    "count_in_dialogue_agree_solution": 69,
+    "appears_as_component": 235,
+    "is_composite_only": false,
+    "example_raw_values": [
+      "外呼骑手-xx",
+      "外呼骑手-催促配送",
+      "外呼骑手-协商调换货品",
+      "外呼骑手-修改订单",
+      "外呼骑手-核实情况"
+    ],
+    "requires_user_agreement_by_rule": false,
+    "requires_user_agreement_by_data": true,
+    "notes": [
+      "rule/data agreement conflict; needs trainer confirmation"
+    ]
+  },
+  {
+    "solution_name": "催促退款审核",
+    "normalized_name": "催促退款审核",
+    "pattern_type": "exact",
+    "count_in_available_solutions": 13524,
+    "count_in_response_solution": 158,
+    "count_in_dialogue_agree_solution": 11,
+    "appears_as_component": 169,
+    "is_composite_only": false,
+    "example_raw_values": [
+      "催促退款审核"
+    ],
+    "requires_user_agreement_by_rule": false,
+    "requires_user_agreement_by_data": true,
+    "notes": [
+      "rule/data agreement conflict; needs trainer confirmation"
+    ]
+  },
+  {
+    "solution_name": "退审跟单",
+    "normalized_name": "退审跟单",
+    "pattern_type": "exact",
+    "count_in_available_solutions": 13524,
+    "count_in_response_solution": 149,
+    "count_in_dialogue_agree_solution": 0,
+    "appears_as_component": 149,
+    "is_composite_only": false,
+    "example_raw_values": [
+      "退审跟单"
+    ],
+    "requires_user_agreement_by_rule": false,
+    "requires_user_agreement_by_data": false,
+    "notes": []
+  },
+  {
+    "solution_name": "引导自助修改订单",
+    "normalized_name": "引导自助修改订单",
+    "pattern_type": "exact",
+    "count_in_available_solutions": 13524,
+    "count_in_response_solution": 121,
+    "count_in_dialogue_agree_solution": 0,
+    "appears_as_component": 121,
+    "is_composite_only": false,
+    "example_raw_values": [
+      "引导自助修改订单"
+    ],
+    "requires_user_agreement_by_rule": false,
+    "requires_user_agreement_by_data": false,
+    "notes": []
+  },
+  {
+    "solution_name": "会员卡退款",
+    "normalized_name": "会员卡退款",
+    "pattern_type": "exact",
+    "count_in_available_solutions": 13524,
+    "count_in_response_solution": 105,
+    "count_in_dialogue_agree_solution": 48,
+    "appears_as_component": 153,
+    "is_composite_only": false,
+    "example_raw_values": [
+      "会员卡退款"
+    ],
+    "requires_user_agreement_by_rule": true,
+    "requires_user_agreement_by_data": true,
+    "notes": []
+  },
+  {
+    "solution_name": "开发票",
+    "normalized_name": "开发票",
+    "pattern_type": "exact",
+    "count_in_available_solutions": 13524,
+    "count_in_response_solution": 96,
+    "count_in_dialogue_agree_solution": 0,
+    "appears_as_component": 96,
+    "is_composite_only": false,
+    "example_raw_values": [
+      "开发票"
+    ],
+    "requires_user_agreement_by_rule": false,
+    "requires_user_agreement_by_data": false,
+    "notes": []
+  },
+  {
+    "solution_name": "管理会员自动续费",
+    "normalized_name": "管理会员自动续费",
+    "pattern_type": "exact",
+    "count_in_available_solutions": 13524,
+    "count_in_response_solution": 88,
+    "count_in_dialogue_agree_solution": 0,
+    "appears_as_component": 88,
+    "is_composite_only": false,
+    "example_raw_values": [
+      "管理会员自动续费"
+    ],
+    "requires_user_agreement_by_rule": false,
+    "requires_user_agreement_by_data": false,
+    "notes": []
+  },
+  {
+    "solution_name": "再次外呼骑手-xx",
+    "normalized_name": "再次外呼骑手-xx",
+    "pattern_type": "call_rider",
+    "count_in_available_solutions": 13524,
+    "count_in_response_solution": 78,
+    "count_in_dialogue_agree_solution": 0,
+    "appears_as_component": 78,
+    "is_composite_only": false,
+    "example_raw_values": [
+      "再次外呼骑手-xx",
+      "再次外呼骑手-催促配送",
+      "再次外呼骑手-协商调换货品",
+      "再次外呼骑手-修改订单",
+      "再次外呼骑手-核实情况"
+    ],
+    "requires_user_agreement_by_rule": false,
+    "requires_user_agreement_by_data": false,
+    "notes": []
+  },
+  {
+    "solution_name": "小象整单申请退款",
+    "normalized_name": "小象整单申请退款",
+    "pattern_type": "exact",
+    "count_in_available_solutions": 13524,
+    "count_in_response_solution": 55,
+    "count_in_dialogue_agree_solution": 27,
+    "appears_as_component": 82,
+    "is_composite_only": false,
+    "example_raw_values": [
+      "小象整单申请退款"
+    ],
+    "requires_user_agreement_by_rule": true,
+    "requires_user_agreement_by_data": true,
+    "notes": []
+  },
+  {
+    "solution_name": "加急催促退款审核",
+    "normalized_name": "加急催促退款审核",
+    "pattern_type": "exact",
+    "count_in_available_solutions": 13524,
+    "count_in_response_solution": 47,
+    "count_in_dialogue_agree_solution": 0,
+    "appears_as_component": 47,
+    "is_composite_only": false,
+    "example_raw_values": [
+      "加急催促退款审核"
+    ],
+    "requires_user_agreement_by_rule": false,
+    "requires_user_agreement_by_data": false,
+    "notes": []
+  },
+  {
+    "solution_name": "智能跟单",
+    "normalized_name": "智能跟单",
+    "pattern_type": "exact",
+    "count_in_available_solutions": 13524,
+    "count_in_response_solution": 44,
+    "count_in_dialogue_agree_solution": 0,
+    "appears_as_component": 44,
+    "is_composite_only": false,
+    "example_raw_values": [
+      "智能跟单"
+    ],
+    "requires_user_agreement_by_rule": false,
+    "requires_user_agreement_by_data": false,
+    "notes": []
+  },
+  {
+    "solution_name": "系统催单",
+    "normalized_name": "系统催单",
+    "pattern_type": "exact",
+    "count_in_available_solutions": 13524,
+    "count_in_response_solution": 44,
+    "count_in_dialogue_agree_solution": 0,
+    "appears_as_component": 44,
+    "is_composite_only": false,
+    "example_raw_values": [
+      "系统催单"
+    ],
+    "requires_user_agreement_by_rule": false,
+    "requires_user_agreement_by_data": false,
+    "notes": []
+  },
+  {
+    "solution_name": "引导自助联系骑手",
+    "normalized_name": "引导自助联系骑手",
+    "pattern_type": "exact",
+    "count_in_available_solutions": 13524,
+    "count_in_response_solution": 27,
+    "count_in_dialogue_agree_solution": 0,
+    "appears_as_component": 27,
+    "is_composite_only": false,
+    "example_raw_values": [
+      "引导自助联系骑手"
+    ],
+    "requires_user_agreement_by_rule": false,
+    "requires_user_agreement_by_data": false,
+    "notes": []
+  },
+  {
+    "solution_name": "发送送达图片",
+    "normalized_name": "发送送达图片",
+    "pattern_type": "exact",
+    "count_in_available_solutions": 13524,
+    "count_in_response_solution": 26,
+    "count_in_dialogue_agree_solution": 0,
+    "appears_as_component": 26,
+    "is_composite_only": false,
+    "example_raw_values": [
+      "发送送达图片"
+    ],
+    "requires_user_agreement_by_rule": false,
+    "requires_user_agreement_by_data": false,
+    "notes": []
+  },
+  {
+    "solution_name": "无骑手接单跟单",
+    "normalized_name": "无骑手接单跟单",
+    "pattern_type": "exact",
+    "count_in_available_solutions": 13524,
+    "count_in_response_solution": 26,
+    "count_in_dialogue_agree_solution": 0,
+    "appears_as_component": 26,
+    "is_composite_only": false,
+    "example_raw_values": [
+      "无骑手接单跟单"
+    ],
+    "requires_user_agreement_by_rule": null,
+    "requires_user_agreement_by_data": false,
+    "notes": []
+  },
+  {
+    "solution_name": "引导自助查看会员权益",
+    "normalized_name": "引导自助查看会员权益",
+    "pattern_type": "exact",
+    "count_in_available_solutions": 0,
+    "count_in_response_solution": 18,
+    "count_in_dialogue_agree_solution": 0,
+    "appears_as_component": 18,
+    "is_composite_only": false,
+    "example_raw_values": [
+      "引导自助查看会员权益"
+    ],
+    "requires_user_agreement_by_rule": null,
+    "requires_user_agreement_by_data": false,
+    "notes": []
+  },
+  {
+    "solution_name": "外呼门店-xx",
+    "normalized_name": "外呼门店-xx",
+    "pattern_type": "call_store",
+    "count_in_available_solutions": 13524,
+    "count_in_response_solution": 15,
+    "count_in_dialogue_agree_solution": 8,
+    "appears_as_component": 23,
+    "is_composite_only": false,
+    "example_raw_values": [
+      "外呼门店-修改订单"
+    ],
+    "requires_user_agreement_by_rule": false,
+    "requires_user_agreement_by_data": true,
+    "notes": [
+      "rule/data agreement conflict; needs trainer confirmation"
+    ]
+  },
+  {
+    "solution_name": "操作赔付-运费券-3元",
+    "normalized_name": "操作赔付-运费券-3元",
+    "pattern_type": "compensation_shipping_coupon",
+    "count_in_available_solutions": 13524,
+    "count_in_response_solution": 15,
+    "count_in_dialogue_agree_solution": 6,
+    "appears_as_component": 21,
+    "is_composite_only": false,
+    "example_raw_values": [
+      "操作赔付-运费券-3元"
+    ],
+    "requires_user_agreement_by_rule": true,
+    "requires_user_agreement_by_data": true,
+    "notes": []
+  },
+  {
+    "solution_name": "加急调度",
+    "normalized_name": "加急调度",
+    "pattern_type": "exact",
+    "count_in_available_solutions": 13524,
+    "count_in_response_solution": 13,
+    "count_in_dialogue_agree_solution": 0,
+    "appears_as_component": 13,
+    "is_composite_only": false,
+    "example_raw_values": [
+      "加急调度"
+    ],
+    "requires_user_agreement_by_rule": false,
+    "requires_user_agreement_by_data": false,
+    "notes": []
+  },
+  {
+    "solution_name": "引导自助查看配送范围",
+    "normalized_name": "引导自助查看配送范围",
+    "pattern_type": "exact",
+    "count_in_available_solutions": 0,
+    "count_in_response_solution": 12,
+    "count_in_dialogue_agree_solution": 0,
+    "appears_as_component": 12,
+    "is_composite_only": false,
+    "example_raw_values": [
+      "引导自助查看配送范围"
+    ],
+    "requires_user_agreement_by_rule": null,
+    "requires_user_agreement_by_data": false,
+    "notes": []
+  },
+  {
+    "solution_name": "再次外呼门店-xx",
+    "normalized_name": "再次外呼门店-xx",
+    "pattern_type": "call_store",
+    "count_in_available_solutions": 13524,
+    "count_in_response_solution": 7,
+    "count_in_dialogue_agree_solution": 0,
+    "appears_as_component": 7,
+    "is_composite_only": false,
+    "example_raw_values": [
+      "再次外呼门店-修改订单"
+    ],
+    "requires_user_agreement_by_rule": false,
+    "requires_user_agreement_by_data": null,
+    "notes": []
+  },
+  {
+    "solution_name": "引导自助开通会员",
+    "normalized_name": "引导自助开通会员",
+    "pattern_type": "exact",
+    "count_in_available_solutions": 13524,
+    "count_in_response_solution": 5,
+    "count_in_dialogue_agree_solution": 0,
+    "appears_as_component": 5,
+    "is_composite_only": false,
+    "example_raw_values": [
+      "引导自助开通会员"
+    ],
+    "requires_user_agreement_by_rule": false,
+    "requires_user_agreement_by_data": null,
+    "notes": []
+  },
+  {
+    "solution_name": "引导自助查看小象开通城市",
+    "normalized_name": "引导自助查看小象开通城市",
+    "pattern_type": "exact",
+    "count_in_available_solutions": 0,
+    "count_in_response_solution": 5,
+    "count_in_dialogue_agree_solution": 0,
+    "appears_as_component": 5,
+    "is_composite_only": false,
+    "example_raw_values": [
+      "引导自助查看小象开通城市"
+    ],
+    "requires_user_agreement_by_rule": null,
+    "requires_user_agreement_by_data": null,
+    "notes": []
+  },
+  {
+    "solution_name": "引导自助查看优惠券",
+    "normalized_name": "引导自助查看优惠券",
+    "pattern_type": "exact",
+    "count_in_available_solutions": 0,
+    "count_in_response_solution": 4,
+    "count_in_dialogue_agree_solution": 0,
+    "appears_as_component": 4,
+    "is_composite_only": false,
+    "example_raw_values": [
+      "引导自助查看优惠券"
+    ],
+    "requires_user_agreement_by_rule": null,
+    "requires_user_agreement_by_data": null,
+    "notes": []
+  },
+  {
+    "solution_name": "引导自助管理地址",
+    "normalized_name": "引导自助管理地址",
+    "pattern_type": "exact",
+    "count_in_available_solutions": 13524,
+    "count_in_response_solution": 2,
+    "count_in_dialogue_agree_solution": 0,
+    "appears_as_component": 2,
+    "is_composite_only": false,
+    "example_raw_values": [
+      "引导自助管理地址"
+    ],
+    "requires_user_agreement_by_rule": false,
+    "requires_user_agreement_by_data": null,
+    "notes": []
+  },
+  {
+    "solution_name": "投诉骑手",
+    "normalized_name": "投诉骑手",
+    "pattern_type": "exact",
+    "count_in_available_solutions": 13524,
+    "count_in_response_solution": 1,
+    "count_in_dialogue_agree_solution": 0,
+    "appears_as_component": 1,
+    "is_composite_only": false,
+    "example_raw_values": [
+      "投诉骑手"
+    ],
+    "requires_user_agreement_by_rule": null,
+    "requires_user_agreement_by_data": null,
+    "notes": []
+  },
+  {
+    "solution_name": "操作赔付-优惠券-8元:智能跟单",
+    "normalized_name": "操作赔付-优惠券-8元:智能跟单",
+    "pattern_type": "exact",
+    "count_in_available_solutions": 0,
+    "count_in_response_solution": 1,
+    "count_in_dialogue_agree_solution": 0,
+    "appears_as_component": 1,
+    "is_composite_only": false,
+    "example_raw_values": [
+      "操作赔付-优惠券-8元:智能跟单"
+    ],
+    "requires_user_agreement_by_rule": null,
+    "requires_user_agreement_by_data": null,
+    "notes": []
+  },
+  {
+    "solution_name": "引导自助查看-xx",
+    "normalized_name": "引导自助查看-xx",
+    "pattern_type": "self_service_view",
+    "count_in_available_solutions": 13524,
+    "count_in_response_solution": 0,
+    "count_in_dialogue_agree_solution": 0,
+    "appears_as_component": 0,
+    "is_composite_only": false,
+    "example_raw_values": [
+      "引导自助查看-xx"
+    ],
+    "requires_user_agreement_by_rule": false,
+    "requires_user_agreement_by_data": null,
+    "notes": []
+  }
+]
