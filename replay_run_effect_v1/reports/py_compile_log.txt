@@ -1,0 +1,2 @@
+$ python3 -m py_compile replay_run_effect_v1/scripts/*.py
+exit_code=0

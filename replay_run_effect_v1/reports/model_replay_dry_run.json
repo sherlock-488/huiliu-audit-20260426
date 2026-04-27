@@ -1,0 +1,34 @@
+{
+  "MODEL_NAME": "",
+  "API_ENDPOINT": false,
+  "INTERNAL_COMMAND": false,
+  "runs": [
+    {
+      "label": "baseline",
+      "input_path": "replay_run_effect_v1/inputs/FD_BASELINE_INPUTS.jsonl",
+      "output_path": "replay_run_effect_v1/model_outputs/FD_BASELINE_OUTPUTS.jsonl",
+      "input_exists": true,
+      "input_rows": 121,
+      "dry_run": true,
+      "model_configured": false
+    },
+    {
+      "label": "skill",
+      "input_path": "replay_run_effect_v1/inputs/FD_SKILL_INPUTS.jsonl",
+      "output_path": "replay_run_effect_v1/model_outputs/FD_SKILL_OUTPUTS.jsonl",
+      "input_exists": true,
+      "input_rows": 121,
+      "dry_run": true,
+      "model_configured": false
+    },
+    {
+      "label": "gold_guided",
+      "input_path": "replay_run_effect_v1/inputs/FD_GOLD_GUIDED_INPUTS.jsonl",
+      "output_path": "replay_run_effect_v1/model_outputs/FD_GOLD_GUIDED_OUTPUTS.jsonl",
+      "input_exists": true,
+      "input_rows": 121,
+      "dry_run": true,
+      "model_configured": false
+    }
+  ]
+}
