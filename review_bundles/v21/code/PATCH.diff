@@ -1,0 +1,4328 @@
+# PATCH.diff generated from staged v21 changes in github staging repo
+
+diff --git a/flow_skill_policy_v21/README_REPORT.md b/flow_skill_policy_v21/README_REPORT.md
+new file mode 100644
+index 0000000..acc1c30
+--- /dev/null
++++ b/flow_skill_policy_v21/README_REPORT.md
+@@ -0,0 +1,39 @@
++# Flow Skill Policy v21 Report
++
++## 1. v21 修了哪些 v2 误触发问题
++- 动作触发只看当前最后一条用户消息，不再把 `dialogue_history[-800:]` 和当前 query 混在一起触发动作。
++- 订单超时/超时风险不再单独等价于催配送意图，必须当前用户仍问 ETA 或催配送。
++- “嗯/好/可以”只在存在 pending strong-confirmation solution 时才确认执行。
++- RQ-09 退款催审必须当前询问退款进度，且退款状态明确进行中/审核中。
++- 未选商品时不再用聚合 item 退款状态误判不可退。
++
++## 2. current-turn gating 如何工作
++`classify_current_turn()` 只读取 `last_user_query`，识别 close/thanks、ack_only、transfer_only 和动作意图；policy 最前面先处理结束/弱确认/转人工，只有当前轮仍有新诉求或 pending strong solution 被确认时才输出动作。
++
++## 3. v2/v21 gold-oracle conflict 对比
++- fulfillment_delivery: `65` -> `50`
++- receipt_quality: `72` -> `45`
++
++## 4. close/ack/transfer 类误触发下降
++- close_ack_transfer_fixed: `37`
++- FD oracle_no_gold_action: `30` -> `8`
++- RQ oracle_no_gold_action: `21` -> `3`
++
++## 5. 重点规则冲突下降
++- FD-03/FD-05A/FD-08 详情见 `outputs/reports/fulfillment_delivery_policy_v21_report.md` 的 V2/V21 conflict rules。
++- RQ-01/RQ-07/RQ-09/RQ-11 详情见 `outputs/reports/receipt_quality_policy_v21_report.md`。
++
++## 6. 是否进入模型 replay
++fulfillment_delivery_policy_v21 建议进入模型 replay：current-turn gating 修掉了主要历史关键词误触发，stable replay 可作为主指标。
++
++## 7. receipt_quality 是否仍需训练师校准
++receipt_quality_policy_v21 仍建议先离线校准：图片/原因/比例/数量等前置 guard 牵涉训练师口径，challenge replay 应先人工看。
++
++## 8. stable vs challenge replay
++- FD stable/challenge: `71` / `50`
++- RQ stable/challenge: `75` / `45`
++- stable replay：gold 与 oracle same/canonical_same，作为自动主指标。
++- challenge replay：gold/oracle 冲突，给训练师校准，不混入主指标。
++
++## 9. 下一步如何跑 baseline vs skill
++使用 stable 的 baseline_inputs / skill_inputs 分别调用同一模型，输出 model_outputs.jsonl 后运行 `flow_skill_policy_v21/replay/evaluate_replay_outputs_v21.py`。challenge 集只做分析，不作为主分数。
+diff --git a/flow_skill_policy_v21/__init__.py b/flow_skill_policy_v21/__init__.py
+new file mode 100644
+index 0000000..c1de612
+--- /dev/null
++++ b/flow_skill_policy_v21/__init__.py
+@@ -0,0 +1,2 @@
++"""Policy-based flow skill v2."""
++
+diff --git a/flow_skill_policy_v21/build_readme_report.py b/flow_skill_policy_v21/build_readme_report.py
+new file mode 100644
+index 0000000..cd8ea6f
+--- /dev/null
++++ b/flow_skill_policy_v21/build_readme_report.py
+@@ -0,0 +1,85 @@
++#!/usr/bin/env python3
++"""Build v21 top-level report."""
++
++from __future__ import annotations
++
++import re
++import sys
++from pathlib import Path
++
++if __package__ in (None, ""):
++    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
++
++from flow_skill_policy_v21.common import V21_REPORTS, V21_ROOT, ensure_dirs
++
++
++def _num(path: Path, key: str) -> int:
++    if not path.exists():
++        return 0
++    m = re.search(rf"{re.escape(key)}: `?(\d+)`?", path.read_text(encoding="utf-8"))
++    return int(m.group(1)) if m else 0
++
++
++def main() -> None:
++    ensure_dirs()
++    fd_report = V21_REPORTS / "fulfillment_delivery_policy_v21_report.md"
++    rq_report = V21_REPORTS / "receipt_quality_policy_v21_report.md"
++    replay_report = V21_REPORTS / "replay_sets_v21_report.md"
++    fd_v2 = _num(fd_report, "conflict_v2")
++    fd_v21 = _num(fd_report, "conflict_v21")
++    rq_v2 = _num(rq_report, "conflict_v2")
++    rq_v21 = _num(rq_report, "conflict_v21")
++    fd_ong_v2 = _num(fd_report, "oracle_no_gold_action_v2")
++    fd_ong_v21 = _num(fd_report, "oracle_no_gold_action_v21")
++    rq_ong_v2 = _num(rq_report, "oracle_no_gold_action_v2")
++    rq_ong_v21 = _num(rq_report, "oracle_no_gold_action_v21")
++    close_fixed = _num(fd_report, "close_ack_transfer_fixed") + _num(rq_report, "close_ack_transfer_fixed")
++    text = replay_report.read_text(encoding="utf-8") if replay_report.exists() else ""
++    fd_stable = re.search(r"fulfillment_delivery stable/challenge: `(\d+)` / `(\d+)`", text)
++    rq_stable = re.search(r"receipt_quality stable/challenge: `(\d+)` / `(\d+)`", text)
++    lines = [
++        "# Flow Skill Policy v21 Report",
++        "",
++        "## 1. v21 修了哪些 v2 误触发问题",
++        "- 动作触发只看当前最后一条用户消息，不再把 `dialogue_history[-800:]` 和当前 query 混在一起触发动作。",
++        "- 订单超时/超时风险不再单独等价于催配送意图，必须当前用户仍问 ETA 或催配送。",
++        "- “嗯/好/可以”只在存在 pending strong-confirmation solution 时才确认执行。",
++        "- RQ-09 退款催审必须当前询问退款进度，且退款状态明确进行中/审核中。",
++        "- 未选商品时不再用聚合 item 退款状态误判不可退。",
++        "",
++        "## 2. current-turn gating 如何工作",
++        "`classify_current_turn()` 只读取 `last_user_query`，识别 close/thanks、ack_only、transfer_only 和动作意图；policy 最前面先处理结束/弱确认/转人工，只有当前轮仍有新诉求或 pending strong solution 被确认时才输出动作。",
++        "",
++        "## 3. v2/v21 gold-oracle conflict 对比",
++        f"- fulfillment_delivery: `{fd_v2}` -> `{fd_v21}`",
++        f"- receipt_quality: `{rq_v2}` -> `{rq_v21}`",
++        "",
++        "## 4. close/ack/transfer 类误触发下降",
++        f"- close_ack_transfer_fixed: `{close_fixed}`",
++        f"- FD oracle_no_gold_action: `{fd_ong_v2}` -> `{fd_ong_v21}`",
++        f"- RQ oracle_no_gold_action: `{rq_ong_v2}` -> `{rq_ong_v21}`",
++        "",
++        "## 5. 重点规则冲突下降",
++        "- FD-03/FD-05A/FD-08 详情见 `outputs/reports/fulfillment_delivery_policy_v21_report.md` 的 V2/V21 conflict rules。",
++        "- RQ-01/RQ-07/RQ-09/RQ-11 详情见 `outputs/reports/receipt_quality_policy_v21_report.md`。",
++        "",
++        "## 6. 是否进入模型 replay",
++        "fulfillment_delivery_policy_v21 建议进入模型 replay：current-turn gating 修掉了主要历史关键词误触发，stable replay 可作为主指标。",
++        "",
++        "## 7. receipt_quality 是否仍需训练师校准",
++        "receipt_quality_policy_v21 仍建议先离线校准：图片/原因/比例/数量等前置 guard 牵涉训练师口径，challenge replay 应先人工看。",
++        "",
++        "## 8. stable vs challenge replay",
++        f"- FD stable/challenge: `{fd_stable.group(1) if fd_stable else 0}` / `{fd_stable.group(2) if fd_stable else 0}`",
++        f"- RQ stable/challenge: `{rq_stable.group(1) if rq_stable else 0}` / `{rq_stable.group(2) if rq_stable else 0}`",
++        "- stable replay：gold 与 oracle same/canonical_same，作为自动主指标。",
++        "- challenge replay：gold/oracle 冲突，给训练师校准，不混入主指标。",
++        "",
++        "## 9. 下一步如何跑 baseline vs skill",
++        "使用 stable 的 baseline_inputs / skill_inputs 分别调用同一模型，输出 model_outputs.jsonl 后运行 `flow_skill_policy_v21/replay/evaluate_replay_outputs_v21.py`。challenge 集只做分析，不作为主分数。",
++    ]
++    (V21_ROOT / "README_REPORT.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/flow_skill_policy_v21/build_trainer_review_pack.py b/flow_skill_policy_v21/build_trainer_review_pack.py
+new file mode 100644
+index 0000000..92140a5
+--- /dev/null
++++ b/flow_skill_policy_v21/build_trainer_review_pack.py
+@@ -0,0 +1,84 @@
++#!/usr/bin/env python3
++"""Build v21 trainer review pack."""
++
++from __future__ import annotations
++
++import sys
++from pathlib import Path
++from typing import Any, Dict, List
++
++if __package__ in (None, ""):
++    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
++
++from flow_skill_policy_v21.common import V2_ROOT, V21_OUT, V21_ROOT, ensure_dirs, mask_text, read_jsonl
++
++
++def _rows(path: Path) -> List[Dict[str, Any]]:
++    return list(read_jsonl(path)) if path.exists() else []
++
++
++def _write(path: Path, rows: List[Dict[str, Any]], title: str, limit: int = 50) -> int:
++    subset = rows[:limit]
++    lines = [f"# {title}", "", "训练师选项：A. gold 正确，oracle 过严；B. oracle 正确；C. 两者都可接受；D. 需要补充信号/流程。", ""]
++    for i, row in enumerate(subset, 1):
++        lines.extend(
++            [
++                f"## {i}. {row.get('sample_id')}",
++                f"- scene: `{row.get('scene')}`",
++                f"- last_user_query: {mask_text(row.get('last_user_query', ''))}",
++                f"- current_turn_intent: `{row.get('current_turn_intent', {}).get('current_intents')}`",
++                f"- gold ResponseSolution: `{row.get('gold_response_solution')}`",
++                f"- oracle ResponseSolution: `{row.get('oracle_response_solution')}`",
++                f"- oracle rule: `{row.get('oracle_rule_id')}`",
++                f"- rationale: {'; '.join(row.get('rationale') or [])}",
++                "- 训练师选择: A / B / C / D",
++                "",
++            ]
++        )
++    path.write_text("\n".join(lines), encoding="utf-8")
++    return len(subset)
++
++
++def main() -> None:
++    ensure_dirs()
++    out = V21_OUT / "trainer_review_pack"
++    out.mkdir(parents=True, exist_ok=True)
++    fd_v2 = {r["sample_id"]: r for r in _rows(V2_ROOT / "replay" / "fulfillment_delivery_oracle.jsonl")}
++    rq_v2 = {r["sample_id"]: r for r in _rows(V2_ROOT / "replay" / "receipt_quality_oracle.jsonl")}
++    fd = _rows(V21_ROOT / "replay" / "fulfillment_delivery_oracle_v21.jsonl")
++    rq = _rows(V21_ROOT / "replay" / "receipt_quality_oracle_v21.jsonl")
++    fixed = []
++    close_ack_fixed = []
++    rq01_fixed = []
++    for row in fd + rq:
++        old = (fd_v2 | rq_v2).get(row["sample_id"])
++        if not old:
++            continue
++        old_conf = old.get("gold_oracle_relation") not in {"same", "canonical_same"}
++        new_conf = row.get("gold_oracle_relation") not in {"same", "canonical_same"}
++        if old_conf and not new_conf:
++            fixed.append(row)
++        cur = row.get("current_turn_intent") or {}
++        if old.get("oracle_response_solution") != "无" and row.get("oracle_response_solution") == "无" and (cur.get("is_close_or_thanks") or cur.get("is_ack_only") or cur.get("is_transfer_only")):
++            close_ack_fixed.append(row)
++        if old.get("oracle_rule_id") == "RQ-01" and row.get("oracle_rule_id") == "RQ-02":
++            rq01_fixed.append(row)
++    fd_conf = [r for r in fd if r.get("gold_oracle_relation") not in {"same", "canonical_same"}]
++    rq_conf = [r for r in rq if r.get("gold_oracle_relation") not in {"same", "canonical_same"}]
++    n_fd = _write(out / "fulfillment_delivery_conflicts_v21_sample.md", fd_conf, "Fulfillment Delivery v21 Remaining Conflicts")
++    n_rq = _write(out / "receipt_quality_conflicts_v21_sample.md", rq_conf, "Receipt Quality v21 Remaining Conflicts")
++    _write(out / "v2_fixed_sample.md", fixed, "V2 Conflicts Fixed By v21", 40)
++    _write(out / "close_ack_fixed_sample.md", close_ack_fixed, "Close/Ack Over-action Fixed", 40)
++    _write(out / "rq01_fixed_sample.md", rq01_fixed, "RQ-01 Guard Changed Back To Select Product", 40)
++    (out / "current_turn_gating_questions.md").write_text(
++        "# Current Turn Gating Questions\n\n- 是否同意动作只能由当前最后一条用户消息触发？\n- “嗯/好/可以”是否只在 pending strong solution 存在时才确认执行？\n- close/thanks 后是否一律 ResponseSolution=无？\n",
++        encoding="utf-8",
++    )
++    (out / "policy_questions_v21.md").write_text(
++        f"# Policy Questions v21\n\n- FD remaining conflicts sampled: `{n_fd}`\n- RQ remaining conflicts sampled: `{n_rq}`\n- v2 fixed sample count: `{len(fixed[:40])}`\n- close/ack fixed sample count: `{len(close_ack_fixed[:40])}`\n- rq01 fixed sample count: `{len(rq01_fixed[:40])}`\n",
++        encoding="utf-8",
++    )
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/flow_skill_policy_v21/common.py b/flow_skill_policy_v21/common.py
+new file mode 100644
+index 0000000..d93f303
+--- /dev/null
++++ b/flow_skill_policy_v21/common.py
+@@ -0,0 +1,208 @@
++#!/usr/bin/env python3
++"""Shared helpers for policy v21."""
++
++from __future__ import annotations
++
++import gzip
++import hashlib
++import json
++import re
++from pathlib import Path
++from typing import Any, Dict, Iterable, List, Optional, Tuple
++
++
++ROOT = Path(__file__).resolve().parents[1]
++V0_OUT = ROOT / "flow_skill_mining" / "outputs"
++V1_OUT = ROOT / "flow_skill_mining_v1" / "outputs"
++V2_ROOT = ROOT / "flow_skill_policy_v2"
++V2_OUT = V2_ROOT / "outputs"
++V2_REPORTS = V2_OUT / "reports"
++V21_ROOT = ROOT / "flow_skill_policy_v21"
++V21_OUT = V21_ROOT / "outputs"
++V21_REPORTS = V21_OUT / "reports"
++
++
++def ensure_dirs() -> None:
++    for path in [
++        V21_ROOT,
++        V21_ROOT / "policies",
++        V21_ROOT / "replay",
++        V21_ROOT / "skills",
++        V21_OUT,
++        V21_REPORTS,
++        V21_OUT / "trainer_review_pack",
++        V21_OUT / "run_logs",
++    ]:
++        path.mkdir(parents=True, exist_ok=True)
++
++
++def read_jsonl(path: Path) -> Iterable[Dict[str, Any]]:
++    opener = gzip.open if path.suffix == ".gz" else open
++    with opener(path, "rt", encoding="utf-8", errors="replace") as f:
++        for line in f:
++            if line.strip():
++                yield json.loads(line)
++
++
++def load_jsonl(path: Path) -> List[Dict[str, Any]]:
++    return list(read_jsonl(path))
++
++
++def write_jsonl(path: Path, rows: Iterable[Dict[str, Any]]) -> int:
++    path.parent.mkdir(parents=True, exist_ok=True)
++    count = 0
++    with path.open("w", encoding="utf-8") as f:
++        for row in rows:
++            f.write(json.dumps(row, ensure_ascii=False) + "\n")
++            count += 1
++    return count
++
++
++def dump_json(path: Path, obj: Any) -> None:
++    path.parent.mkdir(parents=True, exist_ok=True)
++    path.write_text(json.dumps(obj, ensure_ascii=False, indent=2), encoding="utf-8")
++
++
++def get_case_records_path() -> Path:
++    plain = V0_OUT / "case_records.jsonl"
++    return plain if plain.exists() else V0_OUT / "release_assets" / "case_records.jsonl.gz"
++
++
++def get_flow_states_path() -> Path:
++    plain = V0_OUT / "flow_states.jsonl"
++    return plain if plain.exists() else V0_OUT / "release_assets" / "flow_states.jsonl.gz"
++
++
++def sha1_text(text: str) -> str:
++    return hashlib.sha1(text.encode("utf-8", "replace")).hexdigest()
++
++
++def yes_no(value: Any) -> Optional[bool]:
++    if value is None:
++        return None
++    s = str(value).strip()
++    if s in {"是", "有", "可", "可以", "true", "True", "1"}:
++        return True
++    if s in {"否", "无", "不可", "不可以", "false", "False", "0"}:
++        return False
++    return None
++
++
++ALIASES = {
++    "引导自助查看会员权益": "引导自助查看-会员权益",
++    "引导自助查看配送范围": "引导自助查看-配送范围",
++    "引导自助查看小象开通城市": "引导自助查看-小象开通城市",
++    "引导自助查看优惠券": "引导自助查看-优惠券",
++}
++
++
++def normalize_text(value: Any) -> str:
++    s = "" if value is None else str(value).strip()
++    return re.sub(r"\s+", "", s.replace("％", "%").replace("；", ";").replace("：", ":"))
++
++
++def canonicalize_solution(name: Any) -> Tuple[str, str, List[str]]:
++    raw = normalize_text(name)
++    notes: List[str] = []
++    if not raw:
++        return "", "other", notes
++    if raw == "无":
++        return "无", "none", notes
++    if raw in ALIASES:
++        notes.append("alias")
++        return ALIASES[raw], "self_service_view", notes
++    if "红包" in raw:
++        raw = raw.replace("红包", "优惠券")
++        notes.append("historical_red_packet")
++    if re.fullmatch(r"小象-?单商品退款-\d+%", raw):
++        return "小象单商品退款-xx%", "refund_percent", notes
++    if re.fullmatch(r"操作赔付-优惠券-\d+元", raw):
++        return "操作赔付-优惠券-xx元", "compensation_coupon", notes
++    if re.fullmatch(r"操作赔付-运费券-\d+元", raw):
++        return "操作赔付-运费券-3元", "compensation_shipping_coupon", notes
++    if re.fullmatch(r"引导自助查看-.+", raw):
++        return raw, "self_service_view", notes
++    if re.fullmatch(r"再次外呼骑手-.+", raw):
++        return "再次外呼骑手-xx", "call_rider", notes
++    if re.fullmatch(r"外呼骑手-.+", raw):
++        return "外呼骑手-xx", "call_rider", notes
++    if re.fullmatch(r"再次外呼门店-.+", raw):
++        return "再次外呼门店-xx", "call_store", notes
++    if re.fullmatch(r"外呼门店-.+", raw):
++        return "外呼门店-xx", "call_store", notes
++    return raw, "exact", notes
++
++
++def split_solution_raw(raw_value: Any) -> List[str]:
++    raw = normalize_text(raw_value)
++    if not raw or raw == "无":
++        return []
++    out: List[str] = []
++    for piece in re.split(r"[;；]", raw):
++        if ":" in piece:
++            left, right = piece.split(":", 1)
++            if left and right and ("-" in left or "赔付" in left or "退款" in left):
++                out.extend([left, right])
++                continue
++        out.append(piece)
++    return [x for x in out if x and x != "无"]
++
++
++def canonical_components(raw_value: Any) -> List[str]:
++    comps = []
++    for piece in split_solution_raw(raw_value):
++        canonical, _, _ = canonicalize_solution(piece)
++        if canonical and canonical != "无":
++            comps.append(canonical)
++    return comps
++
++
++def explicit_confirm(text: str) -> bool:
++    return bool(
++        re.search(
++            r"可以|同意|行|好|确认|退吧|赔吧|取消吧|就这样|接受|嗯|可以的|行吧|那就|帮我弄|帮我处理|给我退|给我赔|退这个|赔这个|要得|好的|对",
++            text or "",
++        )
++    )
++
++
++def contains_any(text: str, *words: str) -> bool:
++    return any(word in (text or "") for word in words)
++
++
++def extract_amount(solution: str) -> Optional[int]:
++    match = re.search(r"(\d+)元", solution or "")
++    return int(match.group(1)) if match else None
++
++
++def parse_amount_range(text: str) -> Tuple[Optional[int], Optional[int]]:
++    nums = [int(x) for x in re.findall(r"\d+", text or "")]
++    if not nums:
++        return None, None
++    return min(nums), max(nums)
++
++
++def mask_text(text: Any) -> str:
++    s = "" if text is None else str(text)
++    s = re.sub(r"1[3-9]\d{9}", lambda m: m.group(0)[:3] + "****" + m.group(0)[-4:], s)
++    s = re.sub(r"(地址|收货地址|详细地址)[:：]?\s*[^,，。\n\t ]+", r"\1:<MASKED_ADDRESS>", s)
++    s = re.sub(r"(姓名|联系人|收货人)[:：]?\s*[^,，。\n\t ]+", r"\1:<MASKED_NAME>", s)
++    return s
++
++
++def top_counter(counter, limit: int = 30) -> str:
++    return "\n".join(f"- `{k}`: `{v}`" for k, v in counter.most_common(limit))
++
++
++def relation(gold: str, oracle: str) -> str:
++    if gold == oracle:
++        return "same"
++    gold_c = canonical_components(gold)
++    oracle_c = canonical_components(oracle)
++    if gold_c and oracle_c and gold_c == oracle_c:
++        return "canonical_same"
++    if gold == "无" and oracle != "无":
++        return "oracle_no_gold_action"
++    if gold != "无" and oracle == "无":
++        return "gold_no_oracle_action"
++    return "different"
+diff --git a/flow_skill_policy_v21/generate_skill_packs.py b/flow_skill_policy_v21/generate_skill_packs.py
+new file mode 100644
+index 0000000..5853447
+--- /dev/null
++++ b/flow_skill_policy_v21/generate_skill_packs.py
+@@ -0,0 +1,119 @@
++#!/usr/bin/env python3
++"""Generate v21 policy skill packs."""
++
++from __future__ import annotations
++
++import json
++import sys
++from collections import Counter
++from pathlib import Path
++from typing import Any, Dict, List
++
++if __package__ in (None, ""):
++    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
++
++from flow_skill_policy_v21.common import V21_ROOT, ensure_dirs, read_jsonl, write_jsonl
++
++
++FD_PROMPT = """【履约配送流程规则 v21】
++只有当前最后一条用户消息仍表达对应诉求时，才触发动作；如果用户当前只是感谢、结束语、弱确认且没有待确认方案，ResponseSolution 应为“无”。
++1. 先读信号：订单状态、是否配送单、骑手状态、是否超时/有超时风险、是否可取消、是否可赔付、是否已赔付、赔付金额、骑手手机号。
++2. 当前用户只是问 ETA，订单履约中，未超时且无超时风险，骑手不是无骑手/待接单：ResponseSolution=无，只告知预计时间，不承诺一定准时。
++3. 当前用户询问 ETA / 催接单 / 催配送，且骑手无接单、创建履约单、已推配送或待接单时，优先 ResponseSolution=加急调度。
++4. 当前明确催配送，或 ETA 咨询同时存在超时/超时风险，且系统催单可执行：ResponseSolution=系统催单。
++5. 当前用户想联系骑手且骑手已接单/配送中：未明确要求客服外呼时优先引导自助联系骑手；明确“帮我问骑手/客服帮忙打电话”时可外呼骑手。外呼类不要求 DialogueAgreeSolution。
++6. 当前要求取消且可取消：ResponseSolution=取消订单，DialogueAgreeSolution 仍为“无”；只有存在上一轮待确认取消且当前明确同意时，DialogueAgreeSolution=取消订单。不可取消时禁止取消订单。
++7. 当前要求赔付/强烈不满且可赔、未赔、金额在区间内时，才可提出赔付；first_offer 取信号区间下限。只有 pending 赔付方案被当前确认时，DialogueAgreeSolution 才非空。
++8. 上一轮已催单/加急/外呼后，当前仍说“继续帮我盯着/还没到/别忘了”才可智能跟单；当前结束语不跟单。
++9. ResponseSolution=无 的合理原因：普通 ETA、感谢/结束语、弱确认无 pending、只转人工无具体诉求、状态解释、不可取消/不可赔的解释。"""
++
++
++RQ_PROMPT = """【收货品质流程规则 v21】
++只有当前最后一条用户消息仍表达对应诉求时，才触发动作；如果用户当前只是感谢、结束语、弱确认且没有待确认方案，ResponseSolution 应为“无”。
++1. 先读信号：是否已选商品、商品退款状态、订单是否超售后、图片凭证、退款原因、退款比例、退款数量、退款状态、是否可赔、是否已赔、赔付金额。
++2. 未选商品时，不要用聚合商品退款状态判断不可退；当前仍有品质/退款诉求且未选商品，ResponseSolution=选择商品。
++3. 只有订单明确超售后，或已选商品明确不可退，才进入不可退款 guard；此时 ResponseSolution=无，解释政策/不可退原因。
++4. 当前仍在推进品质退款且已选商品但缺图片：ResponseSolution=无，要求上传图片；缺退款原因则追问原因；缺退款比例则追问/确认比例；多数量缺退款数量则追问数量。
++5. 退款进行中/审核中/银行处理中，且当前明确问退款进度或催退款时，才输出催促退款审核;退审跟单；普通质量描述、结束语、弱确认不触发催审。
++6. 前置满足且当前仍有退款/品质诉求，可提出小象单商品退款-xx%；未确认前 DialogueAgreeSolution=无。只有 pending 退款方案被当前明确同意时，DialogueAgreeSolution 才填退款方案。
++7. 当前要求赔付/强烈不满，且可赔、未赔、金额不超过上限时才可提出赔付；first_offer 取信号区间下限。只有 pending 赔付被当前确认时 DialogueAgreeSolution 才非空。
++8. 已赔或不可赔时禁止赔付。ResponseSolution=无 的合理原因：结束语、弱确认无 pending、转人工无具体诉求、缺图片/原因/比例/数量、退款已完成解释、不可退政策解释。"""
++
++
++def _sample_eval(oracle_path: Path, out_path: Path, limit: int = 200) -> int:
++    rows = list(read_jsonl(oracle_path)) if oracle_path.exists() else []
++    groups: Dict[str, List[Dict[str, Any]]] = {}
++    for row in rows:
++        groups.setdefault(row.get("gold_response_solution", "无"), []).append(
++            {
++                "sample_id": row.get("sample_id"),
++                "scene": row.get("scene"),
++                "last_user_query": row.get("last_user_query", ""),
++                "gold_response_solution": row.get("gold_response_solution"),
++                "oracle_response_solution": row.get("oracle_response_solution"),
++                "gold_dialogue_agree_solution": row.get("gold_dialogue_agree_solution"),
++                "oracle_dialogue_agree_solution": row.get("oracle_dialogue_agree_solution"),
++                "oracle_rule_id": row.get("oracle_rule_id"),
++                "current_turn_intent": row.get("current_turn_intent"),
++            }
++        )
++    out = []
++    while len(out) < limit and groups:
++        progressed = False
++        for key in sorted(list(groups)):
++            if groups[key]:
++                out.append(groups[key].pop(0))
++                progressed = True
++                if len(out) >= limit:
++                    break
++            else:
++                groups.pop(key, None)
++        if not progressed:
++            break
++    return write_jsonl(out_path, out)
++
++
++def _write_pack(dirname: str, scene: str, skill_id: str, prompt: str, oracle: Path, online: str) -> None:
++    out_dir = V21_ROOT / "skills" / dirname
++    out_dir.mkdir(parents=True, exist_ok=True)
++    rows = list(read_jsonl(oracle)) if oracle.exists() else []
++    rule_counts = Counter(r.get("oracle_rule_id") for r in rows)
++    skill = {
++        "skill_id": skill_id,
++        "scene": scene,
++        "version": "v2.1-current-turn-gated",
++        "purpose": "约束流程动作，不优化话术",
++        "entry_conditions": [f"问题场景 == {scene}"],
++        "current_turn_gating": "只有当前最后一条用户消息仍表达对应诉求时才触发动作；感谢/结束/弱确认无 pending 时 ResponseSolution=无。",
++        "solution_policy": {
++            "strong_confirmation_required": ["取消订单", "小象单商品退款-xx%", "小象整单申请退款", "操作赔付-优惠券-xx元", "操作赔付-运费券-3元", "会员卡退款"],
++            "user_request_is_enough": ["外呼骑手-xx", "再次外呼骑手-xx", "催促退款审核", "加急催促退款审核"],
++            "no_confirmation_required": ["系统催单", "加急调度", "智能跟单", "选择商品", "发送送达图片", "引导自助联系骑手"],
++        },
++        "action_rules": [{"rule_id": k, "support_in_oracle": v} for k, v in rule_counts.items() if k and not str(k).endswith(("CLOSE", "ACK"))],
++        "guard_rules": ["不可赔付不得赔付", "已赔付不得再次主动赔", "不可取消不得取消", "未选商品不得单商品退款", "强确认方案必须有 pending + 当前确认才填 DialogueAgreeSolution"],
++        "evidence": {"oracle_cases": len(rows), "stable_same_or_canonical": sum(1 for r in rows if r.get("gold_oracle_relation") in {"same", "canonical_same"})},
++        "open_questions_for_trainer": [
++            "current-turn gating 是否过严，是否会漏掉用户简短追问？",
++            "first_offer 取赔付区间下限是否符合训练师口径？",
++            "弱确认词是否只在 pending strong solution 时才执行？",
++        ],
++    }
++    (out_dir / "skill.json").write_text(json.dumps(skill, ensure_ascii=False, indent=2), encoding="utf-8")
++    (out_dir / "skill_prompt.md").write_text(prompt + "\n", encoding="utf-8")
++    (out_dir / "checker_rules.md").write_text(
++        "# Checker Rules v21\n\n- close/thanks/ack-only/transfer-only 无 pending strong solution 时不得输出动作。\n- strong confirmation 方案的 DialogueAgreeSolution 必须有 pending strong solution + 当前确认。\n- 所有动作必须由当前最后一条用户消息触发，不得由历史关键词单独触发。\n",
++        encoding="utf-8",
++    )
++    n = _sample_eval(oracle, out_dir / "eval_cases.jsonl")
++    (out_dir / "README.md").write_text(f"# {skill_id}\n\n- scene: `{scene}`\n- oracle_cases: `{len(rows)}`\n- eval_cases: `{n}`\n- recommendation: {online}\n", encoding="utf-8")
++
++
++def main() -> None:
++    ensure_dirs()
++    _write_pack("fulfillment_delivery_policy_v21", "履约场景-配送问题", "fulfillment_delivery_policy_v21", FD_PROMPT, V21_ROOT / "replay" / "fulfillment_delivery_oracle_v21.jsonl", "建议进入模型 replay。")
++    _write_pack("receipt_quality_policy_v21", "收货场景-品质问题", "receipt_quality_policy_v21", RQ_PROMPT, V21_ROOT / "replay" / "receipt_quality_oracle_v21.jsonl", "建议先离线 replay + 训练师校准。")
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/flow_skill_policy_v21/outputs/reports/eligibility_engine_v21_report.md b/flow_skill_policy_v21/outputs/reports/eligibility_engine_v21_report.md
+new file mode 100644
+index 0000000..d3aa2b4
+--- /dev/null
++++ b/flow_skill_policy_v21/outputs/reports/eligibility_engine_v21_report.md
+@@ -0,0 +1,99 @@
++# Eligibility Engine v21 Report
++
++- total_cases: `13524`
++- v2_R12_with_eligible_action: `125`
++- v21_R12_with_eligible_action: `45`
++- close_ack_transfer_samples_with_any_eligible_action: `277`
++
++## Eligible Counts
++- `引导自助修改订单`: `539`
++- `引导自助管理地址`: `539`
++- `引导自助开通会员`: `539`
++- `引导自助查看-xx`: `539`
++- `开发票`: `539`
++- `管理会员自动续费`: `539`
++- `操作赔付-优惠券-xx元`: `535`
++- `操作赔付-运费券-3元`: `535`
++- `选择商品`: `497`
++- `小象单商品退款-xx%`: `486`
++- `取消订单`: `247`
++- `系统催单`: `159`
++- `发送送达图片`: `52`
++- `引导自助联系骑手`: `43`
++- `外呼骑手-xx`: `41`
++- `加急调度`: `38`
++- `外呼门店-xx`: `22`
++- `再次外呼门店-xx`: `22`
++- `小象整单申请退款`: `5`
++
++## Ineligible Top Reasons
++### 智能跟单
++- `当前轮没有持续跟进诉求或缺少上一轮推进动作`: `13524`
++### 催促退款审核
++- `当前轮不是退款进度诉求或退款状态不是进行中/审核中`: `13524`
++### 加急催促退款审核
++- `当前轮不是退款进度诉求或退款状态不是进行中/审核中`: `13524`
++### 退审跟单
++- `当前轮不是退款进度诉求或退款状态不是进行中/审核中`: `13524`
++### 无骑手接单跟单
++- `未满足当前轮无骑手接单跟单条件`: `13524`
++### 再次外呼骑手-xx
++- `缺少当前联系骑手诉求或最近外呼未接通证据`: `13524`
++### 投诉骑手
++- `未配置 v21 eligibility 规则`: `13524`
++### 会员卡退款
++- `未配置 v21 eligibility 规则`: `13524`
++### 小象整单申请退款
++- `当前轮未识别到整单退款诉求`: `13519`
++### 外呼门店-xx
++- `当前轮未识别到联系门店诉求`: `13502`
++### 再次外呼门店-xx
++- `当前轮未识别到联系门店诉求`: `13502`
++### 加急调度
++- `骑手状态不是无骑手/待接单`: `11864`
++- `当前轮没有 ETA/催接单/无骑手诉求`: `1612`
++- `订单状态不适合加急调度`: `10`
++### 外呼骑手-xx
++- `当前轮未满足外呼骑手条件`: `13483`
++### 引导自助联系骑手
++- `当前轮没有联系骑手诉求或骑手状态不支持`: `13481`
++### 发送送达图片
++- `缺送达图片或当前轮未反馈未找到包裹`: `13472`
++### 系统催单
++- `当前轮不是催配送，也不是超时/风险 ETA 咨询`: `13124`
++- `订单状态不适合催单`: `240`
++- `非配送单`: `1`
++### 取消订单
++- `订单不可取消`: `9653`
++- `当前轮没有取消诉求或 pending cancel confirmation`: `3624`
++### 小象单商品退款-xx%
++- `当前轮没有退款/品质诉求或 pending refund confirmation`: `9366`
++- `当前轮结束语不触发退款`: `2770`
++- `未选择具体商品`: `676`
++- `缺退款原因`: `120`
++- `商品不可退款或订单超售后`: `92`
++- `缺图片凭证`: `13`
++- `缺退款比例`: `1`
++### 选择商品
++- `当前轮没有品质/退款诉求或已选商品`: `8316`
++- `当前轮是结束/弱确认/转人工，不触发选择商品`: `4711`
++### 操作赔付-优惠券-xx元
++- `当前轮没有赔付诉求或 pending compensation confirmation`: `9685`
++- `订单不可赔付`: `3009`
++- `订单已赔付过`: `295`
++### 操作赔付-运费券-3元
++- `当前轮没有赔付诉求或 pending compensation confirmation`: `9685`
++- `订单不可赔付`: `3009`
++- `订单已赔付过`: `295`
++### 引导自助修改订单
++- `当前轮诉求不匹配该自助/业务工具`: `12985`
++### 引导自助管理地址
++- `当前轮诉求不匹配该自助/业务工具`: `12985`
++### 引导自助开通会员
++- `当前轮诉求不匹配该自助/业务工具`: `12985`
++### 引导自助查看-xx
++- `当前轮诉求不匹配该自助/业务工具`: `12985`
++### 开发票
++- `当前轮诉求不匹配该自助/业务工具`: `12985`
++### 管理会员自动续费
++- `当前轮诉求不匹配该自助/业务工具`: `12985`
+diff --git a/flow_skill_policy_v21/outputs/reports/fulfillment_delivery_policy_v21_report.md b/flow_skill_policy_v21/outputs/reports/fulfillment_delivery_policy_v21_report.md
+new file mode 100644
+index 0000000..cc6ecfb
+--- /dev/null
++++ b/flow_skill_policy_v21/outputs/reports/fulfillment_delivery_policy_v21_report.md
+@@ -0,0 +1,36 @@
++# Fulfillment Delivery Policy v21 Report
++
++- conflict_v2: `65`
++- conflict_v21: `50`
++- oracle_no_gold_action_v2: `30`
++- oracle_no_gold_action_v21: `8`
++- close_ack_transfer_over_action_v2: `12`
++- close_ack_transfer_over_action_v21: `0`
++- close_ack_transfer_fixed: `20`
++
++## V2 Conflict Rules
++- `FD-05A`: `19`
++- `FD-03`: `18`
++- `FD-OTHER`: `6`
++- `FD-08`: `5`
++- `FD-02`: `4`
++- `FD-04`: `3`
++- `FD-12`: `3`
++- `FD-05B`: `2`
++- `FD-11`: `1`
++- `FD-06`: `1`
++- `FD-01`: `1`
++- `FD-07`: `1`
++- `FD-10`: `1`
++
++## V21 Conflict Rules
++- `FD-OTHER`: `27`
++- `FD-03`: `13`
++- `FD-05A`: `2`
++- `FD-CLOSE`: `2`
++- `FD-04`: `1`
++- `FD-11`: `1`
++- `FD-10`: `1`
++- `FD-02`: `1`
++- `FD-ACK`: `1`
++- `FD-CONFIRM`: `1`
+diff --git a/flow_skill_policy_v21/outputs/reports/policy_oracle_v21_report.md b/flow_skill_policy_v21/outputs/reports/policy_oracle_v21_report.md
+new file mode 100644
+index 0000000..002cf78
+--- /dev/null
++++ b/flow_skill_policy_v21/outputs/reports/policy_oracle_v21_report.md
+@@ -0,0 +1,7 @@
++# Policy Oracle v21 Summary
++
++- FD conflict v2 -> v21: `65` -> `50`
++- RQ conflict v2 -> v21: `72` -> `45`
++- FD oracle_no_gold_action v2 -> v21: `30` -> `8`
++- RQ oracle_no_gold_action v2 -> v21: `21` -> `3`
++- close_ack_over_action_fixed: `37`
+diff --git a/flow_skill_policy_v21/outputs/reports/receipt_quality_policy_v21_report.md b/flow_skill_policy_v21/outputs/reports/receipt_quality_policy_v21_report.md
+new file mode 100644
+index 0000000..3fccde6
+--- /dev/null
++++ b/flow_skill_policy_v21/outputs/reports/receipt_quality_policy_v21_report.md
+@@ -0,0 +1,25 @@
++# Receipt Quality Policy v21 Report
++
++- conflict_v2: `72`
++- conflict_v21: `45`
++- oracle_no_gold_action_v2: `21`
++- oracle_no_gold_action_v21: `3`
++- close_ack_transfer_over_action_v2: `11`
++- close_ack_transfer_over_action_v21: `0`
++- close_ack_transfer_fixed: `17`
++
++## V2 Conflict Rules
++- `RQ-09`: `24`
++- `RQ-01`: `15`
++- `RQ-02`: `14`
++- `RQ-11`: `13`
++- `RQ-07`: `4`
++- `RQ-03`: `2`
++
++## V21 Conflict Rules
++- `RQ-OTHER`: `30`
++- `RQ-01`: `8`
++- `RQ-02`: `3`
++- `RQ-CONFIRM`: `2`
++- `RQ-CLARIFY_OR_TRANSFER`: `1`
++- `RQ-CLOSE`: `1`
+diff --git a/flow_skill_policy_v21/outputs/reports/replay_sets_v21_report.md b/flow_skill_policy_v21/outputs/reports/replay_sets_v21_report.md
+new file mode 100644
+index 0000000..1f24f0a
+--- /dev/null
++++ b/flow_skill_policy_v21/outputs/reports/replay_sets_v21_report.md
+@@ -0,0 +1,47 @@
++# Replay Sets v21 Report
++
++- fulfillment_delivery stable/challenge: `71` / `50`
++- receipt_quality stable/challenge: `75` / `45`
++- FD DialogueAgree non-empty stable/challenge: `5` / `7`
++- RQ DialogueAgree non-empty stable/challenge: `23` / `7`
++
++## FD Stable ResponseSolution
++- `无`: `56`
++- `引导自助联系骑手`: `4`
++- `系统催单`: `4`
++- `操作赔付-优惠券-10元`: `4`
++- `操作赔付-优惠券-8元`: `3`
++
++## FD Challenge Conflict Rules
++- `FD-OTHER`: `27`
++- `FD-03`: `13`
++- `FD-05A`: `2`
++- `FD-CLOSE`: `2`
++- `FD-04`: `1`
++- `FD-11`: `1`
++- `FD-10`: `1`
++- `FD-02`: `1`
++- `FD-ACK`: `1`
++- `FD-CONFIRM`: `1`
++
++## RQ Stable ResponseSolution
++- `无`: `40`
++- `小象单商品退款-100%`: `8`
++- `小象单商品退款-50%`: `7`
++- `选择商品`: `5`
++- `小象单商品退款-30%`: `4`
++- `操作赔付-优惠券-8元`: `2`
++- `小象单商品退款-60%`: `2`
++- `操作赔付-优惠券-3元`: `2`
++- `小象单商品退款-70%`: `2`
++- `小象单商品退款-40%`: `1`
++- `小象单商品退款-80%`: `1`
++- `操作赔付-优惠券-5元`: `1`
++
++## RQ Challenge Conflict Rules
++- `RQ-OTHER`: `30`
++- `RQ-01`: `8`
++- `RQ-02`: `3`
++- `RQ-CONFIRM`: `2`
++- `RQ-CLARIFY_OR_TRANSFER`: `1`
++- `RQ-CLOSE`: `1`
+diff --git a/flow_skill_policy_v21/outputs/trainer_review_pack/close_ack_fixed_sample.md b/flow_skill_policy_v21/outputs/trainer_review_pack/close_ack_fixed_sample.md
+new file mode 100644
+index 0000000..5ac30c9
+--- /dev/null
++++ b/flow_skill_policy_v21/outputs/trainer_review_pack/close_ack_fixed_sample.md
+@@ -0,0 +1,273 @@
++# Close/Ack Over-action Fixed
++
++训练师选项：A. gold 正确，oracle 过严；B. oracle 正确；C. 两者都可接受；D. 需要补充信号/流程。
++
++## 1. 3a80545a1283ae7ce3f25aa9c196f214a8e86c21
++- scene: `履约场景-配送问题`
++- last_user_query: 没有了
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-CLOSE`
++- rationale: 当前最后一条用户消息是感谢/结束语，不从历史触发新动作。
++- 训练师选择: A / B / C / D
++
++## 2. 537740480fc0010058bbf92166e07e645befa6ac
++- scene: `履约场景-配送问题`
++- last_user_query: 没了，谢谢
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-CLOSE`
++- rationale: 当前最后一条用户消息是感谢/结束语，不从历史触发新动作。
++- 训练师选择: A / B / C / D
++
++## 3. 7ddac8a8439551926ee7df2026187cb03835bc61
++- scene: `履约场景-配送问题`
++- last_user_query: 好的
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-ACK`
++- rationale: 当前只是弱确认/应答，且没有 pending strong solution，不触发动作。
++- 训练师选择: A / B / C / D
++
++## 4. 224a30964d3eeef2c2776cf287633ae5b69004a5
++- scene: `履约场景-配送问题`
++- last_user_query: 没有，就这样吧
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-CLOSE`
++- rationale: 当前最后一条用户消息是感谢/结束语，不从历史触发新动作。
++- 训练师选择: A / B / C / D
++
++## 5. ae0b1d9c65634dd465d30394a0ace5c1bda8e996
++- scene: `履约场景-配送问题`
++- last_user_query: 没了
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-CLOSE`
++- rationale: 当前最后一条用户消息是感谢/结束语，不从历史触发新动作。
++- 训练师选择: A / B / C / D
++
++## 6. b7d6bfcd79d2646f272d97b356b7022261e375ce
++- scene: `履约场景-配送问题`
++- last_user_query: 嗯嗯
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-ACK`
++- rationale: 当前只是弱确认/应答，且没有 pending strong solution，不触发动作。
++- 训练师选择: A / B / C / D
++
++## 7. 037cd0d5624882cde9ecb940a921a3f032b4bfe2
++- scene: `履约场景-配送问题`
++- last_user_query: OK
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-ACK`
++- rationale: 当前只是弱确认/应答，且没有 pending strong solution，不触发动作。
++- 训练师选择: A / B / C / D
++
++## 8. 4340b4a84defb462766100b2e20ef399c7acb50b
++- scene: `履约场景-配送问题`
++- last_user_query: 没了吧
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-CLOSE`
++- rationale: 当前最后一条用户消息是感谢/结束语，不从历史触发新动作。
++- 训练师选择: A / B / C / D
++
++## 9. 6704ad57a2f78e05f033fba3827c906d569dfbc3
++- scene: `履约场景-配送问题`
++- last_user_query: 嗯
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-ACK`
++- rationale: 当前只是弱确认/应答，且没有 pending strong solution，不触发动作。
++- 训练师选择: A / B / C / D
++
++## 10. 43fed2f2ef4e39e731c3b1e44eb4a0ccc73b6594
++- scene: `履约场景-配送问题`
++- last_user_query: 人工客服
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-CLARIFY_OR_TRANSFER`
++- rationale: 当前只请求人工/客服且无具体诉求，ResponseSolution=无。
++- 训练师选择: A / B / C / D
++
++## 11. 0dc7d5034ff214eaecc008fc8af623c652e99f4b
++- scene: `履约场景-配送问题`
++- last_user_query: 人工
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-CLARIFY_OR_TRANSFER`
++- rationale: 当前只请求人工/客服且无具体诉求，ResponseSolution=无。
++- 训练师选择: A / B / C / D
++
++## 12. 928925781ec7bc08a7ef55dbb3924d5cec4ac873
++- scene: `履约场景-配送问题`
++- last_user_query: 没事了，我找骑手说就行
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-CLOSE`
++- rationale: 当前最后一条用户消息是感谢/结束语，不从历史触发新动作。
++- 训练师选择: A / B / C / D
++
++## 13. 857a5362c014b4d423f5fa2b8e64b92fe8b6373d
++- scene: `履约场景-配送问题`
++- last_user_query: 嗯
++- current_turn_intent: `[]`
++- gold ResponseSolution: `智能跟单`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-ACK`
++- rationale: 当前只是弱确认/应答，且没有 pending strong solution，不触发动作。
++- 训练师选择: A / B / C / D
++
++## 14. 8b5163a01f10d0977fd70ad284e4b494b60a9afc
++- scene: `履约场景-配送问题`
++- last_user_query: 好谢谢
++- current_turn_intent: `[]`
++- gold ResponseSolution: `智能跟单`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-CLOSE`
++- rationale: 当前最后一条用户消息是感谢/结束语，不从历史触发新动作。
++- 训练师选择: A / B / C / D
++
++## 15. 77e3661b29b37844598c3cf7f44b23d8b96490ff
++- scene: `履约场景-配送问题`
++- last_user_query: 没了
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-CLOSE`
++- rationale: 当前最后一条用户消息是感谢/结束语，不从历史触发新动作。
++- 训练师选择: A / B / C / D
++
++## 16. d83efd872362a5407f340f10b4c26b57d23e56ab
++- scene: `履约场景-配送问题`
++- last_user_query: 算了，那就这样吧
++- current_turn_intent: `[]`
++- gold ResponseSolution: `操作赔付-优惠券-10元`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-CLOSE`
++- rationale: 当前最后一条用户消息是感谢/结束语，不从历史触发新动作。
++- 训练师选择: A / B / C / D
++
++## 17. b893cf5771deb5c9e95f889cfca66af03ce8df78
++- scene: `履约场景-配送问题`
++- last_user_query: 嗯
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-ACK`
++- rationale: 当前只是弱确认/应答，且没有 pending strong solution，不触发动作。
++- 训练师选择: A / B / C / D
++
++## 18. a84ba555253ba5833ef7dc92e78d546c3aa57d52
++- scene: `收货场景-品质问题`
++- last_user_query: 谢谢
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-CLOSE`
++- rationale: 当前最后一条用户消息是感谢/结束语，不从历史或状态触发新退款/赔付/催审。
++- 训练师选择: A / B / C / D
++
++## 19. 00f2860ed5674bd45a33fc01da3997f5da82d293
++- scene: `收货场景-品质问题`
++- last_user_query: 人工
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-CLARIFY_OR_TRANSFER`
++- rationale: 当前只请求人工/客服且无具体诉求，ResponseSolution=无。
++- 训练师选择: A / B / C / D
++
++## 20. 6abb581729866370710397ec2ad603970953f433
++- scene: `收货场景-品质问题`
++- last_user_query: 人工
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-CLARIFY_OR_TRANSFER`
++- rationale: 当前只请求人工/客服且无具体诉求，ResponseSolution=无。
++- 训练师选择: A / B / C / D
++
++## 21. bdd80803c2ca590ce327260b1da872e909f061ab
++- scene: `收货场景-品质问题`
++- last_user_query: 人工
++- current_turn_intent: `[]`
++- gold ResponseSolution: `选择商品`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-CLARIFY_OR_TRANSFER`
++- rationale: 当前只请求人工/客服且无具体诉求，ResponseSolution=无。
++- 训练师选择: A / B / C / D
++
++## 22. e63e27d9b2d2379000d58c3ca5c92709eb8d19d4
++- scene: `收货场景-品质问题`
++- last_user_query: 没有了，谢谢
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-CLOSE`
++- rationale: 当前最后一条用户消息是感谢/结束语，不从历史或状态触发新退款/赔付/催审。
++- 训练师选择: A / B / C / D
++
++## 23. 6c5756ef558d7ec389403fe85365c8c9b0ad3a6b
++- scene: `收货场景-品质问题`
++- last_user_query: 没有了
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-CLOSE`
++- rationale: 当前最后一条用户消息是感谢/结束语，不从历史或状态触发新退款/赔付/催审。
++- 训练师选择: A / B / C / D
++
++## 24. 81b943e614de1bb8f407229ceadcd2e090156684
++- scene: `收货场景-品质问题`
++- last_user_query: 没有了
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-CLOSE`
++- rationale: 当前最后一条用户消息是感谢/结束语，不从历史或状态触发新退款/赔付/催审。
++- 训练师选择: A / B / C / D
++
++## 25. 69b92a405834cf3b9eb8149654a44aedd4a0456d
++- scene: `收货场景-品质问题`
++- last_user_query: 嗯嗯，谢谢
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-CLOSE`
++- rationale: 当前最后一条用户消息是感谢/结束语，不从历史或状态触发新退款/赔付/催审。
++- 训练师选择: A / B / C / D
++
++## 26. 211a06bc869d71128a43b79cb41ed591309699ac
++- scene: `收货场景-品质问题`
++- last_user_query: 没了，就这个问题
++- current_turn_intent: `['select_product']`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-CLOSE`
++- rationale: 当前最后一条用户消息是感谢/结束语，不从历史或状态触发新退款/赔付/催审。
++- 训练师选择: A / B / C / D
++
++## 27. 4f8dca6a83e9247abfda712f8db77ec40a0a8b63
++- scene: `收货场景-品质问题`
++- last_user_query: 行
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-ACK`
++- rationale: 当前只是弱确认/应答，且没有 pending strong solution，不触发动作。
++- 训练师选择: A / B / C / D
+diff --git a/flow_skill_policy_v21/outputs/trainer_review_pack/current_turn_gating_questions.md b/flow_skill_policy_v21/outputs/trainer_review_pack/current_turn_gating_questions.md
+new file mode 100644
+index 0000000..566e86b
+--- /dev/null
++++ b/flow_skill_policy_v21/outputs/trainer_review_pack/current_turn_gating_questions.md
+@@ -0,0 +1,5 @@
++# Current Turn Gating Questions
++
++- 是否同意动作只能由当前最后一条用户消息触发？
++- “嗯/好/可以”是否只在 pending strong solution 存在时才确认执行？
++- close/thanks 后是否一律 ResponseSolution=无？
+diff --git a/flow_skill_policy_v21/outputs/trainer_review_pack/fulfillment_delivery_conflicts_v21_sample.md b/flow_skill_policy_v21/outputs/trainer_review_pack/fulfillment_delivery_conflicts_v21_sample.md
+new file mode 100644
+index 0000000..9a2f89e
+--- /dev/null
++++ b/flow_skill_policy_v21/outputs/trainer_review_pack/fulfillment_delivery_conflicts_v21_sample.md
+@@ -0,0 +1,503 @@
++# Fulfillment Delivery v21 Remaining Conflicts
++
++训练师选项：A. gold 正确，oracle 过严；B. oracle 正确；C. 两者都可接受；D. 需要补充信号/流程。
++
++## 1. 8c78c13659a8d3e3799b4984fd48a0f4721a206c
++- scene: `履约场景-配送问题`
++- last_user_query: 给我催催
++- current_turn_intent: `['delivery_urge']`
++- gold ResponseSolution: `系统催单`
++- oracle ResponseSolution: `加急调度`
++- oracle rule: `FD-04`
++- rationale: 当前询问 ETA/催接单/催配送且骑手无接单，优先加急调度。
++- 训练师选择: A / B / C / D
++
++## 2. 82fdbb9bca1a4c9d620837c1de8b0f9443baeeef
++- scene: `履约场景-配送问题`
++- last_user_query: 快点啊
++- current_turn_intent: `['delivery_urge']`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `系统催单`
++- oracle rule: `FD-03`
++- rationale: 当前催配送，或 ETA 咨询且有超时/风险，系统催单 eligible。
++- 训练师选择: A / B / C / D
++
++## 3. 4e41965061e8c1a7c6bc720959e78d2d5a349484
++- scene: `履约场景-配送问题`
++- last_user_query: 赶紧的，我着急用呢
++- current_turn_intent: `['delivery_urge']`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `系统催单`
++- oracle rule: `FD-03`
++- rationale: 当前催配送，或 ETA 咨询且有超时/风险，系统催单 eligible。
++- 训练师选择: A / B / C / D
++
++## 4. 1bb9818b912ef348bf3f1176aab81efed13fa77f
++- scene: `履约场景-配送问题`
++- last_user_query: 赶紧的，我着急用呢
++- current_turn_intent: `['delivery_urge']`
++- gold ResponseSolution: `再次外呼骑手-催促配送`
++- oracle ResponseSolution: `系统催单`
++- oracle rule: `FD-03`
++- rationale: 当前催配送，或 ETA 咨询且有超时/风险，系统催单 eligible。
++- 训练师选择: A / B / C / D
++
++## 5. e9b2c72b0ac342556761d1babbf8320b25beb462
++- scene: `履约场景-配送问题`
++- last_user_query: 嗯，别忘了赶紧送
++- current_turn_intent: `['delivery_urge']`
++- gold ResponseSolution: `智能跟单`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-11`
++- rationale: 用户确认赔付但订单不可赔/已赔，禁止填赔付。
++- 训练师选择: A / B / C / D
++
++## 6. d4839fe02480247015d34e1deaa6bee497a09422
++- scene: `履约场景-配送问题`
++- last_user_query: 好，快点
++- current_turn_intent: `['delivery_urge']`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `系统催单`
++- oracle rule: `FD-03`
++- rationale: 当前催配送，或 ETA 咨询且有超时/风险，系统催单 eligible。
++- 训练师选择: A / B / C / D
++
++## 7. 0032a280f3b0d0d62400f2ac042f75eb27011e12
++- scene: `履约场景-配送问题`
++- last_user_query: 好，快点
++- current_turn_intent: `['delivery_urge']`
++- gold ResponseSolution: `智能跟单`
++- oracle ResponseSolution: `系统催单`
++- oracle rule: `FD-03`
++- rationale: 当前催配送，或 ETA 咨询且有超时/风险，系统催单 eligible。
++- 训练师选择: A / B / C / D
++
++## 8. c29d5e0bae5ff002036ab7b77a90661a410b2d24
++- scene: `履约场景-配送问题`
++- last_user_query: 投诉骑手
++- current_turn_intent: `['compensation_request']`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `操作赔付-优惠券-xx元`
++- oracle rule: `FD-10`
++- rationale: 当前用户要求赔付/强烈不满且可赔未赔；first_offer 取赔付区间下限。
++- 训练师选择: A / B / C / D
++
++## 9. 241281d8d123d42eea69b5f6b8dfbbec300e820f
++- scene: `履约场景-配送问题`
++- last_user_query: 快一点吧，都超时这么久了
++- current_turn_intent: `['delivery_urge']`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `系统催单`
++- oracle rule: `FD-03`
++- rationale: 当前催配送，或 ETA 咨询且有超时/风险，系统催单 eligible。
++- 训练师选择: A / B / C / D
++
++## 10. 08242794886028870dc4d0510d1617bd8accc8bb
++- scene: `履约场景-配送问题`
++- last_user_query: 怎么联系骑手
++- current_turn_intent: `['contact_rider']`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `引导自助联系骑手`
++- oracle rule: `FD-05A`
++- rationale: 当前想联系骑手但未明确要求客服外呼，优先自助联系。
++- 训练师选择: A / B / C / D
++
++## 11. bc5481e0516d2b3fafc2d82127915bf123362544
++- scene: `履约场景-配送问题`
++- last_user_query: 我的订单什么时候送到
++- current_turn_intent: `['eta_question']`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `加急调度`
++- oracle rule: `FD-02`
++- rationale: 当前询问 ETA/催接单/催配送且骑手无接单，优先加急调度。
++- 训练师选择: A / B / C / D
++
++## 12. e8d87341580b9b96b3fc9d16b61306adc27ef851
++- scene: `履约场景-配送问题`
++- last_user_query: 我的订单什么时候送到
++- current_turn_intent: `['eta_question']`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `系统催单`
++- oracle rule: `FD-03`
++- rationale: 当前催配送，或 ETA 咨询且有超时/风险，系统催单 eligible。
++- 训练师选择: A / B / C / D
++
++## 13. 70cd97341d0cea23e1e9b14f459fc98eb560418b
++- scene: `履约场景-配送问题`
++- last_user_query: 怎么还没送到
++- current_turn_intent: `['delivery_urge']`
++- gold ResponseSolution: `外呼骑手-催促配送`
++- oracle ResponseSolution: `系统催单`
++- oracle rule: `FD-03`
++- rationale: 当前催配送，或 ETA 咨询且有超时/风险，系统催单 eligible。
++- 训练师选择: A / B / C / D
++
++## 14. a5f5c0de514c53c7f5fef267a9bc084eda9dd36a
++- scene: `履约场景-配送问题`
++- last_user_query: 什么时候送到
++- current_turn_intent: `['eta_question']`
++- gold ResponseSolution: `操作赔付-优惠券-10元`
++- oracle ResponseSolution: `系统催单`
++- oracle rule: `FD-03`
++- rationale: 当前催配送，或 ETA 咨询且有超时/风险，系统催单 eligible。
++- 训练师选择: A / B / C / D
++
++## 15. 74ae95744463a60455da5edbf3acea1a2d08d203
++- scene: `履约场景-配送问题`
++- last_user_query: 啥时候送达啊，问骑手了吗
++- current_turn_intent: `['contact_rider']`
++- gold ResponseSolution: `智能跟单`
++- oracle ResponseSolution: `引导自助联系骑手`
++- oracle rule: `FD-05A`
++- rationale: 当前想联系骑手但未明确要求客服外呼，优先自助联系。
++- 训练师选择: A / B / C / D
++
++## 16. cf3e06fc48d0b33eeb84b7fab9224b0f90d0533d
++- scene: `履约场景-配送问题`
++- last_user_query: 怎么还没配送
++- current_turn_intent: `[]`
++- gold ResponseSolution: `智能跟单`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-OTHER`
++- rationale: 未命中 v21 配送动作规则；当前轮 gating 阻止历史关键词误触发。
++- 训练师选择: A / B / C / D
++
++## 17. 857a5362c014b4d423f5fa2b8e64b92fe8b6373d
++- scene: `履约场景-配送问题`
++- last_user_query: 嗯
++- current_turn_intent: `[]`
++- gold ResponseSolution: `智能跟单`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-ACK`
++- rationale: 当前只是弱确认/应答，且没有 pending strong solution，不触发动作。
++- 训练师选择: A / B / C / D
++
++## 18. 8b5163a01f10d0977fd70ad284e4b494b60a9afc
++- scene: `履约场景-配送问题`
++- last_user_query: 好谢谢
++- current_turn_intent: `[]`
++- gold ResponseSolution: `智能跟单`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-CLOSE`
++- rationale: 当前最后一条用户消息是感谢/结束语，不从历史触发新动作。
++- 训练师选择: A / B / C / D
++
++## 19. f0861d2f68caaabb5f6f85e4b14157d91c0d6bd1
++- scene: `履约场景-配送问题`
++- last_user_query: 5分钟？
++- current_turn_intent: `[]`
++- gold ResponseSolution: `智能跟单`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-OTHER`
++- rationale: 未命中 v21 配送动作规则；当前轮 gating 阻止历史关键词误触发。
++- 训练师选择: A / B / C / D
++
++## 20. b5d5e6a9031133324000fda40035e84de40d5566
++- scene: `履约场景-配送问题`
++- last_user_query: 我知道是17:57到，问题是我要求加急并没有加急啊，我很着急啊
++- current_turn_intent: `[]`
++- gold ResponseSolution: `系统催单`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-OTHER`
++- rationale: 未命中 v21 配送动作规则；当前轮 gating 阻止历史关键词误触发。
++- 训练师选择: A / B / C / D
++
++## 21. b2c8f10994db5b4d54fa8b6d47719cdfb213d306
++- scene: `履约场景-配送问题`
++- last_user_query: 急
++- current_turn_intent: `[]`
++- gold ResponseSolution: `系统催单`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-OTHER`
++- rationale: 未命中 v21 配送动作规则；当前轮 gating 阻止历史关键词误触发。
++- 训练师选择: A / B / C / D
++
++## 22. e05d6cc1ad99f347ecb8867bc7f903bad5f11798
++- scene: `履约场景-配送问题`
++- last_user_query: 对啊，都超时了，半天看不到骑手
++- current_turn_intent: `['delivery_urge']`
++- gold ResponseSolution: `外呼骑手-催促配送`
++- oracle ResponseSolution: `系统催单`
++- oracle rule: `FD-03`
++- rationale: 当前催配送，或 ETA 咨询且有超时/风险，系统催单 eligible。
++- 训练师选择: A / B / C / D
++
++## 23. d0619574e60682aada7c63c37ea0812a9bd29b25
++- scene: `履约场景-配送问题`
++- last_user_query: 还得等到啥时候啊
++- current_turn_intent: `[]`
++- gold ResponseSolution: `外呼骑手-催促配送`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-OTHER`
++- rationale: 未命中 v21 配送动作规则；当前轮 gating 阻止历史关键词误触发。
++- 训练师选择: A / B / C / D
++
++## 24. e103ba15640a2ad48aa5ce6051eb1059b140089f
++- scene: `履约场景-配送问题`
++- last_user_query: 原地呆了那么久
++- current_turn_intent: `[]`
++- gold ResponseSolution: `外呼骑手-催促配送`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-OTHER`
++- rationale: 未命中 v21 配送动作规则；当前轮 gating 阻止历史关键词误触发。
++- 训练师选择: A / B / C / D
++
++## 25. abe5582af38752be7a2b74395f0b9a43c9d2259f
++- scene: `履约场景-配送问题`
++- last_user_query: 很着急
++- current_turn_intent: `[]`
++- gold ResponseSolution: `外呼骑手-催促配送`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-OTHER`
++- rationale: 未命中 v21 配送动作规则；当前轮 gating 阻止历史关键词误触发。
++- 训练师选择: A / B / C / D
++
++## 26. 0ae1c109b4634cb3b936b621525f27fdb166954d
++- scene: `履约场景-配送问题`
++- last_user_query: 你说催就催了啊，我不信，你们每次都这样
++- current_turn_intent: `['delivery_urge']`
++- gold ResponseSolution: `外呼骑手-催促配送`
++- oracle ResponseSolution: `系统催单`
++- oracle rule: `FD-03`
++- rationale: 当前催配送，或 ETA 咨询且有超时/风险，系统催单 eligible。
++- 训练师选择: A / B / C / D
++
++## 27. 7ac1e66186b245ddc59f9e16a58c5d5a1e6a6e9a
++- scene: `履约场景-配送问题`
++- last_user_query: 太少了吧
++- current_turn_intent: `[]`
++- gold ResponseSolution: `操作赔付-优惠券-10元`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-OTHER`
++- rationale: 未命中 v21 配送动作规则；当前轮 gating 阻止历史关键词误触发。
++- 训练师选择: A / B / C / D
++
++## 28. c73a49f1a92ce524fd19964a90ce88cf013e2205
++- scene: `履约场景-配送问题`
++- last_user_query: 太少了
++- current_turn_intent: `[]`
++- gold ResponseSolution: `操作赔付-优惠券-10元`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-OTHER`
++- rationale: 未命中 v21 配送动作规则；当前轮 gating 阻止历史关键词误触发。
++- 训练师选择: A / B / C / D
++
++## 29. 303597288bf4b9c9b4a458cda3e98a48ab7ce5f3
++- scene: `履约场景-配送问题`
++- last_user_query: 这么少？给我20元
++- current_turn_intent: `[]`
++- gold ResponseSolution: `操作赔付-优惠券-10元`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-OTHER`
++- rationale: 未命中 v21 配送动作规则；当前轮 gating 阻止历史关键词误触发。
++- 训练师选择: A / B / C / D
++
++## 30. ad8ab66b7025b58ae444e088a8a8129c99599f49
++- scene: `履约场景-配送问题`
++- last_user_query: 不能再多了吗？
++- current_turn_intent: `[]`
++- gold ResponseSolution: `操作赔付-优惠券-10元`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-OTHER`
++- rationale: 未命中 v21 配送动作规则；当前轮 gating 阻止历史关键词误触发。
++- 训练师选择: A / B / C / D
++
++## 31. 5b6be016fa966aea31d35fb68b687722afdaaefb
++- scene: `履约场景-配送问题`
++- last_user_query: 超时太严重
++- current_turn_intent: `['delivery_urge']`
++- gold ResponseSolution: `操作赔付-优惠券-10元`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-OTHER`
++- rationale: 未命中 v21 配送动作规则；当前轮 gating 阻止历史关键词误触发。
++- 训练师选择: A / B / C / D
++
++## 32. bb762f06ae73e4d2db113d75a12817ef50b7128d
++- scene: `履约场景-配送问题`
++- last_user_query: 都超时了
++- current_turn_intent: `['delivery_urge']`
++- gold ResponseSolution: `操作赔付-优惠券-8元`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-OTHER`
++- rationale: 未命中 v21 配送动作规则；当前轮 gating 阻止历史关键词误触发。
++- 训练师选择: A / B / C / D
++
++## 33. 1a7562f40ab7f16b92f45435f388e86dc2db34f1
++- scene: `履约场景-配送问题`
++- last_user_query: 怎么样了
++- current_turn_intent: `[]`
++- gold ResponseSolution: `操作赔付-优惠券-8元`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-OTHER`
++- rationale: 未命中 v21 配送动作规则；当前轮 gating 阻止历史关键词误触发。
++- 训练师选择: A / B / C / D
++
++## 34. aceb625dc8aa2dc945cce84a3d5684648af6252e
++- scene: `履约场景-配送问题`
++- last_user_query: 超时严重
++- current_turn_intent: `['delivery_urge']`
++- gold ResponseSolution: `操作赔付-优惠券-8元`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-OTHER`
++- rationale: 未命中 v21 配送动作规则；当前轮 gating 阻止历史关键词误触发。
++- 训练师选择: A / B / C / D
++
++## 35. d83efd872362a5407f340f10b4c26b57d23e56ab
++- scene: `履约场景-配送问题`
++- last_user_query: 算了，那就这样吧
++- current_turn_intent: `[]`
++- gold ResponseSolution: `操作赔付-优惠券-10元`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-CLOSE`
++- rationale: 当前最后一条用户消息是感谢/结束语，不从历史触发新动作。
++- 训练师选择: A / B / C / D
++
++## 36. 4aa4bb60646b77a10b0b616243dfa2c33947609e
++- scene: `履约场景-配送问题`
++- last_user_query: 对啊，都超时了，半天看不到骑手
++- current_turn_intent: `['delivery_urge']`
++- gold ResponseSolution: `再次外呼骑手-催促配送`
++- oracle ResponseSolution: `系统催单`
++- oracle rule: `FD-03`
++- rationale: 当前催配送，或 ETA 咨询且有超时/风险，系统催单 eligible。
++- 训练师选择: A / B / C / D
++
++## 37. 82b14eb90948dd5fbdcf684e2abe7f9e684c4690
++- scene: `履约场景-配送问题`
++- last_user_query: 好了吗
++- current_turn_intent: `[]`
++- gold ResponseSolution: `再次外呼骑手-催促配送`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-OTHER`
++- rationale: 未命中 v21 配送动作规则；当前轮 gating 阻止历史关键词误触发。
++- 训练师选择: A / B / C / D
++
++## 38. 90cfc432bf0e0e53230cba8582de35e05f96989b
++- scene: `履约场景-配送问题`
++- last_user_query: 怎么还要这么久，给我退了吧，我有事出门
++- current_turn_intent: `['confirm_refund']`
++- gold ResponseSolution: `取消订单`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-OTHER`
++- rationale: 未命中 v21 配送动作规则；当前轮 gating 阻止历史关键词误触发。
++- 训练师选择: A / B / C / D
++
++## 39. 481aa21421e0e41e2775fac63e5d99608a66f7c7
++- scene: `履约场景-配送问题`
++- last_user_query: 退了
++- current_turn_intent: `[]`
++- gold ResponseSolution: `取消订单`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-OTHER`
++- rationale: 未命中 v21 配送动作规则；当前轮 gating 阻止历史关键词误触发。
++- 训练师选择: A / B / C / D
++
++## 40. 88899aa2fe6b77518220a581f385a55ee8e6a027
++- scene: `履约场景-配送问题`
++- last_user_query: 这么久10块钱？
++- current_turn_intent: `[]`
++- gold ResponseSolution: `操作赔付-优惠券-15元`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-OTHER`
++- rationale: 未命中 v21 配送动作规则；当前轮 gating 阻止历史关键词误触发。
++- 训练师选择: A / B / C / D
++
++## 41. 6aabf79171691f4079b688ca95354f50f1a5b634
++- scene: `履约场景-配送问题`
++- last_user_query: 为什么配送超时了，一直迟迟没到？
++- current_turn_intent: `['delivery_urge']`
++- gold ResponseSolution: `操作赔付-优惠券-15元`
++- oracle ResponseSolution: `系统催单`
++- oracle rule: `FD-03`
++- rationale: 当前催配送，或 ETA 咨询且有超时/风险，系统催单 eligible。
++- 训练师选择: A / B / C / D
++
++## 42. 9b3450280f9e6b11cbba13ec7e0cbf779464a88b
++- scene: `履约场景-配送问题`
++- last_user_query: 嗯
++- current_turn_intent: `[]`
++- gold ResponseSolution: `操作赔付-优惠券-15元;智能跟单`
++- oracle ResponseSolution: `操作赔付-优惠券-xx元`
++- oracle rule: `FD-CONFIRM`
++- rationale: 当前弱确认结合 pending strong solution，允许 DialogueAgreeSolution 非空。
++- 训练师选择: A / B / C / D
++
++## 43. 35866c47e5239ba653566850cd9bbbdd420ab2dc
++- scene: `履约场景-配送问题`
++- last_user_query: 我门口没有
++- current_turn_intent: `[]`
++- gold ResponseSolution: `外呼骑手-协商调换货品`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-OTHER`
++- rationale: 未命中 v21 配送动作规则；当前轮 gating 阻止历史关键词误触发。
++- 训练师选择: A / B / C / D
++
++## 44. 4350aba07a26c1b3cb9b38a6f1829ece17b83c5d
++- scene: `履约场景-配送问题`
++- last_user_query: 快点吧
++- current_turn_intent: `['delivery_urge']`
++- gold ResponseSolution: `外呼骑手-协商调换货品`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-OTHER`
++- rationale: 未命中 v21 配送动作规则；当前轮 gating 阻止历史关键词误触发。
++- 训练师选择: A / B / C / D
++
++## 45. 6eef31c5de5393b6ba2ef1000159a485052593b0
++- scene: `履约场景-配送问题`
++- last_user_query: 好了吗
++- current_turn_intent: `[]`
++- gold ResponseSolution: `再次外呼骑手-协商调换货品`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-OTHER`
++- rationale: 未命中 v21 配送动作规则；当前轮 gating 阻止历史关键词误触发。
++- 训练师选择: A / B / C / D
++
++## 46. e6f762d0619de5d6f4a6356766526c54ebcd10af
++- scene: `履约场景-配送问题`
++- last_user_query: 快点吧
++- current_turn_intent: `['delivery_urge']`
++- gold ResponseSolution: `小象整单申请退款`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-OTHER`
++- rationale: 未命中 v21 配送动作规则；当前轮 gating 阻止历史关键词误触发。
++- 训练师选择: A / B / C / D
++
++## 47. e5cd7b89492457341a06ba0b14dff12a4a25c349
++- scene: `履约场景-配送问题`
++- last_user_query: 已经好几个小时了，退款吧
++- current_turn_intent: `['refund_request', 'confirm_refund']`
++- gold ResponseSolution: `小象整单申请退款`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-OTHER`
++- rationale: 未命中 v21 配送动作规则；当前轮 gating 阻止历史关键词误触发。
++- 训练师选择: A / B / C / D
++
++## 48. e8ff8ef696b263186756430edada746a6f06c12c
++- scene: `履约场景-配送问题`
++- last_user_query: 我买错商品，不要小米
++- current_turn_intent: `[]`
++- gold ResponseSolution: `选择商品`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-OTHER`
++- rationale: 未命中 v21 配送动作规则；当前轮 gating 阻止历史关键词误触发。
++- 训练师选择: A / B / C / D
++
++## 49. 0f018801436d4ed947584327271cb53fd8dfa45b
++- scene: `履约场景-配送问题`
++- last_user_query: 【图片】->系统识别图片结果:小米包装袋没有破损，品相完好。
++- current_turn_intent: `['upload_image']`
++- gold ResponseSolution: `小象单商品退款-100%`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-OTHER`
++- rationale: 未命中 v21 配送动作规则；当前轮 gating 阻止历史关键词误触发。
++- 训练师选择: A / B / C / D
++
++## 50. 55cd31647b4451c4d60476f6b5ac1ee988fcdbfd
++- scene: `履约场景-配送问题`
++- last_user_query: 可以
++- current_turn_intent: `[]`
++- gold ResponseSolution: `小象单商品退款-100%`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-OTHER`
++- rationale: 未命中 v21 配送动作规则；当前轮 gating 阻止历史关键词误触发。
++- 训练师选择: A / B / C / D
+diff --git a/flow_skill_policy_v21/outputs/trainer_review_pack/policy_questions_v21.md b/flow_skill_policy_v21/outputs/trainer_review_pack/policy_questions_v21.md
+new file mode 100644
+index 0000000..7be12bf
+--- /dev/null
++++ b/flow_skill_policy_v21/outputs/trainer_review_pack/policy_questions_v21.md
+@@ -0,0 +1,7 @@
++# Policy Questions v21
++
++- FD remaining conflicts sampled: `50`
++- RQ remaining conflicts sampled: `45`
++- v2 fixed sample count: `40`
++- close/ack fixed sample count: `27`
++- rq01 fixed sample count: `2`
+diff --git a/flow_skill_policy_v21/outputs/trainer_review_pack/receipt_quality_conflicts_v21_sample.md b/flow_skill_policy_v21/outputs/trainer_review_pack/receipt_quality_conflicts_v21_sample.md
+new file mode 100644
+index 0000000..6bd7448
+--- /dev/null
++++ b/flow_skill_policy_v21/outputs/trainer_review_pack/receipt_quality_conflicts_v21_sample.md
+@@ -0,0 +1,453 @@
++# Receipt Quality v21 Remaining Conflicts
++
++训练师选项：A. gold 正确，oracle 过严；B. oracle 正确；C. 两者都可接受；D. 需要补充信号/流程。
++
++## 1. c2d240318f71ca0a4a94f6dec832dfcfdc73379f
++- scene: `收货场景-品质问题`
++- last_user_query: 洗衣液今天打开看都是漏的
++- current_turn_intent: `[]`
++- gold ResponseSolution: `选择商品`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-OTHER`
++- rationale: 未命中 v21 品质动作规则；current-turn gating 阻止状态或历史误触发。
++- 训练师选择: A / B / C / D
++
++## 2. 72c08c9b6c561a9c837c74c51a98418943d29d7e
++- scene: `收货场景-品质问题`
++- last_user_query: 这个蛋送来打开后是碎的
++- current_turn_intent: `['select_product']`
++- gold ResponseSolution: `选择商品`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-OTHER`
++- rationale: 未命中 v21 品质动作规则；current-turn gating 阻止状态或历史误触发。
++- 训练师选择: A / B / C / D
++
++## 3. bdd80803c2ca590ce327260b1da872e909f061ab
++- scene: `收货场景-品质问题`
++- last_user_query: 人工
++- current_turn_intent: `[]`
++- gold ResponseSolution: `选择商品`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-CLARIFY_OR_TRANSFER`
++- rationale: 当前只请求人工/客服且无具体诉求，ResponseSolution=无。
++- 训练师选择: A / B / C / D
++
++## 4. a3733183e0267960405e91765b5cab995398536d
++- scene: `收货场景-品质问题`
++- last_user_query: 芹菜空心的
++- current_turn_intent: `[]`
++- gold ResponseSolution: `选择商品`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-OTHER`
++- rationale: 未命中 v21 品质动作规则；current-turn gating 阻止状态或历史误触发。
++- 训练师选择: A / B / C / D
++
++## 5. 4738e888c52eccf158f3be4a99ad81c564b7b2a0
++- scene: `收货场景-品质问题`
++- last_user_query: 等等，不是，你这个是品质问题，坏得有一半了，至少要退50%
++- current_turn_intent: `['select_product']`
++- gold ResponseSolution: `小象单商品退款-50%`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-OTHER`
++- rationale: 未命中 v21 品质动作规则；current-turn gating 阻止状态或历史误触发。
++- 训练师选择: A / B / C / D
++
++## 6. 994351143d324a08db9fd3a4de0d5ac3c0716293
++- scene: `收货场景-品质问题`
++- last_user_query: 行
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `小象单商品退款-xx%`
++- oracle rule: `RQ-CONFIRM`
++- rationale: 当前弱确认结合 pending strong solution，允许 DialogueAgreeSolution 非空。
++- 训练师选择: A / B / C / D
++
++## 7. 44ecf0d5f0fe67859cd7dfc888b03a9b9d0fae64
++- scene: `收货场景-品质问题`
++- last_user_query: 嗯，什么时候退完给我啊
++- current_turn_intent: `['refund_progress', 'confirm_refund']`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `小象单商品退款-xx%`
++- oracle rule: `RQ-CONFIRM`
++- rationale: 当前弱确认结合 pending strong solution，允许 DialogueAgreeSolution 非空。
++- 训练师选择: A / B / C / D
++
++## 8. 4d4c8a208d43c05ae47456231bc6ec9da4dc1af8
++- scene: `收货场景-品质问题`
++- last_user_query: 都不能吃了就给这么少吗
++- current_turn_intent: `[]`
++- gold ResponseSolution: `小象单商品退款-50%`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-OTHER`
++- rationale: 未命中 v21 品质动作规则；current-turn gating 阻止状态或历史误触发。
++- 训练师选择: A / B / C / D
++
++## 9. 490a19e4808d2813d992b5d0883142b11e765d0b
++- scene: `收货场景-品质问题`
++- last_user_query: 因为泥是压在一起的，很像人为的，不像是拔出来就这样
++- current_turn_intent: `[]`
++- gold ResponseSolution: `小象单商品退款-50%`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-OTHER`
++- rationale: 未命中 v21 品质动作规则；current-turn gating 阻止状态或历史误触发。
++- 训练师选择: A / B / C / D
++
++## 10. 8505a5e90eed60e5386ba4ba007b4effbc2f81b3
++- scene: `收货场景-品质问题`
++- last_user_query: 【图片】 ->系统识别图片结果:这是一张蓝莓的图片，图中显示部分存在干瘪的情况，大小不均匀，与用户描述的质量问题一致
++- current_turn_intent: `['quality_issue', 'upload_image']`
++- gold ResponseSolution: `小象单商品退款-50%`
++- oracle ResponseSolution: `选择商品`
++- oracle rule: `RQ-02`
++- rationale: 当前品质/退款诉求仍在推进且未选商品，先选择商品。
++- 训练师选择: A / B / C / D
++
++## 11. 3e84a41329516471a2c709934f520e00be773424
++- scene: `收货场景-品质问题`
++- last_user_query: 【图片】 ->系统识别图片结果:这是一个牛油果商品的图片，可以看出来商品表面发青，与用户反馈的商品太生符合一致
++- current_turn_intent: `['upload_image']`
++- gold ResponseSolution: `小象单商品退款-50%`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-OTHER`
++- rationale: 未命中 v21 品质动作规则；current-turn gating 阻止状态或历史误触发。
++- 训练师选择: A / B / C / D
++
++## 12. a41e98e86f0f99436b858fdcb341b1e6293b1d43
++- scene: `收货场景-品质问题`
++- last_user_query: 我还用调料腌过 还是臭的，我要退款
++- current_turn_intent: `['refund_request']`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `选择商品`
++- oracle rule: `RQ-02`
++- rationale: 当前品质/退款诉求仍在推进且未选商品，先选择商品。
++- 训练师选择: A / B / C / D
++
++## 13. a75be3fe304589c569d83b0de279cabbca631a2b
++- scene: `收货场景-品质问题`
++- last_user_query: 商品不新鲜，临期商品，退款
++- current_turn_intent: `['refund_request', 'quality_issue']`
++- gold ResponseSolution: `选择商品`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-01`
++- rationale: 已选商品且明确不可退款，禁止单商品退款。
++- 训练师选择: A / B / C / D
++
++## 14. b342ebc0d34907d0b76511518dda2389f04053f4
++- scene: `收货场景-品质问题`
++- last_user_query: 【图片】 ->系统识别图片结果:车厘子柄发黑，部分柄已经散落在袋子里
++- current_turn_intent: `['upload_image']`
++- gold ResponseSolution: `小象单商品退款-30%`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-OTHER`
++- rationale: 未命中 v21 品质动作规则；current-turn gating 阻止状态或历史误触发。
++- 训练师选择: A / B / C / D
++
++## 15. f512976fdab75bfb7c14b27c40d3935f6ca0c1cb
++- scene: `收货场景-品质问题`
++- last_user_query: 【图片】 ->系统识别图片结果:茴香有很多泥，与用户反馈的重量都在泥上相符
++- current_turn_intent: `['upload_image']`
++- gold ResponseSolution: `小象单商品退款-30%`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-OTHER`
++- rationale: 未命中 v21 品质动作规则；current-turn gating 阻止状态或历史误触发。
++- 训练师选择: A / B / C / D
++
++## 16. 0e135a62e902ff0b8eec23514c725a4fe92e990f
++- scene: `收货场景-品质问题`
++- last_user_query: 【图片】 ->系统识别图片结果:用户发了车厘子的图片，部分存在颜色发深发软的情况，与用户反馈的水分不足、发软相符
++- current_turn_intent: `['upload_image']`
++- gold ResponseSolution: `小象单商品退款-10%`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-OTHER`
++- rationale: 未命中 v21 品质动作规则；current-turn gating 阻止状态或历史误触发。
++- 训练师选择: A / B / C / D
++
++## 17. b7f2bef9a2bc25dc70d4837981e66ebc3cb8e76f
++- scene: `收货场景-品质问题`
++- last_user_query: 【图片】 ->系统识别图片结果:车厘子个头大小不一，与用户反馈的个头差距不小相符
++- current_turn_intent: `['upload_image']`
++- gold ResponseSolution: `小象单商品退款-10%`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-OTHER`
++- rationale: 未命中 v21 品质动作规则；current-turn gating 阻止状态或历史误触发。
++- 训练师选择: A / B / C / D
++
++## 18. e934b688cfe790cade0db16999c3120ae202c021
++- scene: `收货场景-品质问题`
++- last_user_query: 【图片】 ->系统识别图片结果:用户上传的图片显示螃蟹无活力，疑似死亡
++- current_turn_intent: `['upload_image']`
++- gold ResponseSolution: `小象单商品退款-10%`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-OTHER`
++- rationale: 未命中 v21 品质动作规则；current-turn gating 阻止状态或历史误触发。
++- 训练师选择: A / B / C / D
++
++## 19. b35ee74ae2d7cdf05fbaccd2a51f2a60f6d0e3c0
++- scene: `收货场景-品质问题`
++- last_user_query: 【图片】 ->系统识别图片结果:番茄称重显示380g，与用户反馈的少称描述一致
++- current_turn_intent: `['upload_image']`
++- gold ResponseSolution: `小象单商品退款-10%`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-OTHER`
++- rationale: 未命中 v21 品质动作规则；current-turn gating 阻止状态或历史误触发。
++- 训练师选择: A / B / C / D
++
++## 20. 990b72109b489bce57c11f3dd81e0bd6053ffd7f
++- scene: `收货场景-品质问题`
++- last_user_query: 【图片】 ->系统识别图片结果:白色米饭中有黄色小沙子
++- current_turn_intent: `['upload_image']`
++- gold ResponseSolution: `小象单商品退款-100%`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-OTHER`
++- rationale: 未命中 v21 品质动作规则；current-turn gating 阻止状态或历史误触发。
++- 训练师选择: A / B / C / D
++
++## 21. 155981c53940f6ad9f1865c1ade386a05c3eb1bb
++- scene: `收货场景-品质问题`
++- last_user_query: 【图片】->系统识别图片结果:图片中显示商品是蒜苗，不是蒜苔，与用户描述一致
++- current_turn_intent: `['upload_image']`
++- gold ResponseSolution: `小象单商品退款-100%`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-OTHER`
++- rationale: 未命中 v21 品质动作规则；current-turn gating 阻止状态或历史误触发。
++- 训练师选择: A / B / C / D
++
++## 22. 3bc3164cdca693a1e5d42573ce879d56638a6371
++- scene: `收货场景-品质问题`
++- last_user_query: 全退了吧
++- current_turn_intent: `['refund_request']`
++- gold ResponseSolution: `小象单商品退款-100%`
++- oracle ResponseSolution: `选择商品`
++- oracle rule: `RQ-02`
++- rationale: 当前品质/退款诉求仍在推进且未选商品，先选择商品。
++- 训练师选择: A / B / C / D
++
++## 23. da4b5f963727956bf897a8f256f956fba1c3f74c
++- scene: `收货场景-品质问题`
++- last_user_query: 这个都没法吃啊，你退我一半钱
++- current_turn_intent: `['select_product']`
++- gold ResponseSolution: `小象单商品退款-100%`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-OTHER`
++- rationale: 未命中 v21 品质动作规则；current-turn gating 阻止状态或历史误触发。
++- 训练师选择: A / B / C / D
++
++## 24. 471b4f9db503587628efa3cc6b37fc57fd578b84
++- scene: `收货场景-品质问题`
++- last_user_query: 【图片】 ->系统识别图片结果:用户上传的图片显示扇贝肉质有些松散，异味问题图上未有明确的体现
++- current_turn_intent: `['upload_image']`
++- gold ResponseSolution: `小象单商品退款-40%`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-OTHER`
++- rationale: 未命中 v21 品质动作规则；current-turn gating 阻止状态或历史误触发。
++- 训练师选择: A / B / C / D
++
++## 25. 61bdc9ae1d49cc0317339000521471252c4c2ba9
++- scene: `收货场景-品质问题`
++- last_user_query: 【图片】 ->系统识别图片结果:图片显示鸭锁骨一拆开，颜色暗黑，表面有有油光，无法判断品质问题
++- current_turn_intent: `['upload_image']`
++- gold ResponseSolution: `小象单商品退款-40%`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-OTHER`
++- rationale: 未命中 v21 品质动作规则；current-turn gating 阻止状态或历史误触发。
++- 训练师选择: A / B / C / D
++
++## 26. 5c565e5bea5cf3f20679e8d399f5a81b24538384
++- scene: `收货场景-品质问题`
++- last_user_query: 这也太少了吧
++- current_turn_intent: `[]`
++- gold ResponseSolution: `小象单商品退款-60%`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-OTHER`
++- rationale: 未命中 v21 品质动作规则；current-turn gating 阻止状态或历史误触发。
++- 训练师选择: A / B / C / D
++
++## 27. f65690c9b79ccf8a323c93ba1395a71795ea89bd
++- scene: `收货场景-品质问题`
++- last_user_query: 1份
++- current_turn_intent: `[]`
++- gold ResponseSolution: `小象单商品退款-60%`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-OTHER`
++- rationale: 未命中 v21 品质动作规则；current-turn gating 阻止状态或历史误触发。
++- 训练师选择: A / B / C / D
++
++## 28. 8057c49957db5e481ac2653cb024f8d71c826dbc
++- scene: `收货场景-品质问题`
++- last_user_query: 再多点吧
++- current_turn_intent: `[]`
++- gold ResponseSolution: `小象单商品退款-60%`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-OTHER`
++- rationale: 未命中 v21 品质动作规则；current-turn gating 阻止状态或历史误触发。
++- 训练师选择: A / B / C / D
++
++## 29. 6c657e56813a639620ea6ad50c0b7b66ef84fa09
++- scene: `收货场景-品质问题`
++- last_user_query: 要这么久吗
++- current_turn_intent: `[]`
++- gold ResponseSolution: `催促退款审核;退审跟单`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-01`
++- rationale: 已选商品且明确不可退款，禁止单商品退款。
++- 训练师选择: A / B / C / D
++
++## 30. a6357cdc7e14c80da256c3e98b0e014acd1a36aa
++- scene: `收货场景-品质问题`
++- last_user_query: 进口金枕榴莲单粒约4.2斤 （称重退差）
++- current_turn_intent: `[]`
++- gold ResponseSolution: `催促退款审核;退审跟单`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-01`
++- rationale: 已选商品且明确不可退款，禁止单商品退款。
++- 训练师选择: A / B / C / D
++
++## 31. 7042baa7b02eea2ee3255404ef97d6496517db80
++- scene: `收货场景-品质问题`
++- last_user_query: 退款呢？多久到，能不能快点
++- current_turn_intent: `['eta_question', 'delivery_urge', 'refund_request']`
++- gold ResponseSolution: `催促退款审核;退审跟单`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-01`
++- rationale: 已选商品且明确不可退款，禁止单商品退款。
++- 训练师选择: A / B / C / D
++
++## 32. 06f4bfcd253496ff2bb5ca88da8004dba4a39718
++- scene: `收货场景-品质问题`
++- last_user_query: 只有5吗？你们有点心没？
++- current_turn_intent: `[]`
++- gold ResponseSolution: `操作赔付-优惠券-8元`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-01`
++- rationale: 已选商品且明确不可退款，禁止单商品退款。
++- 训练师选择: A / B / C / D
++
++## 33. f48283ee21e860637a9c2d5f2489bc4a386245cd
++- scene: `收货场景-品质问题`
++- last_user_query: 不要，不够，至少10元
++- current_turn_intent: `[]`
++- gold ResponseSolution: `操作赔付-优惠券-8元`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-01`
++- rationale: 已选商品且明确不可退款，禁止单商品退款。
++- 训练师选择: A / B / C / D
++
++## 34. fd2ac61ef33bccb7a8855a34b2d50c043783a671
++- scene: `收货场景-品质问题`
++- last_user_query: 10%太少了点
++- current_turn_intent: `[]`
++- gold ResponseSolution: `小象单商品退款-20%`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-OTHER`
++- rationale: 未命中 v21 品质动作规则；current-turn gating 阻止状态或历史误触发。
++- 训练师选择: A / B / C / D
++
++## 35. 54f1e96c7a1533028eec5acc5e0f37a12abfaf0a
++- scene: `收货场景-品质问题`
++- last_user_query: 太少了吧
++- current_turn_intent: `[]`
++- gold ResponseSolution: `小象单商品退款-20%`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-OTHER`
++- rationale: 未命中 v21 品质动作规则；current-turn gating 阻止状态或历史误触发。
++- 训练师选择: A / B / C / D
++
++## 36. b32dd890cc1d05be3ad631d939f6e46aa7a06841
++- scene: `收货场景-品质问题`
++- last_user_query: 起码得退百分之八十吧
++- current_turn_intent: `[]`
++- gold ResponseSolution: `小象单商品退款-80%`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-OTHER`
++- rationale: 未命中 v21 品质动作规则；current-turn gating 阻止状态或历史误触发。
++- 训练师选择: A / B / C / D
++
++## 37. 1d41c3b0eb945e2f35dc0de00a67d6639d30e062
++- scene: `收货场景-品质问题`
++- last_user_query: 商品需要补送
++- current_turn_intent: `[]`
++- gold ResponseSolution: `取消订单`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-OTHER`
++- rationale: 未命中 v21 品质动作规则；current-turn gating 阻止状态或历史误触发。
++- 训练师选择: A / B / C / D
++
++## 38. e41aad3cb86cb2fcc5760c08e1f03c2162983146
++- scene: `收货场景-品质问题`
++- last_user_query: 不是还没送到吗
++- current_turn_intent: `['delivery_urge']`
++- gold ResponseSolution: `取消订单`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-OTHER`
++- rationale: 未命中 v21 品质动作规则；current-turn gating 阻止状态或历史误触发。
++- 训练师选择: A / B / C / D
++
++## 39. fae9ae327a2674e439096019afffa87157a765b3
++- scene: `收货场景-品质问题`
++- last_user_query: 没有其他了的吗？只退吗？那么多问题，赔付呢？
++- current_turn_intent: `['compensation_request']`
++- gold ResponseSolution: `操作赔付-优惠券-5元`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-01`
++- rationale: 已选商品且明确不可退款，禁止单商品退款。
++- 训练师选择: A / B / C / D
++
++## 40. 092a1c5681a165e87d76692372cba5f66ef9eab0
++- scene: `收货场景-品质问题`
++- last_user_query: 行吧行吧，那就这样吧
++- current_turn_intent: `[]`
++- gold ResponseSolution: `操作赔付-优惠券-8元`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-CLOSE`
++- rationale: 当前最后一条用户消息是感谢/结束语，不从历史或状态触发新退款/赔付/催审。
++- 训练师选择: A / B / C / D
++
++## 41. 5bf5a969b66a6da41637ab6bbad28ee0126dd178
++- scene: `收货场景-品质问题`
++- last_user_query: 没收到货
++- current_turn_intent: `[]`
++- gold ResponseSolution: `发送送达图片`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-OTHER`
++- rationale: 未命中 v21 品质动作规则；current-turn gating 阻止状态或历史误触发。
++- 训练师选择: A / B / C / D
++
++## 42. a01860fbfecdbcb4a02234302384a0ce9d784dbe
++- scene: `收货场景-品质问题`
++- last_user_query: 小象超市-光谷三路站-WH0144
++- current_turn_intent: `[]`
++- gold ResponseSolution: `发送送达图片`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-OTHER`
++- rationale: 未命中 v21 品质动作规则；current-turn gating 阻止状态或历史误触发。
++- 训练师选择: A / B / C / D
++
++## 43. 9f08f3e491bb61aaeb23e527a9fd98dd544646ed
++- scene: `收货场景-品质问题`
++- last_user_query: 40吧
++- current_turn_intent: `[]`
++- gold ResponseSolution: `小象单商品退款-40%`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-OTHER`
++- rationale: 未命中 v21 品质动作规则；current-turn gating 阻止状态或历史误触发。
++- 训练师选择: A / B / C / D
++
++## 44. 1f865b3bf8c6f7d7a1bf518e3f10fd71f650eec8
++- scene: `收货场景-品质问题`
++- last_user_query: 好的
++- current_turn_intent: `[]`
++- gold ResponseSolution: `取消订单`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-OTHER`
++- rationale: 未命中 v21 品质动作规则；current-turn gating 阻止状态或历史误触发。
++- 训练师选择: A / B / C / D
++
++## 45. fb0eb95867af9fe24c9fe546b3cb88499aef2999
++- scene: `收货场景-品质问题`
++- last_user_query: 24小时，等不了，现在直接退
++- current_turn_intent: `[]`
++- gold ResponseSolution: `加急催促退款审核`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-01`
++- rationale: 已选商品且明确不可退款，禁止单商品退款。
++- 训练师选择: A / B / C / D
+diff --git a/flow_skill_policy_v21/outputs/trainer_review_pack/rq01_fixed_sample.md b/flow_skill_policy_v21/outputs/trainer_review_pack/rq01_fixed_sample.md
+new file mode 100644
+index 0000000..dfc658a
+--- /dev/null
++++ b/flow_skill_policy_v21/outputs/trainer_review_pack/rq01_fixed_sample.md
+@@ -0,0 +1,23 @@
++# RQ-01 Guard Changed Back To Select Product
++
++训练师选项：A. gold 正确，oracle 过严；B. oracle 正确；C. 两者都可接受；D. 需要补充信号/流程。
++
++## 1. 78dbe3e798b111da3c6f6bd3a6e073929524fd9e
++- scene: `收货场景-品质问题`
++- last_user_query: 商品有质量问题
++- current_turn_intent: `['quality_issue']`
++- gold ResponseSolution: `选择商品`
++- oracle ResponseSolution: `选择商品`
++- oracle rule: `RQ-02`
++- rationale: 当前品质/退款诉求仍在推进且未选商品，先选择商品。
++- 训练师选择: A / B / C / D
++
++## 2. a41e98e86f0f99436b858fdcb341b1e6293b1d43
++- scene: `收货场景-品质问题`
++- last_user_query: 我还用调料腌过 还是臭的，我要退款
++- current_turn_intent: `['refund_request']`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `选择商品`
++- oracle rule: `RQ-02`
++- rationale: 当前品质/退款诉求仍在推进且未选商品，先选择商品。
++- 训练师选择: A / B / C / D
+diff --git a/flow_skill_policy_v21/outputs/trainer_review_pack/v2_fixed_sample.md b/flow_skill_policy_v21/outputs/trainer_review_pack/v2_fixed_sample.md
+new file mode 100644
+index 0000000..c1d88c1
+--- /dev/null
++++ b/flow_skill_policy_v21/outputs/trainer_review_pack/v2_fixed_sample.md
+@@ -0,0 +1,403 @@
++# V2 Conflicts Fixed By v21
++
++训练师选项：A. gold 正确，oracle 过严；B. oracle 正确；C. 两者都可接受；D. 需要补充信号/流程。
++
++## 1. 3a80545a1283ae7ce3f25aa9c196f214a8e86c21
++- scene: `履约场景-配送问题`
++- last_user_query: 没有了
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-CLOSE`
++- rationale: 当前最后一条用户消息是感谢/结束语，不从历史触发新动作。
++- 训练师选择: A / B / C / D
++
++## 2. 33a38408505c2baef03614920416d68a8e01be4d
++- scene: `履约场景-配送问题`
++- last_user_query: 你好，订单为啥要停止配送
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-OTHER`
++- rationale: 未命中 v21 配送动作规则；当前轮 gating 阻止历史关键词误触发。
++- 训练师选择: A / B / C / D
++
++## 3. 537740480fc0010058bbf92166e07e645befa6ac
++- scene: `履约场景-配送问题`
++- last_user_query: 没了，谢谢
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-CLOSE`
++- rationale: 当前最后一条用户消息是感谢/结束语，不从历史触发新动作。
++- 训练师选择: A / B / C / D
++
++## 4. 7ddac8a8439551926ee7df2026187cb03835bc61
++- scene: `履约场景-配送问题`
++- last_user_query: 好的
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-ACK`
++- rationale: 当前只是弱确认/应答，且没有 pending strong solution，不触发动作。
++- 训练师选择: A / B / C / D
++
++## 5. 05dc899bee1a1341004062d11c651a6d43ff9f2a
++- scene: `履约场景-配送问题`
++- last_user_query: 那现在怎么办
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-OTHER`
++- rationale: 未命中 v21 配送动作规则；当前轮 gating 阻止历史关键词误触发。
++- 训练师选择: A / B / C / D
++
++## 6. 5d6060e50e8d3426252edd4cc5e8fb1e7fd40d91
++- scene: `履约场景-配送问题`
++- last_user_query: 我弄一下
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-OTHER`
++- rationale: 未命中 v21 配送动作规则；当前轮 gating 阻止历史关键词误触发。
++- 训练师选择: A / B / C / D
++
++## 7. 224a30964d3eeef2c2776cf287633ae5b69004a5
++- scene: `履约场景-配送问题`
++- last_user_query: 没有，就这样吧
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-CLOSE`
++- rationale: 当前最后一条用户消息是感谢/结束语，不从历史触发新动作。
++- 训练师选择: A / B / C / D
++
++## 8. ae0b1d9c65634dd465d30394a0ace5c1bda8e996
++- scene: `履约场景-配送问题`
++- last_user_query: 没了
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-CLOSE`
++- rationale: 当前最后一条用户消息是感谢/结束语，不从历史触发新动作。
++- 训练师选择: A / B / C / D
++
++## 9. b7d6bfcd79d2646f272d97b356b7022261e375ce
++- scene: `履约场景-配送问题`
++- last_user_query: 嗯嗯
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-ACK`
++- rationale: 当前只是弱确认/应答，且没有 pending strong solution，不触发动作。
++- 训练师选择: A / B / C / D
++
++## 10. 1b3bc3f792b0e4ce9735d25e4298f207892e7618
++- scene: `履约场景-配送问题`
++- last_user_query: 我的订单什么情况
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-OTHER`
++- rationale: 未命中 v21 配送动作规则；当前轮 gating 阻止历史关键词误触发。
++- 训练师选择: A / B / C / D
++
++## 11. aba201bd7c059a6bb1787a19b37b43dfb2038b9d
++- scene: `履约场景-配送问题`
++- last_user_query: 希望以后不要这么慢了
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-OTHER`
++- rationale: 未命中 v21 配送动作规则；当前轮 gating 阻止历史关键词误触发。
++- 训练师选择: A / B / C / D
++
++## 12. 037cd0d5624882cde9ecb940a921a3f032b4bfe2
++- scene: `履约场景-配送问题`
++- last_user_query: OK
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-ACK`
++- rationale: 当前只是弱确认/应答，且没有 pending strong solution，不触发动作。
++- 训练师选择: A / B / C / D
++
++## 13. 4340b4a84defb462766100b2e20ef399c7acb50b
++- scene: `履约场景-配送问题`
++- last_user_query: 没了吧
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-CLOSE`
++- rationale: 当前最后一条用户消息是感谢/结束语，不从历史触发新动作。
++- 训练师选择: A / B / C / D
++
++## 14. 6704ad57a2f78e05f033fba3827c906d569dfbc3
++- scene: `履约场景-配送问题`
++- last_user_query: 嗯
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-ACK`
++- rationale: 当前只是弱确认/应答，且没有 pending strong solution，不触发动作。
++- 训练师选择: A / B / C / D
++
++## 15. 7c1f0ff0efe3e21a91e1e9bf7d7b375c521b1d51
++- scene: `履约场景-配送问题`
++- last_user_query: 没有
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-OTHER`
++- rationale: 未命中 v21 配送动作规则；当前轮 gating 阻止历史关键词误触发。
++- 训练师选择: A / B / C / D
++
++## 16. 25c44061874a2a2999766ec8b3f1a0cff2410774
++- scene: `履约场景-配送问题`
++- last_user_query: 你们这个骑手什么鬼  一直找不到地方
++- current_turn_intent: `['select_product']`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-OTHER`
++- rationale: 未命中 v21 配送动作规则；当前轮 gating 阻止历史关键词误触发。
++- 训练师选择: A / B / C / D
++
++## 17. 2343c3b371e7aeba92204c487de4b3ab894baddb
++- scene: `履约场景-配送问题`
++- last_user_query: 快啊快啊
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-OTHER`
++- rationale: 未命中 v21 配送动作规则；当前轮 gating 阻止历史关键词误触发。
++- 训练师选择: A / B / C / D
++
++## 18. 43fed2f2ef4e39e731c3b1e44eb4a0ccc73b6594
++- scene: `履约场景-配送问题`
++- last_user_query: 人工客服
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-CLARIFY_OR_TRANSFER`
++- rationale: 当前只请求人工/客服且无具体诉求，ResponseSolution=无。
++- 训练师选择: A / B / C / D
++
++## 19. 0dc7d5034ff214eaecc008fc8af623c652e99f4b
++- scene: `履约场景-配送问题`
++- last_user_query: 人工
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-CLARIFY_OR_TRANSFER`
++- rationale: 当前只请求人工/客服且无具体诉求，ResponseSolution=无。
++- 训练师选择: A / B / C / D
++
++## 20. 928925781ec7bc08a7ef55dbb3924d5cec4ac873
++- scene: `履约场景-配送问题`
++- last_user_query: 没事了，我找骑手说就行
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-CLOSE`
++- rationale: 当前最后一条用户消息是感谢/结束语，不从历史触发新动作。
++- 训练师选择: A / B / C / D
++
++## 21. a8bf4ef94a426e262e93c2c7b370922ed1387d2e
++- scene: `履约场景-配送问题`
++- last_user_query: 他怎么这么慢，催促配送
++- current_turn_intent: `['delivery_urge']`
++- gold ResponseSolution: `系统催单`
++- oracle ResponseSolution: `系统催单`
++- oracle rule: `FD-03`
++- rationale: 当前催配送，或 ETA 咨询且有超时/风险，系统催单 eligible。
++- 训练师选择: A / B / C / D
++
++## 22. 622b407c2ed5e6feec6c58a040a3b15fbb24ce1b
++- scene: `履约场景-配送问题`
++- last_user_query: 我的意思是能不能快点啊，等很久了啊
++- current_turn_intent: `['delivery_urge']`
++- gold ResponseSolution: `系统催单`
++- oracle ResponseSolution: `系统催单`
++- oracle rule: `FD-03`
++- rationale: 当前催配送，或 ETA 咨询且有超时/风险，系统催单 eligible。
++- 训练师选择: A / B / C / D
++
++## 23. 77e3661b29b37844598c3cf7f44b23d8b96490ff
++- scene: `履约场景-配送问题`
++- last_user_query: 没了
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-CLOSE`
++- rationale: 当前最后一条用户消息是感谢/结束语，不从历史触发新动作。
++- 训练师选择: A / B / C / D
++
++## 24. b893cf5771deb5c9e95f889cfca66af03ce8df78
++- scene: `履约场景-配送问题`
++- last_user_query: 嗯
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `FD-ACK`
++- rationale: 当前只是弱确认/应答，且没有 pending strong solution，不触发动作。
++- 训练师选择: A / B / C / D
++
++## 25. a84ba555253ba5833ef7dc92e78d546c3aa57d52
++- scene: `收货场景-品质问题`
++- last_user_query: 谢谢
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-CLOSE`
++- rationale: 当前最后一条用户消息是感谢/结束语，不从历史或状态触发新退款/赔付/催审。
++- 训练师选择: A / B / C / D
++
++## 26. 9802aa393ac53581df475e399e90bac207b11c3f
++- scene: `收货场景-品质问题`
++- last_user_query: 好的，知道了
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-OTHER`
++- rationale: 未命中 v21 品质动作规则；current-turn gating 阻止状态或历史误触发。
++- 训练师选择: A / B / C / D
++
++## 27. 00f2860ed5674bd45a33fc01da3997f5da82d293
++- scene: `收货场景-品质问题`
++- last_user_query: 人工
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-CLARIFY_OR_TRANSFER`
++- rationale: 当前只请求人工/客服且无具体诉求，ResponseSolution=无。
++- 训练师选择: A / B / C / D
++
++## 28. 6abb581729866370710397ec2ad603970953f433
++- scene: `收货场景-品质问题`
++- last_user_query: 人工
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-CLARIFY_OR_TRANSFER`
++- rationale: 当前只请求人工/客服且无具体诉求，ResponseSolution=无。
++- 训练师选择: A / B / C / D
++
++## 29. 78dbe3e798b111da3c6f6bd3a6e073929524fd9e
++- scene: `收货场景-品质问题`
++- last_user_query: 商品有质量问题
++- current_turn_intent: `['quality_issue']`
++- gold ResponseSolution: `选择商品`
++- oracle ResponseSolution: `选择商品`
++- oracle rule: `RQ-02`
++- rationale: 当前品质/退款诉求仍在推进且未选商品，先选择商品。
++- 训练师选择: A / B / C / D
++
++## 30. e63e27d9b2d2379000d58c3ca5c92709eb8d19d4
++- scene: `收货场景-品质问题`
++- last_user_query: 没有了，谢谢
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-CLOSE`
++- rationale: 当前最后一条用户消息是感谢/结束语，不从历史或状态触发新退款/赔付/催审。
++- 训练师选择: A / B / C / D
++
++## 31. 6c5756ef558d7ec389403fe85365c8c9b0ad3a6b
++- scene: `收货场景-品质问题`
++- last_user_query: 没有了
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-CLOSE`
++- rationale: 当前最后一条用户消息是感谢/结束语，不从历史或状态触发新退款/赔付/催审。
++- 训练师选择: A / B / C / D
++
++## 32. 81b943e614de1bb8f407229ceadcd2e090156684
++- scene: `收货场景-品质问题`
++- last_user_query: 没有了
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-CLOSE`
++- rationale: 当前最后一条用户消息是感谢/结束语，不从历史或状态触发新退款/赔付/催审。
++- 训练师选择: A / B / C / D
++
++## 33. 69b92a405834cf3b9eb8149654a44aedd4a0456d
++- scene: `收货场景-品质问题`
++- last_user_query: 嗯嗯，谢谢
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-CLOSE`
++- rationale: 当前最后一条用户消息是感谢/结束语，不从历史或状态触发新退款/赔付/催审。
++- 训练师选择: A / B / C / D
++
++## 34. 756fc5a447b8bc29dbf1f6c07edb4b8a18cee3c9
++- scene: `收货场景-品质问题`
++- last_user_query: 主要是这一批次都是软的呀
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-OTHER`
++- rationale: 未命中 v21 品质动作规则；current-turn gating 阻止状态或历史误触发。
++- 训练师选择: A / B / C / D
++
++## 35. 5acee55c660d17570be9f5771eb05ea2dd89c7e9
++- scene: `收货场景-品质问题`
++- last_user_query: 没有
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-OTHER`
++- rationale: 未命中 v21 品质动作规则；current-turn gating 阻止状态或历史误触发。
++- 训练师选择: A / B / C / D
++
++## 36. 211a06bc869d71128a43b79cb41ed591309699ac
++- scene: `收货场景-品质问题`
++- last_user_query: 没了，就这个问题
++- current_turn_intent: `['select_product']`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-CLOSE`
++- rationale: 当前最后一条用户消息是感谢/结束语，不从历史或状态触发新退款/赔付/催审。
++- 训练师选择: A / B / C / D
++
++## 37. 4f8dca6a83e9247abfda712f8db77ec40a0a8b63
++- scene: `收货场景-品质问题`
++- last_user_query: 行
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-ACK`
++- rationale: 当前只是弱确认/应答，且没有 pending strong solution，不触发动作。
++- 训练师选择: A / B / C / D
++
++## 38. ec403eeaaf7165418ea83e9911b631727b41ef07
++- scene: `收货场景-品质问题`
++- last_user_query: 一定要这么抠吗
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-OTHER`
++- rationale: 未命中 v21 品质动作规则；current-turn gating 阻止状态或历史误触发。
++- 训练师选择: A / B / C / D
++
++## 39. 3be9f9affd78ed9449e8bffc9e9cf1602791203b
++- scene: `收货场景-品质问题`
++- last_user_query: 钱什么时候能退啊
++- current_turn_intent: `[]`
++- gold ResponseSolution: `无`
++- oracle ResponseSolution: `无`
++- oracle rule: `RQ-OTHER`
++- rationale: 未命中 v21 品质动作规则；current-turn gating 阻止状态或历史误触发。
++- 训练师选择: A / B / C / D
++
++## 40. 1073928bbf1daded4ab6784dac05238c09324d73
++- scene: `收货场景-品质问题`
++- last_user_query: 万一打开都坏了呢，给我都退了
++- current_turn_intent: `['quality_issue']`
++- gold ResponseSolution: `小象单商品退款-100%`
++- oracle ResponseSolution: `小象单商品退款-100%`
++- oracle rule: `RQ-08`
++- rationale: 当前仍有退款/品质诉求且前置满足；提出退款，未确认前 DialogueAgreeSolution=无。
++- 训练师选择: A / B / C / D
+diff --git a/flow_skill_policy_v21/policies/__init__.py b/flow_skill_policy_v21/policies/__init__.py
+new file mode 100644
+index 0000000..1125473
+--- /dev/null
++++ b/flow_skill_policy_v21/policies/__init__.py
+@@ -0,0 +1,2 @@
++"""Policy modules."""
++
+diff --git a/flow_skill_policy_v21/policies/confirmation_resolver.py b/flow_skill_policy_v21/policies/confirmation_resolver.py
+new file mode 100644
+index 0000000..04d68b6
+--- /dev/null
++++ b/flow_skill_policy_v21/policies/confirmation_resolver.py
+@@ -0,0 +1,89 @@
++#!/usr/bin/env python3
++"""Resolve whether the current turn confirms a pending strong solution."""
++
++from __future__ import annotations
++
++import sys
++from pathlib import Path
++from typing import Any, Dict, List
++
++if __package__ in (None, ""):
++    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
++
++from flow_skill_policy_v21.common import canonical_components, canonicalize_solution, split_solution_raw
++
++
++STRONG_CONFIRMATION = {
++    "取消订单",
++    "小象单商品退款-xx%",
++    "小象整单申请退款",
++    "操作赔付-优惠券-xx元",
++    "操作赔付-运费券-3元",
++    "会员卡退款",
++}
++USER_REQUEST_ENOUGH = {"外呼骑手-xx", "再次外呼骑手-xx", "外呼门店-xx", "再次外呼门店-xx", "催促退款审核", "加急催促退款审核"}
++
++
++def _first_strong(raw_values: List[Any]) -> str:
++    for value in raw_values:
++        for comp in split_solution_raw(value):
++            canonical, _, _ = canonicalize_solution(comp)
++            if canonical in STRONG_CONFIRMATION:
++                return canonical
++    return ""
++
++
++def _first_user_request(raw_values: List[Any]) -> str:
++    for value in raw_values:
++        for comp in split_solution_raw(value):
++            canonical, _, _ = canonicalize_solution(comp)
++            if canonical in USER_REQUEST_ENOUGH:
++                return canonical
++    return ""
++
++
++def resolve_pending_confirmation(
++    case_record: Dict[str, Any],
++    flow_state: Dict[str, Any] | None,
++    current_turn_intent: Dict[str, Any],
++    solution_registry: Any = None,
++) -> Dict[str, Any]:
++    flow_state = flow_state or {}
++    debug: List[str] = []
++    candidates = [
++        flow_state.get("pending_confirmation_solution"),
++        flow_state.get("last_response_solution"),
++        flow_state.get("prev_response_solution_raw"),
++        case_record.get("prev_response_solution_raw"),
++    ]
++    # Some trajectory builds keep recent components rather than raw strings.
++    for key in ["prev_response_solution_components", "last_response_solution_components"]:
++        comps = flow_state.get(key) or []
++        if comps:
++            candidates.append(";".join(comps))
++
++    pending_strong = _first_strong(candidates)
++    pending_user_request = _first_user_request(candidates)
++    if pending_strong:
++        debug.append(f"pending_strong:{pending_strong}")
++    if pending_user_request:
++        debug.append(f"pending_user_request:{pending_user_request}")
++
++    can_confirm = (
++        bool(pending_strong)
++        and current_turn_intent.get("is_confirm_like") is True
++        and current_turn_intent.get("is_close_or_thanks") is not True
++    )
++    if can_confirm:
++        debug.append("current_confirm_like_with_pending_strong")
++    elif current_turn_intent.get("is_confirm_like"):
++        debug.append("confirm_like_without_pending_strong")
++
++    return {
++        "pending_strong_solution": pending_strong,
++        "pending_user_request_solution": pending_user_request,
++        "can_confirm_strong_solution": can_confirm,
++        "confirmed_solution": pending_strong if can_confirm else "",
++        "debug_reason": debug,
++    }
++
+diff --git a/flow_skill_policy_v21/policies/current_turn_intent.py b/flow_skill_policy_v21/policies/current_turn_intent.py
+new file mode 100644
+index 0000000..4d578f8
+--- /dev/null
++++ b/flow_skill_policy_v21/policies/current_turn_intent.py
+@@ -0,0 +1,123 @@
++#!/usr/bin/env python3
++"""Classify only the current last user query, never dialogue history."""
++
++from __future__ import annotations
++
++import re
++from typing import Any, Dict, List
++
++
++CLOSE_PATTERNS = [
++    "没有了",
++    "没了",
++    "不用了",
++    "没事了",
++    "谢谢",
++    "感谢",
++    "好的谢谢",
++    "就这样吧",
++    "没有其他问题",
++    "不需要了",
++]
++ACK_ONLY = {"嗯", "嗯嗯", "好", "好的", "行", "OK", "ok", "知道了", "好吧", "可以"}
++TRANSFER_ONLY = {"人工", "转人工", "人工客服", "客服"}
++
++INTENT_PATTERNS = {
++    "eta_question": ["什么时候送到", "几点到", "多久到", "到哪了", "预计", "啥时候到", "什么时候到"],
++    "delivery_urge": ["催", "快点", "太慢", "配送慢", "还没送", "怎么还没到", "赶紧", "超时"],
++    "no_rider": ["没有骑手", "没人接单", "无骑手", "还没骑手", "没骑手"],
++    "contact_rider": ["联系骑手", "骑手电话", "问骑手", "打给骑手", "帮我问骑手", "帮我联系骑手"],
++    "cancel_request": ["取消", "不要了", "退单", "不想要"],
++    "compensation_request": ["赔", "补偿", "优惠券", "券", "投诉", "太差", "不满意", "不能接受"],
++    "refund_progress": ["退款进度", "多久到账", "什么时候退", "还没退", "退款状态", "审核"],
++    "refund_request": ["退款", "退钱", "全退", "退这个", "申请退款"],
++    "quality_issue": ["坏了", "破了", "漏了", "发霉", "变质", "生虫", "异物", "质量问题", "不新鲜", "软了", "烂了", "碎了"],
++    "select_product": ["选好了", "这个", "这个商品", "就这个"],
++    "upload_image": ["【图片】", "系统识别图片", "图片识别"],
++}
++
++CONFIRM_WORDS = [
++    "确认取消",
++    "取消吧",
++    "退吧",
++    "给我退",
++    "赔吧",
++    "给我赔",
++    "可以",
++    "同意",
++    "行",
++    "好的",
++    "好",
++    "嗯",
++]
++
++
++def _norm(text: str) -> str:
++    return re.sub(r"\s+", "", (text or "").strip())
++
++
++def _contains(text: str, words: List[str]) -> bool:
++    return any(word in text for word in words)
++
++
++def classify_current_turn(last_user_query: str) -> Dict[str, Any]:
++    raw = last_user_query or ""
++    text = _norm(raw)
++    intents: List[str] = []
++    debug: List[str] = []
++
++    is_close = _contains(text, CLOSE_PATTERNS)
++    if is_close:
++        debug.append("close_or_thanks")
++
++    is_ack_only = text in ACK_ONLY or text.lower() in ACK_ONLY
++    if is_ack_only:
++        debug.append("ack_only")
++
++    is_transfer_only = text in TRANSFER_ONLY
++    if is_transfer_only:
++        debug.append("transfer_only")
++
++    for intent, patterns in INTENT_PATTERNS.items():
++        if _contains(text, patterns):
++            intents.append(intent)
++            debug.append(f"intent:{intent}")
++
++    # "可以/好的/嗯" alone is weak confirmation only. Strong execution requires
++    # a pending strong-confirmation solution in confirmation_resolver.
++    is_confirm_like = _contains(text, CONFIRM_WORDS)
++    if is_confirm_like:
++        debug.append("confirm_like")
++        if _contains(text, ["取消", "不要了"]):
++            intents.append("confirm_cancel")
++        if _contains(text, ["退", "退款"]):
++            intents.append("confirm_refund")
++        if _contains(text, ["赔", "补偿", "优惠券"]):
++            intents.append("confirm_compensation")
++
++    # Remove generic select_product if a close/ack-only message happens to contain "这个"
++    # in an unrelated short acknowledgement; this keeps it conservative.
++    intents = list(dict.fromkeys(intents))
++    if is_close or is_ack_only or is_transfer_only:
++        action_intents = [x for x in intents if x not in {"select_product"}]
++        has_new_action = bool(action_intents) and not (is_ack_only and set(action_intents).issubset({"confirm_cancel", "confirm_refund", "confirm_compensation"}))
++    else:
++        has_new_action = bool(intents)
++
++    return {
++        "raw": raw,
++        "current_intents": intents,
++        "is_close_or_thanks": is_close,
++        "is_ack_only": is_ack_only,
++        "is_transfer_only": is_transfer_only,
++        "is_confirm_like": is_confirm_like,
++        "has_new_action_intent": has_new_action,
++        "debug_reason": debug,
++    }
++
++
++if __name__ == "__main__":
++    import json
++    import sys
++
++    print(json.dumps(classify_current_turn(" ".join(sys.argv[1:])), ensure_ascii=False, indent=2))
+diff --git a/flow_skill_policy_v21/policies/fulfillment_delivery_policy.py b/flow_skill_policy_v21/policies/fulfillment_delivery_policy.py
+new file mode 100644
+index 0000000..44d817b
+--- /dev/null
++++ b/flow_skill_policy_v21/policies/fulfillment_delivery_policy.py
+@@ -0,0 +1,169 @@
++#!/usr/bin/env python3
++"""Policy v21 for 履约场景-配送问题 with current-turn gating."""
++
++from __future__ import annotations
++
++import sys
++from pathlib import Path
++from typing import Any, Dict, List
++
++if __package__ in (None, ""):
++    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
++
++from flow_skill_policy_v21.common import contains_any, parse_amount_range
++from flow_skill_policy_v21.policies.confirmation_resolver import resolve_pending_confirmation
++from flow_skill_policy_v21.policies.current_turn_intent import classify_current_turn
++from flow_skill_policy_v21.policies.signal_normalizer import normalize_signals
++from flow_skill_policy_v21.policies.solution_eligibility import get_eligible_solutions
++
++
++def _empty(rule_id: str = "") -> Dict[str, Any]:
++    return {
++        "recommended_response_solution": "无",
++        "recommended_dialogue_agree_solution": "无",
++        "decision_type": "no_action",
++        "no_action_reason": "",
++        "priority_rule_id": rule_id,
++        "forbidden_solutions": [],
++        "rationale": [],
++    }
++
++
++def _last_query(case_record: Dict[str, Any], flow_state: Dict[str, Any]) -> str:
++    return str(case_record.get("last_user_query") or flow_state.get("last_user_query") or "")
++
++
++def _has(eligible: Dict[str, Any], solution: str) -> bool:
++    return solution in set(eligible.get("eligible_solutions") or [])
++
++
++def _no_rider(status: str) -> bool:
++    return any(x in status for x in ["无骑手", "创建履约单", "已推配送", "待接单"])
++
++
++def _rider_active(status: str) -> bool:
++    return any(x in status for x in ["已接单", "配送中", "取货", "到店", "送货"])
++
++
++def _first_coupon(range_text: str) -> str:
++    lo, hi = parse_amount_range(range_text)
++    if lo is not None:
++        return f"操作赔付-优惠券-{lo}元"
++    if hi is not None:
++        return f"操作赔付-优惠券-{hi}元"
++    return "操作赔付-优惠券-xx元"
++
++
++def decide_fulfillment_delivery(
++    case_record: Dict[str, Any],
++    flow_state: Dict[str, Any] | None = None,
++    registry: Any = None,
++    eligibility: Dict[str, Any] | None = None,
++) -> Dict[str, Any]:
++    flow_state = flow_state or {}
++    last_query = _last_query(case_record, flow_state)
++    current = classify_current_turn(last_query)
++    resolver = resolve_pending_confirmation(case_record, flow_state, current, registry)
++    normalized = normalize_signals(case_record, flow_state)
++    eligible = eligibility or get_eligible_solutions(case_record, flow_state, registry)
++    intents = set(current.get("current_intents") or [])
++    rider = normalized.get("rider_status", "")
++    order = normalized.get("order_status", "")
++    result = _empty()
++    forbidden: List[str] = []
++    if normalized.get("can_cancel") is False:
++        forbidden.append("取消订单")
++    if normalized.get("can_compensate") is False or normalized.get("already_compensated") is True:
++        forbidden.extend(["操作赔付-优惠券-xx元", "操作赔付-运费券-3元"])
++    result["forbidden_solutions"] = forbidden
++
++    # Current-turn gates first.
++    if current.get("is_close_or_thanks"):
++        result.update({"priority_rule_id": "FD-CLOSE", "no_action_reason": "close_conversation", "rationale": ["当前最后一条用户消息是感谢/结束语，不从历史触发新动作。"]})
++        return result
++    if current.get("is_transfer_only"):
++        result.update({"priority_rule_id": "FD-CLARIFY_OR_TRANSFER", "no_action_reason": "clarify_intent", "rationale": ["当前只请求人工/客服且无具体诉求，ResponseSolution=无。"]})
++        return result
++    if current.get("is_ack_only") and not resolver.get("can_confirm_strong_solution"):
++        result.update({"priority_rule_id": "FD-ACK", "no_action_reason": "after_action_followup", "rationale": ["当前只是弱确认/应答，且没有 pending strong solution，不触发动作。"]})
++        return result
++    if resolver.get("can_confirm_strong_solution"):
++        confirmed = resolver["confirmed_solution"]
++        if confirmed == "取消订单" and normalized.get("can_cancel") is False:
++            result.update({"priority_rule_id": "FD-09", "decision_type": "guard", "no_action_reason": "unavailable_capability", "rationale": ["用户确认取消但订单不可取消，禁止填取消订单。"]})
++            return result
++        if confirmed.startswith("操作赔付") and (normalized.get("can_compensate") is False or normalized.get("already_compensated") is True):
++            result.update({"priority_rule_id": "FD-11", "decision_type": "guard", "no_action_reason": "already_compensated" if normalized.get("already_compensated") else "unavailable_capability", "rationale": ["用户确认赔付但订单不可赔/已赔，禁止填赔付。"]})
++            return result
++        if confirmed in {"取消订单", "操作赔付-优惠券-xx元", "操作赔付-运费券-3元"}:
++            result.update({"recommended_response_solution": confirmed, "recommended_dialogue_agree_solution": confirmed, "decision_type": "confirm", "priority_rule_id": "FD-CONFIRM", "rationale": ["当前弱确认结合 pending strong solution，允许 DialogueAgreeSolution 非空。"]})
++            return result
++
++    # FD-09 / FD-11 guards based on current intent only.
++    if "cancel_request" in intents and normalized.get("can_cancel") is False:
++        result.update({"priority_rule_id": "FD-09", "decision_type": "guard", "no_action_reason": "unavailable_capability", "rationale": ["当前用户要求取消，但 can_cancel=false。"]})
++        return result
++    if "compensation_request" in intents and (normalized.get("can_compensate") is False or normalized.get("already_compensated") is True):
++        result.update({"priority_rule_id": "FD-11", "decision_type": "guard", "no_action_reason": "already_compensated" if normalized.get("already_compensated") else "unavailable_capability", "rationale": ["当前用户要求赔付，但不可赔或已赔。"]})
++        return result
++
++    # FD-08 cancel proposal.
++    if "cancel_request" in intents and _has(eligible, "取消订单"):
++        result.update({"recommended_response_solution": "取消订单", "decision_type": "action", "priority_rule_id": "FD-08", "rationale": ["当前用户有取消诉求且可取消；未确认前 DialogueAgreeSolution=无。"]})
++        return result
++
++    # FD-10 compensation proposal. Do not auto-trigger on timeout alone.
++    if "compensation_request" in intents and any(s.startswith("操作赔付-优惠券") for s in eligible.get("eligible_solutions", [])):
++        sol = _first_coupon(normalized.get("compensation_amount_range", ""))
++        result.update({"recommended_response_solution": sol, "decision_type": "action", "priority_rule_id": "FD-10", "rationale": ["当前用户要求赔付/强烈不满且可赔未赔；first_offer 取赔付区间下限。"]})
++        return result
++
++    # FD-06 repeated call.
++    if _has(eligible, "再次外呼骑手-xx"):
++        result.update({"recommended_response_solution": "再次外呼骑手-催促配送", "decision_type": "action", "priority_rule_id": "FD-06", "rationale": ["当前仍要求联系骑手，且最近一次外呼未接通。"]})
++        return result
++
++    # FD-05 contact rider.
++    if "contact_rider" in intents and _rider_active(rider):
++        if _has(eligible, "外呼骑手-xx") and contains_any(last_query, "帮我", "你问", "客服问", "打电话", "帮忙联系"):
++            result.update({"recommended_response_solution": "外呼骑手-催促配送", "decision_type": "action", "priority_rule_id": "FD-05B", "rationale": ["当前明确要求客服帮忙联系骑手，外呼类不要求 DialogueAgreeSolution。"]})
++            return result
++        if _has(eligible, "引导自助联系骑手"):
++            result.update({"recommended_response_solution": "引导自助联系骑手", "decision_type": "action", "priority_rule_id": "FD-05A", "rationale": ["当前想联系骑手但未明确要求客服外呼，优先自助联系。"]})
++            return result
++
++    # FD-02 / FD-04 no rider dispatch.
++    if _no_rider(rider) and _has(eligible, "加急调度") and ({"eta_question", "delivery_urge", "no_rider"} & intents):
++        result.update({"recommended_response_solution": "加急调度", "decision_type": "action", "priority_rule_id": "FD-04" if "delivery_urge" in intents or "no_rider" in intents else "FD-02", "rationale": ["当前询问 ETA/催接单/催配送且骑手无接单，优先加急调度。"]})
++        return result
++
++    # FD-03 system urge.
++    if (("delivery_urge" in intents) or (("eta_question" in intents) and (normalized.get("has_timeout_risk") is True or normalized.get("order_timeout") is True))) and _has(eligible, "系统催单"):
++        result.update({"recommended_response_solution": "系统催单", "decision_type": "action", "priority_rule_id": "FD-03", "rationale": ["当前催配送，或 ETA 咨询且有超时/风险，系统催单 eligible。"]})
++        return result
++
++    # FD-12 smart follow-up only when current turn still asks to keep watching.
++    if _has(eligible, "智能跟单") and contains_any(last_query, "别忘", "继续", "还没到", "盯", "跟进"):
++        result.update({"recommended_response_solution": "智能跟单", "decision_type": "action", "priority_rule_id": "FD-12", "rationale": ["上一轮已推进且当前仍要求继续跟进。"]})
++        return result
++
++    # FD-07 delivered/status close.
++    if any(x in rider + order for x in ["已送达", "已完成"]) and contains_any(last_query, "到了吗", "送到了", "找到了", "我看看"):
++        result.update({"priority_rule_id": "FD-07", "no_action_reason": "explain_status", "rationale": ["已送达/已完成的状态咨询，不触发催单/加急。"]})
++        return result
++
++    # FD-01 ETA only.
++    if "eta_question" in intents and "履约中" in order and normalized.get("order_timeout") is not True and normalized.get("has_timeout_risk") is not True and not _no_rider(rider):
++        result.update({"priority_rule_id": "FD-01", "no_action_reason": "eta_answer_only", "rationale": ["普通 ETA 咨询可告知预计送达时间，不承诺一定准时。"]})
++        return result
++
++    result.update({"priority_rule_id": "FD-OTHER", "no_action_reason": "unknown", "rationale": ["未命中 v21 配送动作规则；当前轮 gating 阻止历史关键词误触发。"]})
++    return result
++
++
++OPEN_QUESTIONS_FOR_TRAINER = [
++    "普通 ETA + 无骑手接单时是否总应加急调度，还是部分样本只解释预计时间？",
++    "配送超时但用户未要求赔付时是否永远不主动赔付？",
++    "系统催单与智能跟单是否允许同轮复合输出？",
++    "用户要求联系骑手时，自助联系与客服外呼的优先级边界是什么？",
++]
+diff --git a/flow_skill_policy_v21/policies/receipt_quality_policy.py b/flow_skill_policy_v21/policies/receipt_quality_policy.py
+new file mode 100644
+index 0000000..9d9d891
+--- /dev/null
++++ b/flow_skill_policy_v21/policies/receipt_quality_policy.py
+@@ -0,0 +1,183 @@
++#!/usr/bin/env python3
++"""Policy v21 for 收货场景-品质问题 with current-turn gating."""
++
++from __future__ import annotations
++
++import sys
++from pathlib import Path
++from typing import Any, Dict, List
++
++if __package__ in (None, ""):
++    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
++
++from flow_skill_policy_v21.common import contains_any, parse_amount_range
++from flow_skill_policy_v21.policies.confirmation_resolver import resolve_pending_confirmation
++from flow_skill_policy_v21.policies.current_turn_intent import classify_current_turn
++from flow_skill_policy_v21.policies.signal_normalizer import normalize_signals
++from flow_skill_policy_v21.policies.solution_eligibility import get_eligible_solutions
++
++
++def _empty(rule_id: str = "") -> Dict[str, Any]:
++    return {
++        "recommended_response_solution": "无",
++        "recommended_dialogue_agree_solution": "无",
++        "decision_type": "no_action",
++        "no_action_reason": "",
++        "priority_rule_id": rule_id,
++        "forbidden_solutions": [],
++        "rationale": [],
++    }
++
++
++def _last_query(case_record: Dict[str, Any], flow_state: Dict[str, Any]) -> str:
++    return str(case_record.get("last_user_query") or flow_state.get("last_user_query") or "")
++
++
++def _has(eligible: Dict[str, Any], solution: str) -> bool:
++    return solution in set(eligible.get("eligible_solutions") or [])
++
++
++def _first_coupon(range_text: str) -> str:
++    lo, hi = parse_amount_range(range_text)
++    if lo is not None:
++        return f"操作赔付-优惠券-{lo}元"
++    if hi is not None:
++        return f"操作赔付-优惠券-{hi}元"
++    return "操作赔付-优惠券-xx元"
++
++
++def _item_qty(case_record: Dict[str, Any], normalized: Dict[str, Any]) -> int:
++    selected_name = normalized.get("selected_item_name", "")
++    if not selected_name:
++        return 1
++    for item in case_record.get("items") or []:
++        name = str(item.get("商品名称", ""))
++        if selected_name in name or name in selected_name:
++            try:
++                return int(float(str(item.get("商品数量", item.get("数量", 1))).replace("件", "")))
++            except Exception:
++                return 1
++    return 1
++
++
++def _refund_active(status: str) -> bool:
++    return any(x in (status or "") for x in ["退款中", "审核中", "客服审核", "银行退款中", "银行处理中", "处理中", "待审核"])
++
++
++def _refunded(status: str) -> bool:
++    return any(x in (status or "") for x in ["已退款", "已全部退款", "退款完成", "退款成功"])
++
++
++def _refund_solution(case_record: Dict[str, Any]) -> str:
++    raw = case_record.get("response_solution_raw", "")
++    if raw.startswith("小象单商品退款-"):
++        return raw
++    return "小象单商品退款-100%" if contains_any(case_record.get("last_user_query", ""), "全退", "全部", "全额") else "小象单商品退款-xx%"
++
++
++def decide_receipt_quality(
++    case_record: Dict[str, Any],
++    flow_state: Dict[str, Any] | None = None,
++    registry: Any = None,
++    eligibility: Dict[str, Any] | None = None,
++) -> Dict[str, Any]:
++    flow_state = flow_state or {}
++    last_query = _last_query(case_record, flow_state)
++    current = classify_current_turn(last_query)
++    resolver = resolve_pending_confirmation(case_record, flow_state, current, registry)
++    normalized = normalize_signals(case_record, flow_state)
++    eligible = eligibility or get_eligible_solutions(case_record, flow_state, registry)
++    intents = set(current.get("current_intents") or [])
++    status = normalized.get("refund_status", "") + normalized.get("selected_item_refund_status", "")
++    result = _empty()
++    forbidden: List[str] = []
++    if normalized.get("selected_item_state") != "selected" or normalized.get("selected_item_can_refund") is False or normalized.get("order_over_after_sales") is True:
++        forbidden.append("小象单商品退款-xx%")
++    if normalized.get("can_compensate") is False or normalized.get("already_compensated") is True:
++        forbidden.append("操作赔付-优惠券-xx元")
++    result["forbidden_solutions"] = forbidden
++
++    # Current-turn gates first.
++    if current.get("is_close_or_thanks"):
++        result.update({"priority_rule_id": "RQ-CLOSE", "no_action_reason": "close_conversation", "rationale": ["当前最后一条用户消息是感谢/结束语，不从历史或状态触发新退款/赔付/催审。"]})
++        return result
++    if current.get("is_transfer_only"):
++        result.update({"priority_rule_id": "RQ-CLARIFY_OR_TRANSFER", "no_action_reason": "clarify_intent", "rationale": ["当前只请求人工/客服且无具体诉求，ResponseSolution=无。"]})
++        return result
++    if current.get("is_ack_only") and not resolver.get("can_confirm_strong_solution"):
++        result.update({"priority_rule_id": "RQ-ACK", "no_action_reason": "after_action_followup", "rationale": ["当前只是弱确认/应答，且没有 pending strong solution，不触发动作。"]})
++        return result
++    if resolver.get("can_confirm_strong_solution"):
++        confirmed = resolver["confirmed_solution"]
++        if confirmed == "小象单商品退款-xx%" and (normalized.get("selected_item_can_refund") is False or normalized.get("order_over_after_sales") is True):
++            result.update({"priority_rule_id": "RQ-01", "decision_type": "guard", "no_action_reason": "explain_cannot_refund", "rationale": ["用户确认退款但商品不可退/订单超售后，禁止退款。"]})
++            return result
++        if confirmed.startswith("操作赔付") and (normalized.get("can_compensate") is False or normalized.get("already_compensated") is True):
++            result.update({"priority_rule_id": "RQ-12", "decision_type": "guard", "no_action_reason": "already_compensated" if normalized.get("already_compensated") else "unavailable_capability", "rationale": ["用户确认赔付但不可赔/已赔，禁止赔付。"]})
++            return result
++        if confirmed in {"小象单商品退款-xx%", "操作赔付-优惠券-xx元", "操作赔付-运费券-3元"}:
++            result.update({"recommended_response_solution": confirmed, "recommended_dialogue_agree_solution": confirmed, "decision_type": "confirm", "priority_rule_id": "RQ-CONFIRM", "rationale": ["当前弱确认结合 pending strong solution，允许 DialogueAgreeSolution 非空。"]})
++            return result
++
++    # RQ-01 only when order-level after-sales or selected item is explicitly unavailable.
++    if normalized.get("order_over_after_sales") is True:
++        result.update({"priority_rule_id": "RQ-01", "decision_type": "guard", "no_action_reason": "policy_explain", "rationale": ["订单明确超售后，禁止单商品退款。"]})
++        return result
++    if normalized.get("selected_item_state") == "selected" and normalized.get("selected_item_can_refund") is False:
++        result.update({"priority_rule_id": "RQ-01", "decision_type": "guard", "no_action_reason": "explain_cannot_refund", "rationale": ["已选商品且明确不可退款，禁止单商品退款。"]})
++        return result
++
++    # RQ-10 / RQ-09 only on refund progress current intent.
++    if "refund_progress" in intents and _refunded(status):
++        result.update({"priority_rule_id": "RQ-10", "no_action_reason": "explain_refund_status", "rationale": ["当前询问退款状态且退款已完成。"]})
++        return result
++    if "refund_progress" in intents and _refund_active(status):
++        sol = "加急催促退款审核" if contains_any(last_query, "还没", "怎么还", "再催", "加急") else "催促退款审核;退审跟单"
++        result.update({"recommended_response_solution": sol, "decision_type": "action", "priority_rule_id": "RQ-09", "rationale": ["当前明确咨询/催促退款进度，且退款状态为进行中/审核中。"]})
++        return result
++
++    # RQ-12 compensation guard.
++    if "compensation_request" in intents and (normalized.get("can_compensate") is False or normalized.get("already_compensated") is True):
++        result.update({"priority_rule_id": "RQ-12", "decision_type": "guard", "no_action_reason": "already_compensated" if normalized.get("already_compensated") else "unavailable_capability", "rationale": ["当前要求赔付，但不可赔或已赔。"]})
++        return result
++
++    # Front guards only when current turn is still quality/refund flow.
++    refund_flow_intent = bool({"quality_issue", "refund_request", "confirm_refund"} & intents or resolver.get("pending_strong_solution") == "小象单商品退款-xx%")
++    if normalized.get("selected_item_state") != "selected" and {"quality_issue", "refund_request"} & intents and _has(eligible, "选择商品"):
++        result.update({"recommended_response_solution": "选择商品", "decision_type": "action", "priority_rule_id": "RQ-02", "rationale": ["当前品质/退款诉求仍在推进且未选商品，先选择商品。"]})
++        return result
++    if refund_flow_intent and normalized.get("selected_item_state") == "selected" and normalized.get("has_image_evidence") is not True:
++        result.update({"priority_rule_id": "RQ-03", "no_action_reason": "ask_upload_image", "rationale": ["当前仍在推进品质退款，已选商品但缺图片凭证。"]})
++        return result
++    if refund_flow_intent and normalized.get("selected_item_state") == "selected" and normalized.get("has_image_evidence") is True and normalized.get("has_refund_reason") is False:
++        result.update({"priority_rule_id": "RQ-04", "no_action_reason": "ask_refund_reason", "rationale": ["当前仍在推进品质退款，缺退款原因。"]})
++        return result
++    if refund_flow_intent and normalized.get("selected_item_state") == "selected" and normalized.get("has_image_evidence") is True and normalized.get("has_refund_reason") is True and normalized.get("has_refund_ratio") is False:
++        result.update({"priority_rule_id": "RQ-05", "no_action_reason": "ask_refund_ratio", "rationale": ["当前仍在推进品质退款，缺退款比例。"]})
++        return result
++    if refund_flow_intent and _item_qty(case_record, normalized) > 1 and normalized.get("has_refund_quantity") is False:
++        result.update({"priority_rule_id": "RQ-06", "no_action_reason": "ask_refund_quantity", "rationale": ["多数量商品缺退款数量，不默认处理。"]})
++        return result
++
++    # RQ-11 compensation proposal.
++    if "compensation_request" in intents and any(s.startswith("操作赔付-优惠券") for s in eligible.get("eligible_solutions", [])):
++        sol = _first_coupon(normalized.get("compensation_amount_range", ""))
++        result.update({"recommended_response_solution": sol, "decision_type": "action", "priority_rule_id": "RQ-11", "rationale": ["当前要求赔付/强烈不满且可赔未赔；first_offer 取赔付区间下限。"]})
++        return result
++
++    # RQ-07 / RQ-08 refund proposal.
++    if ({"refund_request", "quality_issue", "confirm_refund"} & intents) and _has(eligible, "小象单商品退款-xx%"):
++        sol = _refund_solution(case_record)
++        result.update({"recommended_response_solution": sol, "decision_type": "action", "priority_rule_id": "RQ-08", "rationale": ["当前仍有退款/品质诉求且前置满足；提出退款，未确认前 DialogueAgreeSolution=无。"]})
++        return result
++
++    result.update({"priority_rule_id": "RQ-OTHER", "no_action_reason": "unknown", "rationale": ["未命中 v21 品质动作规则；current-turn gating 阻止状态或历史误触发。"]})
++    return result
++
++
++OPEN_QUESTIONS_FOR_TRAINER = [
++    "未选商品但部分商品状态不可退时，是否必须先选择商品再判断不可退？",
++    "品质问题缺图片/原因/比例时，是否允许客服主动提出退款比例？",
++    "退款进度只有订单部分退款但用户未问进度时，是否绝不催审？",
++    "赔付 first_offer 取区间下限是否符合训练师口径？",
++]
+diff --git a/flow_skill_policy_v21/policies/signal_normalizer.py b/flow_skill_policy_v21/policies/signal_normalizer.py
+new file mode 100644
+index 0000000..eb38e5c
+--- /dev/null
++++ b/flow_skill_policy_v21/policies/signal_normalizer.py
+@@ -0,0 +1,187 @@
++#!/usr/bin/env python3
++"""Normalize Chinese business signals into policy v21 fields."""
++
++from __future__ import annotations
++
++import re
++import sys
++from pathlib import Path
++from typing import Any, Dict, Optional
++
++if __package__ in (None, ""):
++    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
++
++from flow_skill_policy_v21.common import yes_no
++
++
++def _first(*values: Any) -> str:
++    for value in values:
++        if value not in (None, ""):
++            return str(value).strip()
++    return ""
++
++
++EMPTY_VALUES = {"", "无", "未知", "不涉及", "None", "null", "NULL"}
++
++
++def _yes_no_loose(value: Any) -> Optional[bool]:
++    parsed = yes_no(value)
++    if parsed is not None:
++        return parsed
++    s = "" if value is None else str(value).strip()
++    if s.startswith(("是", "有", "可", "可以")):
++        return True
++    if s.startswith(("否", "无", "不可", "不可以")):
++        return False
++    return None
++
++
++def _compensation_range(signals: Dict[str, Any], flow_state: Dict[str, Any]) -> str:
++    direct = _first(signals.get("赔付金额"), signals.get("可赔付金额"), flow_state.get("compensation_range"))
++    if direct:
++        return direct
++    text = _first(signals.get("订单是否可赔付"), signals.get("是否可赔付"))
++    match = re.search(r"赔付金额[:：]?\s*([^,，;；\s]+)", text)
++    return match.group(1) if match else ""
++
++
++def _minutes(text: str) -> Optional[int]:
++    if not text:
++        return None
++    match = re.search(r"(\d+)", text)
++    return int(match.group(1)) if match else None
++
++
++def _selected_item_name(selected_info: Dict[str, Any]) -> str:
++    for key in ["已选择退款商品", "已选择商品", "商品名称", "已选择商品信息"]:
++        value = selected_info.get(key)
++        if value not in (None, "", "无", "不涉及"):
++            return str(value).strip()
++    return ""
++
++
++def _selected_item_refund_status(selected_name: str, selected_info: Dict[str, Any], items: list, warnings: list) -> str:
++    direct = _first(selected_info.get("商品退款状态"), selected_info.get("退款状态"), selected_info.get("是否可退款"))
++    if direct:
++        return direct
++    if selected_name:
++        for item in items or []:
++            name = str(item.get("商品名称", ""))
++            if selected_name in name or name in selected_name:
++                return _first(item.get("商品退款状态"), item.get("退款状态"), item.get("是否可退款"))
++        warnings.append("selected_item_unmatched")
++        return ""
++    statuses = [_first(item.get("商品退款状态"), item.get("退款状态"), item.get("是否可退款")) for item in items or []]
++    statuses = [s for s in statuses if s]
++    if len(set(statuses)) > 1:
++        warnings.append("mixed_item_refund_status_without_selection")
++    # v21: when no item is selected, do not collapse item statuses into a selected
++    # item refund status. The policy should choose item first.
++    return ""
++
++
++def _has_value(value: Any) -> Optional[bool]:
++    if value is None:
++        return None
++    s = str(value).strip()
++    if s in EMPTY_VALUES:
++        return False
++    yn = _yes_no_loose(s)
++    if yn is not None:
++        return yn
++    return True
++
++
++def _selected_state(selected_name: str, items: list, flow_state: Dict[str, Any], warnings: list) -> str:
++    flow_selected = flow_state.get("selected_sku_state")
++    if selected_name or flow_selected == "selected":
++        return "selected"
++    if len(items or []) > 1:
++        warnings.append("multiple_items_no_selected_item")
++    if items or flow_selected == "not_selected":
++        return "not_selected"
++    return "unknown"
++
++
++def _can_refund(status: str) -> Optional[bool]:
++    if not status:
++        return None
++    if "不可退款" in status or "不可退" in status or "超售后" in status:
++        return False
++    if "可退款" in status or status in {"是", "可", "可以"}:
++        return True
++    return None
++
++
++def normalize_signals(record: Dict[str, Any], flow_state: Dict[str, Any] | None = None) -> Dict[str, Any]:
++    flow_state = flow_state or {}
++    signals = record.get("signals") or flow_state.get("signals") or {}
++    items = record.get("items") or flow_state.get("items") or []
++    selected = record.get("selected_item_info") or flow_state.get("selected_item_info") or {}
++    history = record.get("dialogue_history") or flow_state.get("dialogue_history") or ""
++    errors = []
++    warnings = []
++
++    selected_name = _selected_item_name(selected)
++    selected_state = _selected_state(selected_name, items, flow_state, warnings)
++    image_value = _first(selected.get("是否已收集图片凭证"), signals.get("是否已收集图片凭证"))
++    has_image = _yes_no_loose(image_value)
++    if has_image is None and flow_state.get("image_state") == "has_image":
++        has_image = True
++    if has_image is None and ("【图片】" in history or "系统识别图片" in history or "图片识别" in history):
++        has_image = True
++
++    refund_reason = None if selected_state != "selected" else _has_value(_first(selected.get("是否已收集退款原因"), signals.get("是否已收集退款原因")))
++    refund_ratio = selected.get("建议退款比例")
++    has_ratio = None if selected_state != "selected" else _has_value(refund_ratio)
++    refund_qty = selected.get("实际退款数量") or selected.get("退款数量")
++    has_qty = None if selected_state != "selected" else _has_value(refund_qty)
++    refund_status = _first(signals.get("订单退款状态"), signals.get("退款状态"), flow_state.get("refund_state"))
++    selected_refund_status = _selected_item_refund_status(selected_name, selected, items, warnings)
++    timeout_text = _first(signals.get("履约中订单超时时长"), signals.get("已完成订单超时时长"))
++
++    over_after_sales = _yes_no_loose(_first(signals.get("订单是否超售后"), flow_state.get("order_over_after_sales")))
++    if over_after_sales is None and "超售后" in str(signals.get("订单是否超售后", "")):
++        over_after_sales = True
++    if over_after_sales is None and "超售后" in _first(flow_state.get("can_refund_state")) and selected_state == "selected":
++        warnings.append("ambiguous_after_sales_status")
++
++    normalized = {
++        "order_status": _first(signals.get("订单状态"), flow_state.get("order_status")),
++        "is_delivery_order": _yes_no_loose(_first(signals.get("是否为配送单"), flow_state.get("is_delivery_order"))),
++        "is_pickup_order": _yes_no_loose(_first(signals.get("是否为自提单"), flow_state.get("is_pickup_order"))),
++        "rider_status": _first(signals.get("订单骑手状态"), flow_state.get("rider_status")),
++        "store_status": _first(signals.get("订单门店状态"), flow_state.get("store_status")),
++        "estimated_arrival_time": _first(signals.get("预计送达时间")),
++        "latest_promised_arrival_time": _first(signals.get("承诺最晚送达时间")),
++        "order_timeout": _yes_no_loose(signals.get("订单是否超时") or flow_state.get("timeout_state")),
++        "timeout_minutes": _minutes(timeout_text),
++        "has_timeout_risk": _yes_no_loose(_first(signals.get("履约中未超时订单是否有超时风险"), flow_state.get("has_timeout_risk"))),
++        "can_cancel": _yes_no_loose(_first(signals.get("是否可取消订单"), signals.get("能否取消订单"), flow_state.get("can_cancel"))),
++        "can_compensate": _yes_no_loose(_first(signals.get("订单是否可赔付"), signals.get("是否可赔付"), flow_state.get("can_compensate"))),
++        "already_compensated": _yes_no_loose(_first(signals.get("是否赔付过"), flow_state.get("already_compensated"))),
++        "compensation_amount_range": _compensation_range(signals, flow_state),
++        "has_rider_phone": _yes_no_loose(_first(signals.get("是否有骑手真实手机号"), flow_state.get("has_rider_phone"))),
++        "has_delivery_photo": _yes_no_loose(_first(signals.get("骑手是否有送达图片"), flow_state.get("has_delivery_photo"))),
++        "refund_status": refund_status,
++        "has_refund_record": _yes_no_loose(str(_first(signals.get("订单是否有退款记录"), flow_state.get("has_refund_record"))).split()[0] if _first(signals.get("订单是否有退款记录"), flow_state.get("has_refund_record")) else ""),
++        "order_over_after_sales": over_after_sales,
++        "selected_item_name": selected_name,
++        "selected_item_state": selected_state,
++        "has_image_evidence": has_image,
++        "has_refund_reason": refund_reason,
++        "has_refund_ratio": has_ratio,
++        "has_refund_quantity": has_qty,
++        "selected_item_refund_status": selected_refund_status,
++        "selected_item_can_refund": _can_refund(selected_refund_status) if selected_state == "selected" else None,
++        "refund_apply_result": _first(selected.get("退款申请结果"), signals.get("退款申请结果")),
++        "normalization_errors": errors,
++        "normalization_warnings": warnings,
++    }
++    return normalized
++
++
++if __name__ == "__main__":
++    import json
++
++    print(json.dumps(normalize_signals(json.loads(sys.stdin.read())), ensure_ascii=False, indent=2))
+diff --git a/flow_skill_policy_v21/policies/solution_eligibility.py b/flow_skill_policy_v21/policies/solution_eligibility.py
+new file mode 100644
+index 0000000..295e35a
+--- /dev/null
++++ b/flow_skill_policy_v21/policies/solution_eligibility.py
+@@ -0,0 +1,311 @@
++#!/usr/bin/env python3
++"""Policy v21 eligibility engine with current-turn gating."""
++
++from __future__ import annotations
++
++import json
++import sys
++from collections import Counter, defaultdict
++from pathlib import Path
++from typing import Any, Dict, List, Tuple
++
++if __package__ in (None, ""):
++    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
++
++from flow_skill_policy_v21.common import (
++    V1_OUT,
++    V2_REPORTS,
++    V21_OUT,
++    V21_REPORTS,
++    canonicalize_solution,
++    contains_any,
++    ensure_dirs,
++    extract_amount,
++    get_case_records_path,
++    get_flow_states_path,
++    parse_amount_range,
++    read_jsonl,
++    top_counter,
++    write_jsonl,
++)
++from flow_skill_policy_v21.policies.confirmation_resolver import resolve_pending_confirmation
++from flow_skill_policy_v21.policies.current_turn_intent import classify_current_turn
++from flow_skill_policy_v21.policies.signal_normalizer import normalize_signals
++
++
++ACTIVE_ORDER = ("履约中", "付款成功")
++NO_RIDER = ("无骑手", "创建履约单", "已推配送", "待接单")
++RIDER_ACTIVE = ("已接单", "配送中", "取货", "到店", "送货")
++
++
++def _last_query(case_record: Dict[str, Any], flow_state: Dict[str, Any]) -> str:
++    return str(case_record.get("last_user_query") or flow_state.get("last_user_query") or "")
++
++
++def _available(case_record: Dict[str, Any], flow_state: Dict[str, Any]) -> List[str]:
++    names = []
++    for item in case_record.get("available_solutions") or []:
++        names.append(item.get("name", "") if isinstance(item, dict) else str(item))
++    if not names:
++        names = [str(x) for x in flow_state.get("available_solution_names") or []]
++    out, seen = [], set()
++    for name in names:
++        canonical, _, _ = canonicalize_solution(name)
++        if canonical and canonical not in seen:
++            out.append(canonical)
++            seen.add(canonical)
++    return out
++
++
++def _intents(intent: Dict[str, Any]) -> set[str]:
++    return set(intent.get("current_intents") or [])
++
++
++def _refund_active(status: str) -> bool:
++    # v21 intentionally excludes generic "订单部分退款" / "订单无退款".
++    return any(x in (status or "") for x in ["退款中", "审核中", "客服审核", "银行退款中", "银行处理中", "处理中", "待审核"])
++
++
++def _amount_ok(solution: str, normalized: Dict[str, Any]) -> Tuple[bool, str]:
++    amount = extract_amount(solution)
++    lo, hi = parse_amount_range(normalized.get("compensation_amount_range", ""))
++    if amount is None or hi is None:
++        return True, ""
++    if amount > hi:
++        return False, f"赔付金额{amount}元超过信号上限{hi}元"
++    if lo is not None and amount < lo:
++        return True, f"赔付金额{amount}元低于信号下限{lo}元"
++    return True, ""
++
++
++def _add(result: Dict[str, Any], solution: str, ok: bool, reason: str = "", warning: str = "") -> None:
++    if ok:
++        if solution not in result["eligible_solutions"]:
++            result["eligible_solutions"].append(solution)
++    else:
++        result["ineligible_solutions"].append({"solution": solution, "reason": reason})
++    if reason:
++        result["guards"].append(f"{solution}: {reason}")
++    if warning:
++        result["warnings"].append(f"{solution}: {warning}")
++
++
++def get_eligible_solutions(case_record: Dict[str, Any], flow_state: Dict[str, Any] | None, registry: Any = None) -> Dict[str, Any]:
++    flow_state = flow_state or {}
++    normalized = normalize_signals(case_record, flow_state)
++    current = classify_current_turn(_last_query(case_record, flow_state))
++    resolver = resolve_pending_confirmation(case_record, flow_state, current, registry)
++    intents = _intents(current)
++    available = _available(case_record, flow_state)
++    scene = case_record.get("scene") or flow_state.get("scene") or ""
++    rider = normalized.get("rider_status", "")
++    order = normalized.get("order_status", "")
++    history_tail = (case_record.get("dialogue_history") or "")[-800:]
++    result: Dict[str, Any] = {
++        "sample_id": case_record.get("sample_id") or flow_state.get("sample_id"),
++        "scene": scene,
++        "available_solutions": available,
++        "eligible_solutions": [],
++        "ineligible_solutions": [],
++        "guards": [],
++        "warnings": [],
++        "normalized_signals": normalized,
++        "current_turn_intent": current,
++        "confirmation": resolver,
++    }
++
++    for solution in available:
++        ok = False
++        reason = ""
++        warning = ""
++        if solution.startswith("操作赔付-优惠券") or solution.startswith("操作赔付-运费券"):
++            amount_ok, amount_warning = _amount_ok(solution, normalized)
++            if normalized.get("can_compensate") is False:
++                reason = "订单不可赔付"
++            elif normalized.get("already_compensated") is True:
++                reason = "订单已赔付过"
++            elif not amount_ok:
++                reason = amount_warning
++            elif "compensation_request" in intents or resolver.get("confirmed_solution") in {"操作赔付-优惠券-xx元", "操作赔付-运费券-3元"}:
++                ok = True
++                warning = amount_warning
++            else:
++                reason = "当前轮没有赔付诉求或 pending compensation confirmation"
++        elif solution == "取消订单":
++            if normalized.get("can_cancel") is False:
++                reason = "订单不可取消"
++            elif "cancel_request" in intents or resolver.get("confirmed_solution") == "取消订单":
++                ok = True
++            else:
++                reason = "当前轮没有取消诉求或 pending cancel confirmation"
++        elif solution == "系统催单":
++            if not ({"delivery_urge"} & intents or (("eta_question" in intents) and (normalized.get("has_timeout_risk") is True or normalized.get("order_timeout") is True))):
++                reason = "当前轮不是催配送，也不是超时/风险 ETA 咨询"
++            elif normalized.get("is_delivery_order") is False:
++                reason = "非配送单"
++            elif not any(x in order for x in ACTIVE_ORDER):
++                reason = "订单状态不适合催单"
++            elif any(x in rider for x in ["已送达"]):
++                reason = "骑手已送达"
++            else:
++                ok = True
++        elif solution == "加急调度":
++            if not any(x in rider for x in NO_RIDER):
++                reason = "骑手状态不是无骑手/待接单"
++            elif not ({"eta_question", "delivery_urge", "no_rider"} & intents):
++                reason = "当前轮没有 ETA/催接单/无骑手诉求"
++            elif normalized.get("is_delivery_order") is False:
++                reason = "非配送单"
++            elif not any(x in order for x in ACTIVE_ORDER):
++                reason = "订单状态不适合加急调度"
++            else:
++                ok = True
++        elif solution == "智能跟单":
++            if any(x in flow_state.get("last_response_solution", "") for x in ["系统催单", "加急调度", "外呼骑手"]) and contains_any(_last_query(case_record, flow_state), "别忘", "继续", "还没到", "盯", "跟进"):
++                ok = True
++            else:
++                reason = "当前轮没有持续跟进诉求或缺少上一轮推进动作"
++        elif solution == "无骑手接单跟单":
++            if any(x in rider for x in NO_RIDER) and {"delivery_urge", "no_rider"} & intents and contains_any(_last_query(case_record, flow_state), "修改", "地址", "时间", "备注"):
++                ok = True
++            else:
++                reason = "未满足当前轮无骑手接单跟单条件"
++        elif solution == "引导自助联系骑手":
++            if "contact_rider" in intents and any(x in rider for x in RIDER_ACTIVE):
++                ok = True
++            else:
++                reason = "当前轮没有联系骑手诉求或骑手状态不支持"
++        elif solution == "外呼骑手-xx":
++            if "contact_rider" in intents and any(x in rider for x in RIDER_ACTIVE) and normalized.get("has_rider_phone") is not False:
++                ok = True
++            else:
++                reason = "当前轮未满足外呼骑手条件"
++        elif solution == "再次外呼骑手-xx":
++            if "contact_rider" in intents and "未接通" in history_tail and any(x in rider for x in RIDER_ACTIVE):
++                ok = True
++            else:
++                reason = "缺少当前联系骑手诉求或最近外呼未接通证据"
++        elif solution == "选择商品":
++            if current.get("is_close_or_thanks") or current.get("is_ack_only") or current.get("is_transfer_only"):
++                reason = "当前轮是结束/弱确认/转人工，不触发选择商品"
++            elif ({"quality_issue", "refund_request"} & intents) and normalized.get("selected_item_state") != "selected":
++                ok = True
++            else:
++                reason = "当前轮没有品质/退款诉求或已选商品"
++        elif solution == "小象单商品退款-xx%":
++            if current.get("is_close_or_thanks"):
++                reason = "当前轮结束语不触发退款"
++            elif not ({"refund_request", "quality_issue", "confirm_refund"} & intents or resolver.get("confirmed_solution") == "小象单商品退款-xx%"):
++                reason = "当前轮没有退款/品质诉求或 pending refund confirmation"
++            elif normalized.get("selected_item_state") != "selected":
++                reason = "未选择具体商品"
++            elif normalized.get("selected_item_can_refund") is False or normalized.get("order_over_after_sales") is True:
++                reason = "商品不可退款或订单超售后"
++            elif normalized.get("has_image_evidence") is not True and "quality_issue" in intents:
++                reason = "缺图片凭证"
++            elif normalized.get("has_refund_reason") is False:
++                reason = "缺退款原因"
++            elif normalized.get("has_refund_ratio") is False:
++                reason = "缺退款比例"
++            elif normalized.get("has_refund_quantity") is False:
++                reason = "缺退款数量"
++            else:
++                ok = True
++        elif solution == "小象整单申请退款":
++            if "refund_request" in intents and contains_any(_last_query(case_record, flow_state), "整单", "全部退款", "整个订单"):
++                ok = True
++            else:
++                reason = "当前轮未识别到整单退款诉求"
++        elif solution in {"催促退款审核", "加急催促退款审核", "退审跟单"}:
++            status = normalized.get("refund_status", "") + normalized.get("selected_item_refund_status", "")
++            if "refund_progress" in intents and _refund_active(status):
++                ok = True
++            else:
++                reason = "当前轮不是退款进度诉求或退款状态不是进行中/审核中"
++        elif solution == "发送送达图片":
++            if normalized.get("has_delivery_photo") is True and contains_any(_last_query(case_record, flow_state), "没收到", "找不到", "送哪", "放哪", "没看见"):
++                ok = True
++            else:
++                reason = "缺送达图片或当前轮未反馈未找到包裹"
++        elif solution in {"开发票", "管理会员自动续费", "引导自助修改订单", "引导自助联系骑手", "引导自助管理地址", "引导自助开通会员"} or solution.startswith("引导自助查看"):
++            if current.get("has_new_action_intent") and contains_any(scene + _last_query(case_record, flow_state), "发票", "会员", "续费", "权益", "配送范围", "优惠券", "修改", "地址", "联系骑手", "开通"):
++                ok = True
++            else:
++                reason = "当前轮诉求不匹配该自助/业务工具"
++        elif solution.startswith("外呼门店") or solution.startswith("再次外呼门店"):
++            if current.get("has_new_action_intent") and contains_any(_last_query(case_record, flow_state), "门店", "商家", "店里", "分拣", "缺货", "修改订单"):
++                ok = True
++            else:
++                reason = "当前轮未识别到联系门店诉求"
++        else:
++            reason = "未配置 v21 eligibility 规则"
++        _add(result, solution, ok, reason, warning)
++    return result
++
++
++def _r12_ids() -> set[str]:
++    ids = set()
++    path = V1_OUT / "global_checker_result_v1.jsonl"
++    if not path.exists():
++        return ids
++    for row in read_jsonl(path):
++        if any(issue.get("rule") == "R12" for issue in row.get("issues", [])):
++            ids.add(row.get("sample_id"))
++    return ids
++
++
++def main() -> None:
++    ensure_dirs()
++    registry_path = V1_OUT / "solution_registry_v1.json"
++    registry = json.loads(registry_path.read_text(encoding="utf-8")) if registry_path.exists() else []
++    flows = {row["sample_id"]: row for row in read_jsonl(get_flow_states_path())}
++    r12_ids = _r12_ids()
++    rows = []
++    eligible_counts = Counter()
++    ineligible = defaultdict(Counter)
++    r12_eligible = 0
++    close_ack_with_action = 0
++    for case in read_jsonl(get_case_records_path()):
++        flow = flows.get(case.get("sample_id"), {})
++        result = get_eligible_solutions(case, flow, registry)
++        rows.append(result)
++        for sol in result["eligible_solutions"]:
++            eligible_counts[sol] += 1
++        for item in result["ineligible_solutions"]:
++            ineligible[item["solution"]][item["reason"]] += 1
++        if case.get("sample_id") in r12_ids and result["eligible_solutions"]:
++            r12_eligible += 1
++        current = result["current_turn_intent"]
++        if (current.get("is_close_or_thanks") or current.get("is_ack_only") or current.get("is_transfer_only")) and result["eligible_solutions"]:
++            close_ack_with_action += 1
++    write_jsonl(V21_OUT / "eligibility_results_v21.jsonl", rows)
++    v2_r12 = "unknown"
++    v2_report = V2_REPORTS / "eligibility_engine_report.md"
++    if v2_report.exists():
++        text = v2_report.read_text(encoding="utf-8")
++        import re
++
++        m = re.search(r"v1_R12_with_eligible_action: `(\d+)`", text)
++        if m:
++            v2_r12 = m.group(1)
++    report = [
++        "# Eligibility Engine v21 Report",
++        "",
++        f"- total_cases: `{len(rows)}`",
++        f"- v2_R12_with_eligible_action: `{v2_r12}`",
++        f"- v21_R12_with_eligible_action: `{r12_eligible}`",
++        f"- close_ack_transfer_samples_with_any_eligible_action: `{close_ack_with_action}`",
++        "",
++        "## Eligible Counts",
++        top_counter(eligible_counts, 80) or "- none",
++        "",
++        "## Ineligible Top Reasons",
++    ]
++    for sol, counter in sorted(ineligible.items(), key=lambda kv: sum(kv[1].values()), reverse=True)[:80]:
++        report.append(f"### {sol}")
++        report.append(top_counter(counter, 8) or "- none")
++    (V21_REPORTS / "eligibility_engine_v21_report.md").write_text("\n".join(report) + "\n", encoding="utf-8")
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/flow_skill_policy_v21/replay/__init__.py b/flow_skill_policy_v21/replay/__init__.py
+new file mode 100644
+index 0000000..e35d5e9
+--- /dev/null
++++ b/flow_skill_policy_v21/replay/__init__.py
+@@ -0,0 +1,2 @@
++"""Replay utilities."""
++
+diff --git a/flow_skill_policy_v21/replay/build_policy_oracle_labels.py b/flow_skill_policy_v21/replay/build_policy_oracle_labels.py
+new file mode 100644
+index 0000000..a9edb5c
+--- /dev/null
++++ b/flow_skill_policy_v21/replay/build_policy_oracle_labels.py
+@@ -0,0 +1,174 @@
++#!/usr/bin/env python3
++"""Build v21 policy oracle labels and policy reports."""
++
++from __future__ import annotations
++
++import json
++import sys
++from collections import Counter
++from pathlib import Path
++from typing import Any, Callable, Dict, List
++
++if __package__ in (None, ""):
++    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
++
++from flow_skill_policy_v21.common import V1_OUT, V2_ROOT, V21_REPORTS, V21_ROOT, ensure_dirs, get_case_records_path, get_flow_states_path, read_jsonl, relation, top_counter, write_jsonl
++from flow_skill_policy_v21.policies.current_turn_intent import classify_current_turn
++from flow_skill_policy_v21.policies.fulfillment_delivery_policy import decide_fulfillment_delivery
++from flow_skill_policy_v21.policies.receipt_quality_policy import decide_receipt_quality
++
++
++def _maps() -> tuple[Dict[str, Dict[str, Any]], Dict[str, Dict[str, Any]], Any]:
++    cases = {row["sample_id"]: row for row in read_jsonl(get_case_records_path())}
++    flows = {row["sample_id"]: row for row in read_jsonl(get_flow_states_path())}
++    registry_path = V1_OUT / "solution_registry_v1.json"
++    registry = json.loads(registry_path.read_text(encoding="utf-8")) if registry_path.exists() else []
++    return cases, flows, registry
++
++
++def _old_rows(path: Path) -> Dict[str, Dict[str, Any]]:
++    return {row["sample_id"]: row for row in read_jsonl(path)} if path.exists() else {}
++
++
++def _build_one(
++    replay_path: Path,
++    output_path: Path,
++    policy: Callable[[Dict[str, Any], Dict[str, Any], Any], Dict[str, Any]],
++    cases: Dict[str, Dict[str, Any]],
++    flows: Dict[str, Dict[str, Any]],
++    registry: Any,
++) -> List[Dict[str, Any]]:
++    out = []
++    for replay in read_jsonl(replay_path):
++        sid = replay["sample_id"]
++        case = cases.get(sid, {})
++        flow = flows.get(sid, {})
++        decision = policy(case, flow, registry)
++        gold_rs = replay.get("gold_response_solution") or case.get("response_solution_raw") or "无"
++        gold_agree = replay.get("gold_dialogue_agree_solution") or case.get("dialogue_agree_solution_raw") or "无"
++        oracle_rs = decision.get("recommended_response_solution", "无") or "无"
++        oracle_agree = decision.get("recommended_dialogue_agree_solution", "无") or "无"
++        rel = relation(gold_rs, oracle_rs)
++        agree_rel = relation(gold_agree, oracle_agree)
++        current = classify_current_turn(replay.get("last_user_query") or case.get("last_user_query", ""))
++        out.append(
++            {
++                "sample_id": sid,
++                "scene": replay.get("scene") or case.get("scene"),
++                "gold_response_solution": gold_rs,
++                "gold_dialogue_agree_solution": gold_agree,
++                "oracle_response_solution": oracle_rs,
++                "oracle_dialogue_agree_solution": oracle_agree,
++                "oracle_decision_type": decision.get("decision_type"),
++                "oracle_rule_id": decision.get("priority_rule_id"),
++                "gold_oracle_relation": rel,
++                "gold_oracle_agree_relation": agree_rel,
++                "rationale": decision.get("rationale", []),
++                "needs_trainer_review": rel not in {"same", "canonical_same"} or agree_rel not in {"same", "canonical_same"},
++                "last_user_query": replay.get("last_user_query", ""),
++                "current_turn_intent": current,
++                "signals": replay.get("signals", {}),
++                "input_without_target": replay.get("input_without_target", ""),
++                "forbidden_solutions": decision.get("forbidden_solutions", []),
++                "no_action_reason": decision.get("no_action_reason", ""),
++            }
++        )
++    write_jsonl(output_path, out)
++    return out
++
++
++def _conflict_count(rows: List[Dict[str, Any]]) -> int:
++    return sum(1 for r in rows if r.get("gold_oracle_relation") not in {"same", "canonical_same"})
++
++
++def _oracle_no_gold(rows: List[Dict[str, Any]]) -> int:
++    return sum(1 for r in rows if r.get("gold_oracle_relation") == "oracle_no_gold_action")
++
++
++def _over_action(rows: List[Dict[str, Any]]) -> int:
++    n = 0
++    for row in rows:
++        current = row.get("current_turn_intent") or classify_current_turn(row.get("last_user_query", ""))
++        is_pending_confirm = str(row.get("oracle_rule_id", "")).endswith("CONFIRM") or row.get("oracle_decision_type") == "confirm"
++        if (current.get("is_close_or_thanks") or current.get("is_ack_only") or current.get("is_transfer_only")) and row.get("oracle_response_solution") != "无" and not is_pending_confirm:
++            n += 1
++    return n
++
++
++def _fixed(old: Dict[str, Dict[str, Any]], new_rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
++    fixed = []
++    for row in new_rows:
++        old_row = old.get(row["sample_id"])
++        if not old_row:
++            continue
++        old_current = classify_current_turn(old_row.get("last_user_query", ""))
++        old_over = (old_current.get("is_close_or_thanks") or old_current.get("is_ack_only") or old_current.get("is_transfer_only")) and old_row.get("oracle_response_solution") != "无"
++        if old_over and (row.get("oracle_response_solution") == "无" or str(row.get("oracle_rule_id", "")).endswith("CONFIRM")):
++            fixed.append(row)
++    return fixed
++
++
++def _write_policy_report(name: str, v2_rows: Dict[str, Dict[str, Any]], v21_rows: List[Dict[str, Any]], path: Path) -> None:
++    old_list = list(v2_rows.values())
++    fixed = _fixed(v2_rows, v21_rows)
++    old_rule_conf = Counter(r.get("oracle_rule_id") for r in old_list if r.get("gold_oracle_relation") not in {"same", "canonical_same"})
++    new_rule_conf = Counter(r.get("oracle_rule_id") for r in v21_rows if r.get("gold_oracle_relation") not in {"same", "canonical_same"})
++    lines = [
++        f"# {name} Policy v21 Report",
++        "",
++        f"- conflict_v2: `{_conflict_count(old_list)}`",
++        f"- conflict_v21: `{_conflict_count(v21_rows)}`",
++        f"- oracle_no_gold_action_v2: `{_oracle_no_gold(old_list)}`",
++        f"- oracle_no_gold_action_v21: `{_oracle_no_gold(v21_rows)}`",
++        f"- close_ack_transfer_over_action_v2: `{_over_action(old_list)}`",
++        f"- close_ack_transfer_over_action_v21: `{_over_action(v21_rows)}`",
++        f"- close_ack_transfer_fixed: `{len(fixed)}`",
++        "",
++        "## V2 Conflict Rules",
++        top_counter(old_rule_conf, 20) or "- none",
++        "",
++        "## V21 Conflict Rules",
++        top_counter(new_rule_conf, 20) or "- none",
++    ]
++    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
++
++
++def main() -> None:
++    ensure_dirs()
++    cases, flows, registry = _maps()
++    fd_rows = _build_one(
++        V21_ROOT.parent / "flow_skill_mining_v1" / "replay" / "fulfillment_delivery_replay.jsonl",
++        V21_ROOT / "replay" / "fulfillment_delivery_oracle_v21.jsonl",
++        decide_fulfillment_delivery,
++        cases,
++        flows,
++        registry,
++    )
++    rq_rows = _build_one(
++        V21_ROOT.parent / "flow_skill_mining_v1" / "replay" / "receipt_quality_replay.jsonl",
++        V21_ROOT / "replay" / "receipt_quality_oracle_v21.jsonl",
++        decide_receipt_quality,
++        cases,
++        flows,
++        registry,
++    )
++    fd_v2 = _old_rows(V2_ROOT / "replay" / "fulfillment_delivery_oracle.jsonl")
++    rq_v2 = _old_rows(V2_ROOT / "replay" / "receipt_quality_oracle.jsonl")
++    _write_policy_report("Fulfillment Delivery", fd_v2, fd_rows, V21_REPORTS / "fulfillment_delivery_policy_v21_report.md")
++    _write_policy_report("Receipt Quality", rq_v2, rq_rows, V21_REPORTS / "receipt_quality_policy_v21_report.md")
++    all_rows = fd_rows + rq_rows
++    all_v2 = list(fd_v2.values()) + list(rq_v2.values())
++    report = [
++        "# Policy Oracle v21 Summary",
++        "",
++        f"- FD conflict v2 -> v21: `{_conflict_count(list(fd_v2.values()))}` -> `{_conflict_count(fd_rows)}`",
++        f"- RQ conflict v2 -> v21: `{_conflict_count(list(rq_v2.values()))}` -> `{_conflict_count(rq_rows)}`",
++        f"- FD oracle_no_gold_action v2 -> v21: `{_oracle_no_gold(list(fd_v2.values()))}` -> `{_oracle_no_gold(fd_rows)}`",
++        f"- RQ oracle_no_gold_action v2 -> v21: `{_oracle_no_gold(list(rq_v2.values()))}` -> `{_oracle_no_gold(rq_rows)}`",
++        f"- close_ack_over_action_fixed: `{len(_fixed(fd_v2, fd_rows)) + len(_fixed(rq_v2, rq_rows))}`",
++    ]
++    (V21_REPORTS / "policy_oracle_v21_report.md").write_text("\n".join(report) + "\n", encoding="utf-8")
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/flow_skill_policy_v21/replay/build_replay_sets.py b/flow_skill_policy_v21/replay/build_replay_sets.py
+new file mode 100644
+index 0000000..c170926
+--- /dev/null
++++ b/flow_skill_policy_v21/replay/build_replay_sets.py
+@@ -0,0 +1,103 @@
++#!/usr/bin/env python3
++"""Build v21 stable/challenge replay sets and prompt inputs."""
++
++from __future__ import annotations
++
++import sys
++from collections import Counter
++from pathlib import Path
++from typing import Any, Dict, List
++
++if __package__ in (None, ""):
++    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
++
++from flow_skill_policy_v21.common import V21_REPORTS, V21_ROOT, ensure_dirs, read_jsonl, top_counter, write_jsonl
++
++
++def insert_skill_prompt(prompt: str, skill_prompt: str) -> str:
++    block = "\n\n### 流程操作规则（Skill）\n" + skill_prompt.strip() + "\n"
++    text = prompt or ""
++    marker = "### 系统信号"
++    idx = text.find(marker)
++    if idx != -1:
++        next_idx = text.find("\n### ", idx + len(marker))
++        if next_idx != -1:
++            return text[:next_idx] + block + text[next_idx:]
++    marker = "## 你查询到的方案列表"
++    idx = text.find(marker)
++    if idx != -1:
++        next_idx = text.find("\n### ", idx + len(marker))
++        if next_idx != -1:
++            return text[:next_idx] + block + text[next_idx:]
++    return block + text
++
++
++def _split(oracle_path: Path, prefix: str, skill_prompt_path: Path) -> Dict[str, int]:
++    rows = list(read_jsonl(oracle_path))
++    stable = [r for r in rows if r.get("gold_oracle_relation") in {"same", "canonical_same"}]
++    challenge = [r for r in rows if r.get("gold_oracle_relation") not in {"same", "canonical_same"}]
++    stable_path = V21_ROOT / "replay" / f"{prefix}_stable_replay.jsonl"
++    challenge_path = V21_ROOT / "replay" / f"{prefix}_challenge_replay.jsonl"
++    write_jsonl(stable_path, stable)
++    write_jsonl(challenge_path, challenge)
++    skill_prompt = skill_prompt_path.read_text(encoding="utf-8")
++    for kind, subset in [("stable", stable), ("challenge", challenge)]:
++        baseline = []
++        skill = []
++        for r in subset:
++            base = {
++                "sample_id": r.get("sample_id"),
++                "prompt": r.get("input_without_target", ""),
++                "gold_response_solution": r.get("gold_response_solution"),
++                "gold_dialogue_agree_solution": r.get("gold_dialogue_agree_solution"),
++                "oracle_response_solution": r.get("oracle_response_solution"),
++                "oracle_dialogue_agree_solution": r.get("oracle_dialogue_agree_solution"),
++                "oracle_rule_id": r.get("oracle_rule_id"),
++                "gold_oracle_relation": r.get("gold_oracle_relation"),
++            }
++            baseline.append(base)
++            s = dict(base)
++            s["prompt"] = insert_skill_prompt(s["prompt"], skill_prompt)
++            skill.append(s)
++        write_jsonl(V21_ROOT / "replay" / f"{prefix}_{kind}_baseline_inputs.jsonl", baseline)
++        write_jsonl(V21_ROOT / "replay" / f"{prefix}_{kind}_skill_inputs.jsonl", skill)
++    return {
++        "stable": len(stable),
++        "challenge": len(challenge),
++        "agree_non_empty_stable": sum(1 for r in stable if r.get("gold_dialogue_agree_solution") not in ("", "无", None) or r.get("oracle_dialogue_agree_solution") not in ("", "无", None)),
++        "agree_non_empty_challenge": sum(1 for r in challenge if r.get("gold_dialogue_agree_solution") not in ("", "无", None) or r.get("oracle_dialogue_agree_solution") not in ("", "无", None)),
++        "response_dist_stable": Counter(r.get("gold_response_solution") for r in stable),
++        "response_dist_challenge": Counter(r.get("gold_response_solution") for r in challenge),
++        "conflict_rules": Counter(r.get("oracle_rule_id") for r in challenge),
++    }
++
++
++def main() -> None:
++    ensure_dirs()
++    fd = _split(V21_ROOT / "replay" / "fulfillment_delivery_oracle_v21.jsonl", "fulfillment_delivery", V21_ROOT / "skills" / "fulfillment_delivery_policy_v21" / "skill_prompt.md")
++    rq = _split(V21_ROOT / "replay" / "receipt_quality_oracle_v21.jsonl", "receipt_quality", V21_ROOT / "skills" / "receipt_quality_policy_v21" / "skill_prompt.md")
++    lines = [
++        "# Replay Sets v21 Report",
++        "",
++        f"- fulfillment_delivery stable/challenge: `{fd['stable']}` / `{fd['challenge']}`",
++        f"- receipt_quality stable/challenge: `{rq['stable']}` / `{rq['challenge']}`",
++        f"- FD DialogueAgree non-empty stable/challenge: `{fd['agree_non_empty_stable']}` / `{fd['agree_non_empty_challenge']}`",
++        f"- RQ DialogueAgree non-empty stable/challenge: `{rq['agree_non_empty_stable']}` / `{rq['agree_non_empty_challenge']}`",
++        "",
++        "## FD Stable ResponseSolution",
++        top_counter(fd["response_dist_stable"], 20) or "- none",
++        "",
++        "## FD Challenge Conflict Rules",
++        top_counter(fd["conflict_rules"], 20) or "- none",
++        "",
++        "## RQ Stable ResponseSolution",
++        top_counter(rq["response_dist_stable"], 20) or "- none",
++        "",
++        "## RQ Challenge Conflict Rules",
++        top_counter(rq["conflict_rules"], 20) or "- none",
++    ]
++    (V21_REPORTS / "replay_sets_v21_report.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/flow_skill_policy_v21/replay/evaluate_replay_outputs_v21.py b/flow_skill_policy_v21/replay/evaluate_replay_outputs_v21.py
+new file mode 100644
+index 0000000..fbcc85e
+--- /dev/null
++++ b/flow_skill_policy_v21/replay/evaluate_replay_outputs_v21.py
+@@ -0,0 +1,113 @@
++#!/usr/bin/env python3
++"""Evaluate v21 replay outputs with stable/challenge separation."""
++
++from __future__ import annotations
++
++import argparse
++import sys
++from collections import Counter, defaultdict
++from pathlib import Path
++from typing import Any, Dict, List
++
++if __package__ in (None, ""):
++    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
++
++from flow_skill_policy_v21.common import canonical_components, read_jsonl, relation, write_jsonl
++
++
++STRONG = {"取消订单", "小象单商品退款-xx%", "小象整单申请退款", "会员卡退款", "操作赔付-优惠券-xx元", "操作赔付-运费券-3元"}
++
++
++def _load_outputs(path: Path) -> Dict[str, Dict[str, Any]]:
++    return {row.get("sample_id"): row for row in read_jsonl(path)} if path.exists() else {}
++
++
++def _strong(solution: str) -> bool:
++    return any(x in STRONG for x in canonical_components(solution))
++
++
++def _eval_rows(rows: List[Dict[str, Any]], outputs: Dict[str, Dict[str, Any]]) -> tuple[List[Dict[str, Any]], Counter, Dict[str, Counter]]:
++    out = []
++    c = Counter()
++    by_rule = defaultdict(Counter)
++    for row in rows:
++        pred = outputs.get(row["sample_id"], {})
++        pred_rs = pred.get("ResponseSolution", "无")
++        pred_agree = pred.get("DialogueAgreeSolution", "无")
++        oracle_rs = row.get("oracle_response_solution", "无")
++        gold_rs = row.get("gold_response_solution", "无")
++        current = row.get("current_turn_intent") or {}
++        close_over = current.get("is_close_or_thanks") and pred_rs != "无"
++        ack_over = current.get("is_ack_only") and pred_rs != "无"
++        transfer_over = current.get("is_transfer_only") and pred_rs != "无"
++        over_trigger = _strong(pred_agree) and not _strong(row.get("oracle_dialogue_agree_solution", "无"))
++        item = {
++            "sample_id": row["sample_id"],
++            "scene": row.get("scene"),
++            "oracle_rule_id": row.get("oracle_rule_id"),
++            "gold_response_solution": gold_rs,
++            "oracle_response_solution": oracle_rs,
++            "pred_response_solution": pred_rs,
++            "pred_dialogue_agree_solution": pred_agree,
++            "gold_response_exact": pred_rs == gold_rs,
++            "gold_response_canonical": relation(pred_rs, gold_rs) in {"same", "canonical_same"},
++            "oracle_response_exact": pred_rs == oracle_rs,
++            "oracle_response_canonical": relation(pred_rs, oracle_rs) in {"same", "canonical_same"},
++            "close_over_action": bool(close_over),
++            "ack_over_action": bool(ack_over),
++            "transfer_over_action": bool(transfer_over),
++            "dialogue_agree_over_trigger": bool(over_trigger),
++        }
++        out.append(item)
++        for key in ["gold_response_exact", "gold_response_canonical", "oracle_response_exact", "oracle_response_canonical", "close_over_action", "ack_over_action", "transfer_over_action", "dialogue_agree_over_trigger"]:
++            c[key] += int(item[key])
++            by_rule[row.get("oracle_rule_id", "")][key] += int(item[key])
++        c["total"] += 1
++        by_rule[row.get("oracle_rule_id", "")]["total"] += 1
++    return out, c, by_rule
++
++
++def main() -> None:
++    parser = argparse.ArgumentParser()
++    parser.add_argument("--stable-oracle", required=True)
++    parser.add_argument("--challenge-oracle", required=True)
++    parser.add_argument("--model-outputs", required=True)
++    parser.add_argument("--output", default="flow_skill_policy_v21/replay/replay_eval_result_v21.jsonl")
++    parser.add_argument("--report", default="flow_skill_policy_v21/replay/replay_eval_report_v21.md")
++    args = parser.parse_args()
++    stable = list(read_jsonl(Path(args.stable_oracle)))
++    challenge = list(read_jsonl(Path(args.challenge_oracle)))
++    outputs = _load_outputs(Path(args.model_outputs))
++    if not outputs:
++        Path(args.output).parent.mkdir(parents=True, exist_ok=True)
++        Path(args.output).write_text("", encoding="utf-8")
++        Path(args.report).write_text("# Replay Eval Report v21\n\nNo model outputs provided. Main metrics will run on stable replay only when outputs are available.\n", encoding="utf-8")
++        return
++    stable_eval, stable_c, by_rule = _eval_rows(stable, outputs)
++    challenge_eval, challenge_c, _ = _eval_rows(challenge, outputs)
++    write_jsonl(Path(args.output), stable_eval + challenge_eval)
++    total = stable_c["total"] or 1
++    lines = [
++        "# Replay Eval Report v21",
++        "",
++        "Main metrics use stable replay only. Challenge replay is reported separately.",
++        "",
++        f"- stable_total: `{stable_c['total']}`",
++        f"- stable_gold_exact: `{stable_c['gold_response_exact']/total:.4f}`",
++        f"- stable_oracle_canonical: `{stable_c['oracle_response_canonical']/total:.4f}`",
++        f"- close_over_action_rate: `{stable_c['close_over_action']/total:.4f}`",
++        f"- ack_over_action_rate: `{stable_c['ack_over_action']/total:.4f}`",
++        f"- transfer_over_action_rate: `{stable_c['transfer_over_action']/total:.4f}`",
++        f"- dialogue_agree_over_trigger_rate: `{stable_c['dialogue_agree_over_trigger']/total:.4f}`",
++        f"- challenge_total: `{challenge_c['total']}`",
++        "",
++        "## By Oracle Rule (stable)",
++    ]
++    for rule, counter in sorted(by_rule.items(), key=lambda kv: kv[1]["total"], reverse=True)[:50]:
++        t = counter["total"] or 1
++        lines.append(f"- `{rule}` total=`{counter['total']}` oracle_canonical=`{counter['oracle_response_canonical']/t:.3f}` close_over=`{counter['close_over_action']/t:.3f}` ack_over=`{counter['ack_over_action']/t:.3f}`")
++    Path(args.report).write_text("\n".join(lines) + "\n", encoding="utf-8")
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/flow_skill_policy_v21/replay/replay_eval_report_v21.md b/flow_skill_policy_v21/replay/replay_eval_report_v21.md
+new file mode 100644
+index 0000000..e516ff9
+--- /dev/null
++++ b/flow_skill_policy_v21/replay/replay_eval_report_v21.md
+@@ -0,0 +1,3 @@
++# Replay Eval Report v21
++
++No model outputs provided. Main metrics will run on stable replay only when outputs are available.
+diff --git a/flow_skill_policy_v21/skills/fulfillment_delivery_policy_v21/README.md b/flow_skill_policy_v21/skills/fulfillment_delivery_policy_v21/README.md
+new file mode 100644
+index 0000000..770f58f
+--- /dev/null
++++ b/flow_skill_policy_v21/skills/fulfillment_delivery_policy_v21/README.md
+@@ -0,0 +1,6 @@
++# fulfillment_delivery_policy_v21
++
++- scene: `履约场景-配送问题`
++- oracle_cases: `121`
++- eval_cases: `121`
++- recommendation: 建议进入模型 replay。
+diff --git a/flow_skill_policy_v21/skills/fulfillment_delivery_policy_v21/checker_rules.md b/flow_skill_policy_v21/skills/fulfillment_delivery_policy_v21/checker_rules.md
+new file mode 100644
+index 0000000..9f9cce9
+--- /dev/null
++++ b/flow_skill_policy_v21/skills/fulfillment_delivery_policy_v21/checker_rules.md
+@@ -0,0 +1,5 @@
++# Checker Rules v21
++
++- close/thanks/ack-only/transfer-only 无 pending strong solution 时不得输出动作。
++- strong confirmation 方案的 DialogueAgreeSolution 必须有 pending strong solution + 当前确认。
++- 所有动作必须由当前最后一条用户消息触发，不得由历史关键词单独触发。
+diff --git a/flow_skill_policy_v21/skills/fulfillment_delivery_policy_v21/skill.json b/flow_skill_policy_v21/skills/fulfillment_delivery_policy_v21/skill.json
+new file mode 100644
+index 0000000..ce7ff2d
+--- /dev/null
++++ b/flow_skill_policy_v21/skills/fulfillment_delivery_policy_v21/skill.json
+@@ -0,0 +1,96 @@
++{
++  "skill_id": "fulfillment_delivery_policy_v21",
++  "scene": "履约场景-配送问题",
++  "version": "v2.1-current-turn-gated",
++  "purpose": "约束流程动作，不优化话术",
++  "entry_conditions": [
++    "问题场景 == 履约场景-配送问题"
++  ],
++  "current_turn_gating": "只有当前最后一条用户消息仍表达对应诉求时才触发动作；感谢/结束/弱确认无 pending 时 ResponseSolution=无。",
++  "solution_policy": {
++    "strong_confirmation_required": [
++      "取消订单",
++      "小象单商品退款-xx%",
++      "小象整单申请退款",
++      "操作赔付-优惠券-xx元",
++      "操作赔付-运费券-3元",
++      "会员卡退款"
++    ],
++    "user_request_is_enough": [
++      "外呼骑手-xx",
++      "再次外呼骑手-xx",
++      "催促退款审核",
++      "加急催促退款审核"
++    ],
++    "no_confirmation_required": [
++      "系统催单",
++      "加急调度",
++      "智能跟单",
++      "选择商品",
++      "发送送达图片",
++      "引导自助联系骑手"
++    ]
++  },
++  "action_rules": [
++    {
++      "rule_id": "FD-OTHER",
++      "support_in_oracle": 53
++    },
++    {
++      "rule_id": "FD-04",
++      "support_in_oracle": 1
++    },
++    {
++      "rule_id": "FD-03",
++      "support_in_oracle": 17
++    },
++    {
++      "rule_id": "FD-11",
++      "support_in_oracle": 2
++    },
++    {
++      "rule_id": "FD-10",
++      "support_in_oracle": 4
++    },
++    {
++      "rule_id": "FD-CLARIFY_OR_TRANSFER",
++      "support_in_oracle": 8
++    },
++    {
++      "rule_id": "FD-05A",
++      "support_in_oracle": 6
++    },
++    {
++      "rule_id": "FD-02",
++      "support_in_oracle": 1
++    },
++    {
++      "rule_id": "FD-07",
++      "support_in_oracle": 2
++    },
++    {
++      "rule_id": "FD-CONFIRM",
++      "support_in_oracle": 5
++    },
++    {
++      "rule_id": "FD-09",
++      "support_in_oracle": 1
++    }
++  ],
++  "guard_rules": [
++    "不可赔付不得赔付",
++    "已赔付不得再次主动赔",
++    "不可取消不得取消",
++    "未选商品不得单商品退款",
++    "强确认方案必须有 pending + 当前确认才填 DialogueAgreeSolution"
++  ],
++  "evidence": {
++    "oracle_cases": 121,
++    "stable_same_or_canonical": 71
++  },
++  "open_questions_for_trainer": [
++    "current-turn gating 是否过严，是否会漏掉用户简短追问？",
++    "first_offer 取赔付区间下限是否符合训练师口径？",
++    "弱确认词是否只在 pending strong solution 时才执行？"
++  ]
++}
+\ No newline at end of file
+diff --git a/flow_skill_policy_v21/skills/fulfillment_delivery_policy_v21/skill_prompt.md b/flow_skill_policy_v21/skills/fulfillment_delivery_policy_v21/skill_prompt.md
+new file mode 100644
+index 0000000..5c8c3b5
+--- /dev/null
++++ b/flow_skill_policy_v21/skills/fulfillment_delivery_policy_v21/skill_prompt.md
+@@ -0,0 +1,11 @@
++【履约配送流程规则 v21】
++只有当前最后一条用户消息仍表达对应诉求时，才触发动作；如果用户当前只是感谢、结束语、弱确认且没有待确认方案，ResponseSolution 应为“无”。
++1. 先读信号：订单状态、是否配送单、骑手状态、是否超时/有超时风险、是否可取消、是否可赔付、是否已赔付、赔付金额、骑手手机号。
++2. 当前用户只是问 ETA，订单履约中，未超时且无超时风险，骑手不是无骑手/待接单：ResponseSolution=无，只告知预计时间，不承诺一定准时。
++3. 当前用户询问 ETA / 催接单 / 催配送，且骑手无接单、创建履约单、已推配送或待接单时，优先 ResponseSolution=加急调度。
++4. 当前明确催配送，或 ETA 咨询同时存在超时/超时风险，且系统催单可执行：ResponseSolution=系统催单。
++5. 当前用户想联系骑手且骑手已接单/配送中：未明确要求客服外呼时优先引导自助联系骑手；明确“帮我问骑手/客服帮忙打电话”时可外呼骑手。外呼类不要求 DialogueAgreeSolution。
++6. 当前要求取消且可取消：ResponseSolution=取消订单，DialogueAgreeSolution 仍为“无”；只有存在上一轮待确认取消且当前明确同意时，DialogueAgreeSolution=取消订单。不可取消时禁止取消订单。
++7. 当前要求赔付/强烈不满且可赔、未赔、金额在区间内时，才可提出赔付；first_offer 取信号区间下限。只有 pending 赔付方案被当前确认时，DialogueAgreeSolution 才非空。
++8. 上一轮已催单/加急/外呼后，当前仍说“继续帮我盯着/还没到/别忘了”才可智能跟单；当前结束语不跟单。
++9. ResponseSolution=无 的合理原因：普通 ETA、感谢/结束语、弱确认无 pending、只转人工无具体诉求、状态解释、不可取消/不可赔的解释。
+diff --git a/flow_skill_policy_v21/skills/receipt_quality_policy_v21/README.md b/flow_skill_policy_v21/skills/receipt_quality_policy_v21/README.md
+new file mode 100644
+index 0000000..29f22e9
+--- /dev/null
++++ b/flow_skill_policy_v21/skills/receipt_quality_policy_v21/README.md
+@@ -0,0 +1,6 @@
++# receipt_quality_policy_v21
++
++- scene: `收货场景-品质问题`
++- oracle_cases: `120`
++- eval_cases: `120`
++- recommendation: 建议先离线 replay + 训练师校准。
+diff --git a/flow_skill_policy_v21/skills/receipt_quality_policy_v21/checker_rules.md b/flow_skill_policy_v21/skills/receipt_quality_policy_v21/checker_rules.md
+new file mode 100644
+index 0000000..9f9cce9
+--- /dev/null
++++ b/flow_skill_policy_v21/skills/receipt_quality_policy_v21/checker_rules.md
+@@ -0,0 +1,5 @@
++# Checker Rules v21
++
++- close/thanks/ack-only/transfer-only 无 pending strong solution 时不得输出动作。
++- strong confirmation 方案的 DialogueAgreeSolution 必须有 pending strong solution + 当前确认。
++- 所有动作必须由当前最后一条用户消息触发，不得由历史关键词单独触发。
+diff --git a/flow_skill_policy_v21/skills/receipt_quality_policy_v21/skill.json b/flow_skill_policy_v21/skills/receipt_quality_policy_v21/skill.json
+new file mode 100644
+index 0000000..2f15f65
+--- /dev/null
++++ b/flow_skill_policy_v21/skills/receipt_quality_policy_v21/skill.json
+@@ -0,0 +1,80 @@
++{
++  "skill_id": "receipt_quality_policy_v21",
++  "scene": "收货场景-品质问题",
++  "version": "v2.1-current-turn-gated",
++  "purpose": "约束流程动作，不优化话术",
++  "entry_conditions": [
++    "问题场景 == 收货场景-品质问题"
++  ],
++  "current_turn_gating": "只有当前最后一条用户消息仍表达对应诉求时才触发动作；感谢/结束/弱确认无 pending 时 ResponseSolution=无。",
++  "solution_policy": {
++    "strong_confirmation_required": [
++      "取消订单",
++      "小象单商品退款-xx%",
++      "小象整单申请退款",
++      "操作赔付-优惠券-xx元",
++      "操作赔付-运费券-3元",
++      "会员卡退款"
++    ],
++    "user_request_is_enough": [
++      "外呼骑手-xx",
++      "再次外呼骑手-xx",
++      "催促退款审核",
++      "加急催促退款审核"
++    ],
++    "no_confirmation_required": [
++      "系统催单",
++      "加急调度",
++      "智能跟单",
++      "选择商品",
++      "发送送达图片",
++      "引导自助联系骑手"
++    ]
++  },
++  "action_rules": [
++    {
++      "rule_id": "RQ-OTHER",
++      "support_in_oracle": 45
++    },
++    {
++      "rule_id": "RQ-CLARIFY_OR_TRANSFER",
++      "support_in_oracle": 5
++    },
++    {
++      "rule_id": "RQ-01",
++      "support_in_oracle": 16
++    },
++    {
++      "rule_id": "RQ-02",
++      "support_in_oracle": 8
++    },
++    {
++      "rule_id": "RQ-08",
++      "support_in_oracle": 9
++    },
++    {
++      "rule_id": "RQ-CONFIRM",
++      "support_in_oracle": 21
++    },
++    {
++      "rule_id": "RQ-11",
++      "support_in_oracle": 2
++    }
++  ],
++  "guard_rules": [
++    "不可赔付不得赔付",
++    "已赔付不得再次主动赔",
++    "不可取消不得取消",
++    "未选商品不得单商品退款",
++    "强确认方案必须有 pending + 当前确认才填 DialogueAgreeSolution"
++  ],
++  "evidence": {
++    "oracle_cases": 120,
++    "stable_same_or_canonical": 75
++  },
++  "open_questions_for_trainer": [
++    "current-turn gating 是否过严，是否会漏掉用户简短追问？",
++    "first_offer 取赔付区间下限是否符合训练师口径？",
++    "弱确认词是否只在 pending strong solution 时才执行？"
++  ]
++}
+\ No newline at end of file
+diff --git a/flow_skill_policy_v21/skills/receipt_quality_policy_v21/skill_prompt.md b/flow_skill_policy_v21/skills/receipt_quality_policy_v21/skill_prompt.md
+new file mode 100644
+index 0000000..a8c5c1c
+--- /dev/null
++++ b/flow_skill_policy_v21/skills/receipt_quality_policy_v21/skill_prompt.md
+@@ -0,0 +1,10 @@
++【收货品质流程规则 v21】
++只有当前最后一条用户消息仍表达对应诉求时，才触发动作；如果用户当前只是感谢、结束语、弱确认且没有待确认方案，ResponseSolution 应为“无”。
++1. 先读信号：是否已选商品、商品退款状态、订单是否超售后、图片凭证、退款原因、退款比例、退款数量、退款状态、是否可赔、是否已赔、赔付金额。
++2. 未选商品时，不要用聚合商品退款状态判断不可退；当前仍有品质/退款诉求且未选商品，ResponseSolution=选择商品。
++3. 只有订单明确超售后，或已选商品明确不可退，才进入不可退款 guard；此时 ResponseSolution=无，解释政策/不可退原因。
++4. 当前仍在推进品质退款且已选商品但缺图片：ResponseSolution=无，要求上传图片；缺退款原因则追问原因；缺退款比例则追问/确认比例；多数量缺退款数量则追问数量。
++5. 退款进行中/审核中/银行处理中，且当前明确问退款进度或催退款时，才输出催促退款审核;退审跟单；普通质量描述、结束语、弱确认不触发催审。
++6. 前置满足且当前仍有退款/品质诉求，可提出小象单商品退款-xx%；未确认前 DialogueAgreeSolution=无。只有 pending 退款方案被当前明确同意时，DialogueAgreeSolution 才填退款方案。
++7. 当前要求赔付/强烈不满，且可赔、未赔、金额不超过上限时才可提出赔付；first_offer 取信号区间下限。只有 pending 赔付被当前确认时 DialogueAgreeSolution 才非空。
++8. 已赔或不可赔时禁止赔付。ResponseSolution=无 的合理原因：结束语、弱确认无 pending、转人工无具体诉求、缺图片/原因/比例/数量、退款已完成解释、不可退政策解释。

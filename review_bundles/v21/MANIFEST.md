@@ -1,0 +1,56 @@
+# MANIFEST
+
+## GPT 必看
+- `README_FOR_GPT.md`
+- `flow_skill_policy_v21/README_REPORT.md`
+- `flow_skill_policy_v21/outputs/reports/fulfillment_delivery_policy_v21_report.md`
+- `flow_skill_policy_v21/outputs/reports/receipt_quality_policy_v21_report.md`
+- `flow_skill_policy_v21/outputs/reports/replay_sets_v21_report.md`
+- `flow_skill_policy_v21/skills/*/skill_prompt.md`
+- `review_samples/*`
+- `code/PATCH.diff`
+
+- total_files: `41`
+- missing_files_count: `0`
+
+- `MISSING_FILES.md`: `10B`
+- `README_FOR_GPT.md`: `1.9KB`
+- `code/PATCH.diff`: `194.3KB`
+- `code/changed_files_manifest.md`: `4.1KB`
+- `code/py_compile_log.txt`: `45B`
+- `code/run_log.txt`: `581B`
+- `flow_skill_policy_v21/README_REPORT.md`: `2.3KB`
+- `flow_skill_policy_v21/outputs/reports/eligibility_engine_v21_report.md`: `3.7KB`
+- `flow_skill_policy_v21/outputs/reports/fulfillment_delivery_policy_v21_report.md`: `678B`
+- `flow_skill_policy_v21/outputs/reports/receipt_quality_policy_v21_report.md`: `519B`
+- `flow_skill_policy_v21/outputs/reports/replay_sets_v21_report.md`: `1.2KB`
+- `flow_skill_policy_v21/outputs/trainer_review_pack/close_ack_fixed_sample.md`: `9.9KB`
+- `flow_skill_policy_v21/outputs/trainer_review_pack/current_turn_gating_questions.md`: `244B`
+- `flow_skill_policy_v21/outputs/trainer_review_pack/fulfillment_delivery_conflicts_v21_sample.md`: `19.9KB`
+- `flow_skill_policy_v21/outputs/trainer_review_pack/policy_questions_v21.md`: `200B`
+- `flow_skill_policy_v21/outputs/trainer_review_pack/receipt_quality_conflicts_v21_sample.md`: `19.3KB`
+- `flow_skill_policy_v21/outputs/trainer_review_pack/rq01_fixed_sample.md`: `980B`
+- `flow_skill_policy_v21/outputs/trainer_review_pack/v2_fixed_sample.md`: `15.0KB`
+- `flow_skill_policy_v21/replay/evaluate_replay_outputs_v21.py`: `5.6KB`
+- `flow_skill_policy_v21/replay/fulfillment_delivery_challenge_replay.jsonl`: `644.0KB` lines=`50`
+- `flow_skill_policy_v21/replay/fulfillment_delivery_oracle_v21.jsonl`: `1.6MB` lines=`121`
+- `flow_skill_policy_v21/replay/fulfillment_delivery_stable_replay.jsonl`: `945.3KB` lines=`71`
+- `flow_skill_policy_v21/replay/receipt_quality_challenge_replay.jsonl`: `658.9KB` lines=`45`
+- `flow_skill_policy_v21/replay/receipt_quality_oracle_v21.jsonl`: `1.7MB` lines=`120`
+- `flow_skill_policy_v21/replay/receipt_quality_stable_replay.jsonl`: `1.0MB` lines=`75`
+- `flow_skill_policy_v21/skills/fulfillment_delivery_policy_v21/README.md`: `161B`
+- `flow_skill_policy_v21/skills/fulfillment_delivery_policy_v21/checker_rules.md`: `320B`
+- `flow_skill_policy_v21/skills/fulfillment_delivery_policy_v21/eval_cases.jsonl`: `70.0KB` lines=`121`
+- `flow_skill_policy_v21/skills/fulfillment_delivery_policy_v21/skill.json`: `2.4KB`
+- `flow_skill_policy_v21/skills/fulfillment_delivery_policy_v21/skill_prompt.md`: `1.9KB`
+- `flow_skill_policy_v21/skills/receipt_quality_policy_v21/README.md`: `171B`
+- `flow_skill_policy_v21/skills/receipt_quality_policy_v21/checker_rules.md`: `320B`
+- `flow_skill_policy_v21/skills/receipt_quality_policy_v21/eval_cases.jsonl`: `74.8KB` lines=`120`
+- `flow_skill_policy_v21/skills/receipt_quality_policy_v21/skill.json`: `2.1KB`
+- `flow_skill_policy_v21/skills/receipt_quality_policy_v21/skill_prompt.md`: `1.8KB`
+- `review_samples/case_records_matched_sample.jsonl`: `1.7MB` lines=`165`
+- `review_samples/close_ack_overaction_fixed_sample.jsonl`: `959.1KB` lines=`37`
+- `review_samples/flow_states_matched_sample.jsonl`: `1.1MB` lines=`165`
+- `review_samples/rq01_fixed_sample.jsonl`: `68.9KB` lines=`2`
+- `review_samples/v21_remaining_conflicts_sample.jsonl`: `1.3MB` lines=`95`
+- `review_samples/v2_vs_v21_fixed_samples.jsonl`: `1.8MB` lines=`68`

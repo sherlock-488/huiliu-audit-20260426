@@ -1,0 +1,96 @@
+{
+  "skill_id": "fulfillment_delivery_policy_v21",
+  "scene": "履约场景-配送问题",
+  "version": "v2.1-current-turn-gated",
+  "purpose": "约束流程动作，不优化话术",
+  "entry_conditions": [
+    "问题场景 == 履约场景-配送问题"
+  ],
+  "current_turn_gating": "只有当前最后一条用户消息仍表达对应诉求时才触发动作；感谢/结束/弱确认无 pending 时 ResponseSolution=无。",
+  "solution_policy": {
+    "strong_confirmation_required": [
+      "取消订单",
+      "小象单商品退款-xx%",
+      "小象整单申请退款",
+      "操作赔付-优惠券-xx元",
+      "操作赔付-运费券-3元",
+      "会员卡退款"
+    ],
+    "user_request_is_enough": [
+      "外呼骑手-xx",
+      "再次外呼骑手-xx",
+      "催促退款审核",
+      "加急催促退款审核"
+    ],
+    "no_confirmation_required": [
+      "系统催单",
+      "加急调度",
+      "智能跟单",
+      "选择商品",
+      "发送送达图片",
+      "引导自助联系骑手"
+    ]
+  },
+  "action_rules": [
+    {
+      "rule_id": "FD-OTHER",
+      "support_in_oracle": 53
+    },
+    {
+      "rule_id": "FD-04",
+      "support_in_oracle": 1
+    },
+    {
+      "rule_id": "FD-03",
+      "support_in_oracle": 17
+    },
+    {
+      "rule_id": "FD-11",
+      "support_in_oracle": 2
+    },
+    {
+      "rule_id": "FD-10",
+      "support_in_oracle": 4
+    },
+    {
+      "rule_id": "FD-CLARIFY_OR_TRANSFER",
+      "support_in_oracle": 8
+    },
+    {
+      "rule_id": "FD-05A",
+      "support_in_oracle": 6
+    },
+    {
+      "rule_id": "FD-02",
+      "support_in_oracle": 1
+    },
+    {
+      "rule_id": "FD-07",
+      "support_in_oracle": 2
+    },
+    {
+      "rule_id": "FD-CONFIRM",
+      "support_in_oracle": 5
+    },
+    {
+      "rule_id": "FD-09",
+      "support_in_oracle": 1
+    }
+  ],
+  "guard_rules": [
+    "不可赔付不得赔付",
+    "已赔付不得再次主动赔",
+    "不可取消不得取消",
+    "未选商品不得单商品退款",
+    "强确认方案必须有 pending + 当前确认才填 DialogueAgreeSolution"
+  ],
+  "evidence": {
+    "oracle_cases": 121,
+    "stable_same_or_canonical": 71
+  },
+  "open_questions_for_trainer": [
+    "current-turn gating 是否过严，是否会漏掉用户简短追问？",
+    "first_offer 取赔付区间下限是否符合训练师口径？",
+    "弱确认词是否只在 pending strong solution 时才执行？"
+  ]
+}
