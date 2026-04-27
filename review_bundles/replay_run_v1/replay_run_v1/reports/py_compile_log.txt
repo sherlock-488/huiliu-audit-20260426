@@ -1,0 +1,2 @@
+$ python3 -m py_compile replay_run_v1/evaluate_replay_outputs_v23.py replay_run_v1/compare_baseline_skill.py replay_run_v1/run_model_replay.py replay_run_v1/current_turn_patch.py
+exit_code=0

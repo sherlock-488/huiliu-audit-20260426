@@ -1,0 +1,23 @@
+{
+  "MODEL_NAME": "",
+  "API_ENDPOINT": false,
+  "INTERNAL_COMMAND": false,
+  "runs": [
+    {
+      "input_path": "replay_run_v1/inputs/FD_BASELINE_INPUTS.jsonl",
+      "output_path": "replay_run_v1/model_outputs/FD_BASELINE_OUTPUTS.jsonl",
+      "input_exists": true,
+      "input_rows": 121,
+      "would_call_model": false,
+      "model_configured": false
+    },
+    {
+      "input_path": "replay_run_v1/inputs/FD_SKILL_INPUTS.jsonl",
+      "output_path": "replay_run_v1/model_outputs/FD_SKILL_OUTPUTS.jsonl",
+      "input_exists": true,
+      "input_rows": 121,
+      "would_call_model": false,
+      "model_configured": false
+    }
+  ]
+}
