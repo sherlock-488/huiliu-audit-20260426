@@ -1,0 +1,1177 @@
+{
+  "level_summary": {
+    "strong_confirmation_required": {
+      "solutions": 6,
+      "response_count": 2076,
+      "agree_count": 825
+    },
+    "no_confirmation_required": {
+      "solutions": 18,
+      "response_count": 1415,
+      "agree_count": 0
+    },
+    "user_request_is_enough": {
+      "solutions": 6,
+      "response_count": 471,
+      "agree_count": 88
+    },
+    "unclear": {
+      "solutions": 1,
+      "response_count": 1,
+      "agree_count": 0
+    }
+  },
+  "solutions": [
+    {
+      "solution_name": "小象单商品退款-xx%",
+      "requires_confirmation_level": "strong_confirmation_required",
+      "response_count": 992,
+      "agree_count": 422,
+      "agree_rate": 0.4254,
+      "matched_previous_or_current_or_recent3": 422,
+      "matched_user_request_count": 0,
+      "unmatched_count": 0,
+      "warning_count": 112,
+      "evidence_examples": [
+        {
+          "sample_id": "a755499729dfca2fcced951092a105d65e82f375",
+          "scene": "收货场景-退款问题诉求",
+          "last_user_query": "我要全额退",
+          "match_type": "current"
+        },
+        {
+          "sample_id": "4658eb80ee3c549222fe8adfd157f8fa981d1e71",
+          "scene": "收货场景-退款问题",
+          "last_user_query": "可以",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "c896adecdc18cfe86520d8b6d62cd6f5deedb0cd",
+          "scene": "收货场景-错送问题",
+          "last_user_query": "一半吧",
+          "match_type": "current"
+        },
+        {
+          "sample_id": "911acef1389ed325adfa16b213078510234ae4ba",
+          "scene": "收货场景-错送问题",
+          "last_user_query": "不能换，就退你说的50%吧，牛奶也能喝",
+          "match_type": "current"
+        },
+        {
+          "sample_id": "8797548c7d7443880656fe11c005a1e75bd30329",
+          "scene": "收货场景-错送问题",
+          "last_user_query": "可以给我退了吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "25104ab7cc1b92fe43ba9f02619469b8706e1dfa",
+          "scene": "收货场景-错送问题",
+          "last_user_query": "好吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "1a7ca5bb42ba33707e2f0fb85bde51ef0236eea4",
+          "scene": "收货场景-错送问题",
+          "last_user_query": "好吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "adc1511519618f3838825f9b622f835a789a81a7",
+          "scene": "收货场景-错送问题",
+          "last_user_query": "行",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "57c7f38717badfde8d9a4df4668e4f6350523fbc",
+          "scene": "收货场景-错送问题",
+          "last_user_query": "给我全额退",
+          "match_type": "current"
+        },
+        {
+          "sample_id": "c237019c901f8588f466205ffdf50a1e161e8eb2",
+          "scene": "收货场景-错送问题",
+          "last_user_query": "不行，怎么也得给我退一半吧",
+          "match_type": "previous"
+        }
+      ],
+      "notes": [],
+      "needs_trainer_confirmation": false
+    },
+    {
+      "solution_name": "操作赔付-优惠券-xx元",
+      "requires_confirmation_level": "strong_confirmation_required",
+      "response_count": 566,
+      "agree_count": 190,
+      "agree_rate": 0.3357,
+      "matched_previous_or_current_or_recent3": 190,
+      "matched_user_request_count": 0,
+      "unmatched_count": 0,
+      "warning_count": 11,
+      "evidence_examples": [
+        {
+          "sample_id": "56a2a65b4cd2464ae77033c5933a5bc174ba23db",
+          "scene": "履约场景-配送问题",
+          "last_user_query": "行吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "1a684a703b22831654d46cc6611945f29812cb9a",
+          "scene": "履约场景-配送问题",
+          "last_user_query": "嗯",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "dce1f4a1adf87edf0997686710d6d506f1c3c81c",
+          "scene": "履约场景-配送问题",
+          "last_user_query": "行吧行吧，15就15吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "50ddb828fba700f9df7d2f58f62b1b82ef9aec4b",
+          "scene": "履约场景-配送问题",
+          "last_user_query": "行吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "03b1b7a8a30de917956d7dd165fdfef06a2a5844",
+          "scene": "履约场景-配送问题",
+          "last_user_query": "那行吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "cb5e2eddfb48f224081443c26296105d2b2bab94",
+          "scene": "履约场景-配送问题",
+          "last_user_query": "算了算了，你赔吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "597331f09e5f8d35febd0b26b908996d95995661",
+          "scene": "履约场景-配送问题",
+          "last_user_query": "行吧，这还差不多",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "76b6b1fc34676a7bb2a12dc996f203a7aab26145",
+          "scene": "履约场景-配送问题",
+          "last_user_query": "可以",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "5a006c4625bf489b979621bb895ad5904b0dab72",
+          "scene": "履约场景-配送问题",
+          "last_user_query": "可以",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "fdc84308c81a808e781917b743dec2645fc14c8b",
+          "scene": "履约场景-配送问题",
+          "last_user_query": "好吧，可以",
+          "match_type": "current"
+        }
+      ],
+      "notes": [],
+      "needs_trainer_confirmation": false
+    },
+    {
+      "solution_name": "取消订单",
+      "requires_confirmation_level": "strong_confirmation_required",
+      "response_count": 343,
+      "agree_count": 132,
+      "agree_rate": 0.3848,
+      "matched_previous_or_current_or_recent3": 132,
+      "matched_user_request_count": 0,
+      "unmatched_count": 0,
+      "warning_count": 28,
+      "evidence_examples": [
+        {
+          "sample_id": "c50febd367dd33ab1f97751ae98a39a2f8e1c8ab",
+          "scene": "履约场景-配送问题",
+          "last_user_query": "行，取消吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "6910e26f5cd5f2e305ac16be0a35d439eb25ce46",
+          "scene": "履约场景-配送问题",
+          "last_user_query": "那取消吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "6fcd3bd2ab639a4b9f2285e743596946b78b4783",
+          "scene": "收货场景-品质问题",
+          "last_user_query": "可以",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "1f865b3bf8c6f7d7a1bf518e3f10fd71f650eec8",
+          "scene": "收货场景-品质问题",
+          "last_user_query": "好的",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "1a21f3726077c303f3b7e71337bd575fc1f6fb27",
+          "scene": "收货场景-品质问题",
+          "last_user_query": "好的",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "4f639e1d4799fe3ef2aceb8ce1a2c55153f2f81f",
+          "scene": "收货场景-品质问题",
+          "last_user_query": "噢噢，好的，你帮我取消吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "bd4b24b4fe1f21cdb59b43551f80bdbc5e4bbc21",
+          "scene": "收货场景-品质问题",
+          "last_user_query": "那取消吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "b6c7821b303b1d4bed4b963bfec5a64ae15e4eac",
+          "scene": "收货场景-品质问题",
+          "last_user_query": "取消吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "b9b042b853ebcc28b92481d18e855fcdbf89d5a0",
+          "scene": "收货场景-品质问题",
+          "last_user_query": "取消吧",
+          "match_type": "current"
+        },
+        {
+          "sample_id": "cb10aa75e9325f6d11986a94aec29a15d9fdaf61",
+          "scene": "履约场景-配送问题",
+          "last_user_query": "怎么这么慢啊，我要出门了，给我取消订单吧",
+          "match_type": "current"
+        }
+      ],
+      "notes": [],
+      "needs_trainer_confirmation": false
+    },
+    {
+      "solution_name": "外呼骑手-xx",
+      "requires_confirmation_level": "user_request_is_enough",
+      "response_count": 166,
+      "agree_count": 69,
+      "agree_rate": 0.4157,
+      "matched_previous_or_current_or_recent3": 69,
+      "matched_user_request_count": 0,
+      "unmatched_count": 0,
+      "warning_count": 0,
+      "evidence_examples": [
+        {
+          "sample_id": "2ba867c287e25f9111d898bd14688ed8f671a5ff",
+          "scene": "收货场景-错送问题",
+          "last_user_query": "可",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "dfa4317991fdc463c39697fd1d6ffecbd6b0bc17",
+          "scene": "收货场景-错送问题",
+          "last_user_query": "东西没到",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "99023b42ab7c93133d76a61f4e63cb5e4e732e61",
+          "scene": "收货场景-错送问题",
+          "last_user_query": "嗯",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "651ca40a2aa18487a3e8eaf8fbf7683b06afe21c",
+          "scene": "收货场景-错送问题",
+          "last_user_query": "可以",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "7f705b9ef55344077cc1058ecbeb50fd28bd2644",
+          "scene": "收货场景-错送问题",
+          "last_user_query": "三四个小时了",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "5dfb5f553f1397695d615f281e74a273dc7508a6",
+          "scene": "收货场景-错送问题",
+          "last_user_query": "行",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "76ed9558419d898354861151ac6c6f877f0864ab",
+          "scene": "收货场景-错送问题",
+          "last_user_query": "可以的",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "e88011e55166d0bdef64cea0d01d59eb022ed0ad",
+          "scene": "收货场景-错送问题",
+          "last_user_query": "好的",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "9a7edca07bee72f8de0fbeb7b6a6dd1aee3952cf",
+          "scene": "收货场景-错送问题",
+          "last_user_query": "可以",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "c6e9832c800d69191f4795401c5bed049a715f3a",
+          "scene": "收货场景-错送问题",
+          "last_user_query": "行，麻烦快点吧",
+          "match_type": "previous"
+        }
+      ],
+      "notes": [],
+      "needs_trainer_confirmation": false
+    },
+    {
+      "solution_name": "会员卡退款",
+      "requires_confirmation_level": "strong_confirmation_required",
+      "response_count": 105,
+      "agree_count": 48,
+      "agree_rate": 0.4571,
+      "matched_previous_or_current_or_recent3": 48,
+      "matched_user_request_count": 0,
+      "unmatched_count": 0,
+      "warning_count": 26,
+      "evidence_examples": [
+        {
+          "sample_id": "6b40637b8fe27e243291f678a2f3c3d092ad4a21",
+          "scene": "售前场景-商品咨询问题",
+          "last_user_query": "可以，你帮我退了吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "873c65582107502d12687c06d6316d52a951be37",
+          "scene": "收货场景-差价问题诉求",
+          "last_user_query": "好的，退吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "d4aa19359b1486749c8c9f533f08a7e44a7a9176",
+          "scene": "售前场景-业务咨询问题",
+          "last_user_query": "需要",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "eb0d807121c4c4ccae2425b48df009763a2ba7eb",
+          "scene": "活动场景-省钱卡问题诉求",
+          "last_user_query": "退吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "2559bca1351488b706613922cab56de62daca196",
+          "scene": "发票场景",
+          "last_user_query": "嗯退了吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "ca03d2beb2e1bae58fba7bf8cc066100313dfa4d",
+          "scene": "收货场景-品质问题",
+          "last_user_query": "好的",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "862e59b55d9c4934d3e33139f50340153699981a",
+          "scene": "收货场景-实描不符问题",
+          "last_user_query": "行吧退款吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "bd25668123f266781d76c4686aed5c23e2acd962",
+          "scene": "会员场景-开通问题",
+          "last_user_query": "是的，退吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "f64ad6ec692b39db546043da17f0c828d794247f",
+          "scene": "会员场景-开通问题诉求",
+          "last_user_query": "退了吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "16ea507a6bd384e7524b9bbc328cdd9fc8d425c1",
+          "scene": "会员场景-续费问题",
+          "last_user_query": "退，赶紧退了",
+          "match_type": "previous"
+        }
+      ],
+      "notes": [],
+      "needs_trainer_confirmation": false
+    },
+    {
+      "solution_name": "小象整单申请退款",
+      "requires_confirmation_level": "strong_confirmation_required",
+      "response_count": 55,
+      "agree_count": 27,
+      "agree_rate": 0.4909,
+      "matched_previous_or_current_or_recent3": 27,
+      "matched_user_request_count": 0,
+      "unmatched_count": 0,
+      "warning_count": 6,
+      "evidence_examples": [
+        {
+          "sample_id": "b013f9d0d588ca38416288a981d1d907d0a413fb",
+          "scene": "收货场景-错送问题",
+          "last_user_query": "好吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "5955b26dda852730f654cd39f94ac2a63111dc72",
+          "scene": "收货场景-错送问题",
+          "last_user_query": "先这样吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "0ea43e79e635de46d3abd1cbbf7bd5a830adda25",
+          "scene": "收货场景-错送问题",
+          "last_user_query": "行吧，真服了",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "91ad0401c09eb186aa0c2c958df8b5305e9373e9",
+          "scene": "收货场景-错送问题",
+          "last_user_query": "那行吧，只能这样了",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "4c783a6cbdbb0f5b96d3200751f5c16e769fe31f",
+          "scene": "收货场景-错送问题",
+          "last_user_query": "行，我填一下吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "3780072e9352a349fbd652474bf3080705624752",
+          "scene": "收货场景-错送问题",
+          "last_user_query": "给我退款",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "e5cd7b89492457341a06ba0b14dff12a4a25c349",
+          "scene": "履约场景-配送问题",
+          "last_user_query": "已经好几个小时了，退款吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "ae507fb63d33efa70a5fb962f9757333287a60b5",
+          "scene": "收货场景-错送问题",
+          "last_user_query": "行吧行吧，那你退吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "7e5d42c60ecab43dd02bd68640f59893cf7a9b96",
+          "scene": "收货场景-错送问题",
+          "last_user_query": "行，行",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "36039e2fe43eb4d123fd8ba307cf5c351c6a433d",
+          "scene": "收货场景-错送问题",
+          "last_user_query": "[白眼]",
+          "match_type": "previous"
+        }
+      ],
+      "notes": [],
+      "needs_trainer_confirmation": false
+    },
+    {
+      "solution_name": "催促退款审核",
+      "requires_confirmation_level": "user_request_is_enough",
+      "response_count": 158,
+      "agree_count": 11,
+      "agree_rate": 0.0696,
+      "matched_previous_or_current_or_recent3": 11,
+      "matched_user_request_count": 0,
+      "unmatched_count": 0,
+      "warning_count": 0,
+      "evidence_examples": [
+        {
+          "sample_id": "3fda30726dc18867f24e399bce4bac6a11fc4324",
+          "scene": "收货场景-退款问题诉求",
+          "last_user_query": "当然可以，快点",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "d6d5d53a5f8a596ae8054e7216d43530c4d05d6e",
+          "scene": "收货场景-退款问题诉求",
+          "last_user_query": "好的，谢谢",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "0e42491d7ae92f672c887ac98f635c10bd19920d",
+          "scene": "收货场景-退款问题",
+          "last_user_query": "快去快去，等多久了",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "db85174657fc59dc88e10cf54bd84ad42906a1a3",
+          "scene": "收货场景-退款问题",
+          "last_user_query": "需要，麻烦了",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "b80305aad2cca4e21070b5d4851e1d4f4bf70ea0",
+          "scene": "收货场景-退款问题",
+          "last_user_query": "帮我催促一下",
+          "match_type": "current"
+        },
+        {
+          "sample_id": "5e795149b00003c935bd5dd1921ed6b931d1f1d7",
+          "scene": "收货场景-退款问题",
+          "last_user_query": "可以的",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "9ec34141b8a9071ee3cc9a68936b237d3d09e33d",
+          "scene": "收货场景-退款问题",
+          "last_user_query": "行",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "7caab61119d3cde93233f772e59e3f134d5641f1",
+          "scene": "收货场景-退款问题",
+          "last_user_query": "嗯嗯",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "67e530ee4b94160fee14778a0cf72a5ad8d86886",
+          "scene": "收货场景-退款问题",
+          "last_user_query": "给我催下退款审核",
+          "match_type": "current"
+        },
+        {
+          "sample_id": "48340ff2f0146148e4888c928fcfbf4ffe89ab4d",
+          "scene": "收货场景-退款问题",
+          "last_user_query": "催，谢谢",
+          "match_type": "previous"
+        }
+      ],
+      "notes": [],
+      "needs_trainer_confirmation": false
+    },
+    {
+      "solution_name": "外呼门店-xx",
+      "requires_confirmation_level": "user_request_is_enough",
+      "response_count": 15,
+      "agree_count": 8,
+      "agree_rate": 0.5333,
+      "matched_previous_or_current_or_recent3": 8,
+      "matched_user_request_count": 0,
+      "unmatched_count": 0,
+      "warning_count": 0,
+      "evidence_examples": [
+        {
+          "sample_id": "0bf8ab6ba76f00651cf483e9633663c815561a20",
+          "scene": "履约场景-修改订单问题",
+          "last_user_query": "好的",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "e688e4366469cafab325f2b2a361ea5d733740f0",
+          "scene": "履约场景-修改订单问题",
+          "last_user_query": "麻烦你帮我联系商家说一下备注，我的啤酒都要常温的，不要冰的",
+          "match_type": "current"
+        },
+        {
+          "sample_id": "dcbec581992a40a6503bc402e3c88eaeb4a3b1a8",
+          "scene": "履约场景-修改订单问题",
+          "last_user_query": "好吧，麻烦了",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "a945b0b4230843bafa118dc236222691e2467c4f",
+          "scene": "履约场景-修改订单问题",
+          "last_user_query": "行",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "b6996c7f39a47c846898e11c5c9362e399f9b12d",
+          "scene": "履约场景-修改订单问题",
+          "last_user_query": "行",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "6eb0ec31f105fa4e3f3442532b3ea89543d7eda9",
+          "scene": "履约场景-修改订单问题",
+          "last_user_query": "可以",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "d37b5d56c08392e90a3b2d9807059a59d2b9fbde",
+          "scene": "履约场景-修改订单问题",
+          "last_user_query": "可以",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "8cff7c0c284d293a3f8e85f918f2b796f4a1cf49",
+          "scene": "履约场景-修改订单问题",
+          "last_user_query": "行，谢谢",
+          "match_type": "previous"
+        }
+      ],
+      "notes": [],
+      "needs_trainer_confirmation": false
+    },
+    {
+      "solution_name": "操作赔付-运费券-3元",
+      "requires_confirmation_level": "strong_confirmation_required",
+      "response_count": 15,
+      "agree_count": 6,
+      "agree_rate": 0.4,
+      "matched_previous_or_current_or_recent3": 6,
+      "matched_user_request_count": 0,
+      "unmatched_count": 0,
+      "warning_count": 2,
+      "evidence_examples": [
+        {
+          "sample_id": "fb3a9a8fba86cbbd6bfd31d4b6515ef62c205d3f",
+          "scene": "履约场景-修改订单问题",
+          "last_user_query": "我试试",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "3ef214c6770c0fb598e7403f66be9327534d7788",
+          "scene": "履约场景-修改订单问题",
+          "last_user_query": "可以",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "80a0a51b2bf12cfcc3d95755cd450ca42c17b13f",
+          "scene": "履约场景-修改订单问题",
+          "last_user_query": "那你把券给我吧",
+          "match_type": "current"
+        },
+        {
+          "sample_id": "525ea940aab3ea74a498876d11cc778d38965b58",
+          "scene": "履约场景-修改订单问题",
+          "last_user_query": "嗯，好吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "e2a3dd4a1e3787f86b6bdec5ddb8aa65493a8693",
+          "scene": "履约场景-修改订单问题",
+          "last_user_query": "好吧",
+          "match_type": "previous"
+        },
+        {
+          "sample_id": "0114813d10675f2c71e4aa8523c905761e7c26b3",
+          "scene": "履约场景-修改订单问题",
+          "last_user_query": "好吧",
+          "match_type": "previous"
+        }
+      ],
+      "notes": [],
+      "needs_trainer_confirmation": false
+    },
+    {
+      "solution_name": "选择商品",
+      "requires_confirmation_level": "no_confirmation_required",
+      "response_count": 734,
+      "agree_count": 0,
+      "agree_rate": 0.0,
+      "matched_previous_or_current_or_recent3": 0,
+      "matched_user_request_count": 0,
+      "unmatched_count": 0,
+      "warning_count": 0,
+      "evidence_examples": [],
+      "notes": [],
+      "needs_trainer_confirmation": false
+    },
+    {
+      "solution_name": "退审跟单",
+      "requires_confirmation_level": "no_confirmation_required",
+      "response_count": 149,
+      "agree_count": 0,
+      "agree_rate": 0.0,
+      "matched_previous_or_current_or_recent3": 0,
+      "matched_user_request_count": 0,
+      "unmatched_count": 0,
+      "warning_count": 0,
+      "evidence_examples": [],
+      "notes": [],
+      "needs_trainer_confirmation": false
+    },
+    {
+      "solution_name": "引导自助修改订单",
+      "requires_confirmation_level": "no_confirmation_required",
+      "response_count": 121,
+      "agree_count": 0,
+      "agree_rate": 0.0,
+      "matched_previous_or_current_or_recent3": 0,
+      "matched_user_request_count": 0,
+      "unmatched_count": 0,
+      "warning_count": 0,
+      "evidence_examples": [],
+      "notes": [],
+      "needs_trainer_confirmation": false
+    },
+    {
+      "solution_name": "开发票",
+      "requires_confirmation_level": "no_confirmation_required",
+      "response_count": 96,
+      "agree_count": 0,
+      "agree_rate": 0.0,
+      "matched_previous_or_current_or_recent3": 0,
+      "matched_user_request_count": 0,
+      "unmatched_count": 0,
+      "warning_count": 0,
+      "evidence_examples": [],
+      "notes": [],
+      "needs_trainer_confirmation": false
+    },
+    {
+      "solution_name": "管理会员自动续费",
+      "requires_confirmation_level": "no_confirmation_required",
+      "response_count": 88,
+      "agree_count": 0,
+      "agree_rate": 0.0,
+      "matched_previous_or_current_or_recent3": 0,
+      "matched_user_request_count": 0,
+      "unmatched_count": 0,
+      "warning_count": 0,
+      "evidence_examples": [],
+      "notes": [],
+      "needs_trainer_confirmation": false
+    },
+    {
+      "solution_name": "再次外呼骑手-xx",
+      "requires_confirmation_level": "user_request_is_enough",
+      "response_count": 78,
+      "agree_count": 0,
+      "agree_rate": 0.0,
+      "matched_previous_or_current_or_recent3": 0,
+      "matched_user_request_count": 0,
+      "unmatched_count": 0,
+      "warning_count": 0,
+      "evidence_examples": [],
+      "notes": [],
+      "needs_trainer_confirmation": false
+    },
+    {
+      "solution_name": "加急催促退款审核",
+      "requires_confirmation_level": "user_request_is_enough",
+      "response_count": 47,
+      "agree_count": 0,
+      "agree_rate": 0.0,
+      "matched_previous_or_current_or_recent3": 0,
+      "matched_user_request_count": 0,
+      "unmatched_count": 0,
+      "warning_count": 0,
+      "evidence_examples": [],
+      "notes": [],
+      "needs_trainer_confirmation": false
+    },
+    {
+      "solution_name": "智能跟单",
+      "requires_confirmation_level": "no_confirmation_required",
+      "response_count": 45,
+      "agree_count": 0,
+      "agree_rate": 0.0,
+      "matched_previous_or_current_or_recent3": 0,
+      "matched_user_request_count": 0,
+      "unmatched_count": 0,
+      "warning_count": 0,
+      "evidence_examples": [],
+      "notes": [],
+      "needs_trainer_confirmation": false
+    },
+    {
+      "solution_name": "系统催单",
+      "requires_confirmation_level": "no_confirmation_required",
+      "response_count": 44,
+      "agree_count": 0,
+      "agree_rate": 0.0,
+      "matched_previous_or_current_or_recent3": 0,
+      "matched_user_request_count": 0,
+      "unmatched_count": 0,
+      "warning_count": 0,
+      "evidence_examples": [],
+      "notes": [],
+      "needs_trainer_confirmation": false
+    },
+    {
+      "solution_name": "引导自助联系骑手",
+      "requires_confirmation_level": "no_confirmation_required",
+      "response_count": 27,
+      "agree_count": 0,
+      "agree_rate": 0.0,
+      "matched_previous_or_current_or_recent3": 0,
+      "matched_user_request_count": 0,
+      "unmatched_count": 0,
+      "warning_count": 0,
+      "evidence_examples": [],
+      "notes": [],
+      "needs_trainer_confirmation": false
+    },
+    {
+      "solution_name": "发送送达图片",
+      "requires_confirmation_level": "no_confirmation_required",
+      "response_count": 26,
+      "agree_count": 0,
+      "agree_rate": 0.0,
+      "matched_previous_or_current_or_recent3": 0,
+      "matched_user_request_count": 0,
+      "unmatched_count": 0,
+      "warning_count": 0,
+      "evidence_examples": [],
+      "notes": [],
+      "needs_trainer_confirmation": false
+    },
+    {
+      "solution_name": "无骑手接单跟单",
+      "requires_confirmation_level": "no_confirmation_required",
+      "response_count": 26,
+      "agree_count": 0,
+      "agree_rate": 0.0,
+      "matched_previous_or_current_or_recent3": 0,
+      "matched_user_request_count": 0,
+      "unmatched_count": 0,
+      "warning_count": 0,
+      "evidence_examples": [],
+      "notes": [],
+      "needs_trainer_confirmation": false
+    },
+    {
+      "solution_name": "引导自助查看-会员权益",
+      "requires_confirmation_level": "no_confirmation_required",
+      "response_count": 18,
+      "agree_count": 0,
+      "agree_rate": 0.0,
+      "matched_previous_or_current_or_recent3": 0,
+      "matched_user_request_count": 0,
+      "unmatched_count": 0,
+      "warning_count": 0,
+      "evidence_examples": [],
+      "notes": [],
+      "needs_trainer_confirmation": false
+    },
+    {
+      "solution_name": "加急调度",
+      "requires_confirmation_level": "no_confirmation_required",
+      "response_count": 13,
+      "agree_count": 0,
+      "agree_rate": 0.0,
+      "matched_previous_or_current_or_recent3": 0,
+      "matched_user_request_count": 0,
+      "unmatched_count": 0,
+      "warning_count": 0,
+      "evidence_examples": [],
+      "notes": [],
+      "needs_trainer_confirmation": false
+    },
+    {
+      "solution_name": "引导自助查看-配送范围",
+      "requires_confirmation_level": "no_confirmation_required",
+      "response_count": 12,
+      "agree_count": 0,
+      "agree_rate": 0.0,
+      "matched_previous_or_current_or_recent3": 0,
+      "matched_user_request_count": 0,
+      "unmatched_count": 0,
+      "warning_count": 0,
+      "evidence_examples": [],
+      "notes": [],
+      "needs_trainer_confirmation": false
+    },
+    {
+      "solution_name": "再次外呼门店-xx",
+      "requires_confirmation_level": "user_request_is_enough",
+      "response_count": 7,
+      "agree_count": 0,
+      "agree_rate": 0.0,
+      "matched_previous_or_current_or_recent3": 0,
+      "matched_user_request_count": 0,
+      "unmatched_count": 0,
+      "warning_count": 0,
+      "evidence_examples": [],
+      "notes": [],
+      "needs_trainer_confirmation": false
+    },
+    {
+      "solution_name": "引导自助开通会员",
+      "requires_confirmation_level": "no_confirmation_required",
+      "response_count": 5,
+      "agree_count": 0,
+      "agree_rate": 0.0,
+      "matched_previous_or_current_or_recent3": 0,
+      "matched_user_request_count": 0,
+      "unmatched_count": 0,
+      "warning_count": 0,
+      "evidence_examples": [],
+      "notes": [],
+      "needs_trainer_confirmation": false
+    },
+    {
+      "solution_name": "引导自助查看-小象开通城市",
+      "requires_confirmation_level": "no_confirmation_required",
+      "response_count": 5,
+      "agree_count": 0,
+      "agree_rate": 0.0,
+      "matched_previous_or_current_or_recent3": 0,
+      "matched_user_request_count": 0,
+      "unmatched_count": 0,
+      "warning_count": 0,
+      "evidence_examples": [],
+      "notes": [],
+      "needs_trainer_confirmation": false
+    },
+    {
+      "solution_name": "引导自助查看-优惠券",
+      "requires_confirmation_level": "no_confirmation_required",
+      "response_count": 4,
+      "agree_count": 0,
+      "agree_rate": 0.0,
+      "matched_previous_or_current_or_recent3": 0,
+      "matched_user_request_count": 0,
+      "unmatched_count": 0,
+      "warning_count": 0,
+      "evidence_examples": [],
+      "notes": [],
+      "needs_trainer_confirmation": false
+    },
+    {
+      "solution_name": "引导自助管理地址",
+      "requires_confirmation_level": "no_confirmation_required",
+      "response_count": 2,
+      "agree_count": 0,
+      "agree_rate": 0.0,
+      "matched_previous_or_current_or_recent3": 0,
+      "matched_user_request_count": 0,
+      "unmatched_count": 0,
+      "warning_count": 0,
+      "evidence_examples": [],
+      "notes": [],
+      "needs_trainer_confirmation": false
+    },
+    {
+      "solution_name": "投诉骑手",
+      "requires_confirmation_level": "unclear",
+      "response_count": 1,
+      "agree_count": 0,
+      "agree_rate": 0.0,
+      "matched_previous_or_current_or_recent3": 0,
+      "matched_user_request_count": 0,
+      "unmatched_count": 0,
+      "warning_count": 0,
+      "evidence_examples": [],
+      "notes": [],
+      "needs_trainer_confirmation": false
+    },
+    {
+      "solution_name": "引导自助查看-xx",
+      "requires_confirmation_level": "no_confirmation_required",
+      "response_count": 0,
+      "agree_count": 0,
+      "agree_rate": 0.0,
+      "matched_previous_or_current_or_recent3": 0,
+      "matched_user_request_count": 0,
+      "unmatched_count": 0,
+      "warning_count": 0,
+      "evidence_examples": [],
+      "notes": [],
+      "needs_trainer_confirmation": false
+    }
+  ],
+  "unmatched_dialogue_agree_top": [],
+  "weak_confirmation_examples": [
+    {
+      "sample_id": "a755499729dfca2fcced951092a105d65e82f375",
+      "solution": "小象单商品退款-xx%"
+    },
+    {
+      "sample_id": "c896adecdc18cfe86520d8b6d62cd6f5deedb0cd",
+      "solution": "小象单商品退款-xx%"
+    },
+    {
+      "sample_id": "911acef1389ed325adfa16b213078510234ae4ba",
+      "solution": "小象单商品退款-xx%"
+    },
+    {
+      "sample_id": "5955b26dda852730f654cd39f94ac2a63111dc72",
+      "solution": "小象整单申请退款"
+    },
+    {
+      "sample_id": "d4aa19359b1486749c8c9f533f08a7e44a7a9176",
+      "solution": "会员卡退款"
+    },
+    {
+      "sample_id": "f64ad6ec692b39db546043da17f0c828d794247f",
+      "solution": "会员卡退款"
+    },
+    {
+      "sample_id": "16ea507a6bd384e7524b9bbc328cdd9fc8d425c1",
+      "solution": "会员卡退款"
+    },
+    {
+      "sample_id": "83a061df10349367046b710cc67e908c48f15b0a",
+      "solution": "会员卡退款"
+    },
+    {
+      "sample_id": "46fde1a66601945cd95b644d46537ba0bb4e5380",
+      "solution": "会员卡退款"
+    },
+    {
+      "sample_id": "ba4f9044425493f14e2e9f70f0c045bb2ce460ac",
+      "solution": "会员卡退款"
+    },
+    {
+      "sample_id": "435872fce83350bf949608ce0085c26344b58eed",
+      "solution": "会员卡退款"
+    },
+    {
+      "sample_id": "f5d1daa9aab406de3e2b3f4d55c22f5ec91c395d",
+      "solution": "操作赔付-优惠券-xx元"
+    },
+    {
+      "sample_id": "cb10aa75e9325f6d11986a94aec29a15d9fdaf61",
+      "solution": "取消订单"
+    },
+    {
+      "sample_id": "788371c1e54b6ed301a3d1c23f365c56b1f128fd",
+      "solution": "取消订单"
+    },
+    {
+      "sample_id": "70fbb4d367d5159889a70dfec1064d4b3faaf7de",
+      "solution": "取消订单"
+    },
+    {
+      "sample_id": "59b3cee924d37c18f1b8bed3e1e1d5f98090f986",
+      "solution": "会员卡退款"
+    },
+    {
+      "sample_id": "61aded10017e955cc3b9b9edade45860249ff01e",
+      "solution": "会员卡退款"
+    },
+    {
+      "sample_id": "d61d4f9eab50a43eff1fa26a386ac59848ba4680",
+      "solution": "会员卡退款"
+    },
+    {
+      "sample_id": "249dc97a888c73f14bb0c98785f8f1e35f958d87",
+      "solution": "会员卡退款"
+    },
+    {
+      "sample_id": "ba4e9be73452cb9a7cfb39b68ec38170f966f14e",
+      "solution": "会员卡退款"
+    },
+    {
+      "sample_id": "2fb04934c5167973dbfb0c1b36d4261689d130ba",
+      "solution": "会员卡退款"
+    },
+    {
+      "sample_id": "1b2c7921995b2b61213c8197d3259f791a5fec7d",
+      "solution": "会员卡退款"
+    },
+    {
+      "sample_id": "3e8aced1f1be3f6e9385c3c9d9799499fe725036",
+      "solution": "会员卡退款"
+    },
+    {
+      "sample_id": "05a05547fbcea0df82c23acdc037d3e522735cb1",
+      "solution": "会员卡退款"
+    },
+    {
+      "sample_id": "064fb5cbe6b7c32317f9c48d35b7846b4b521a2f",
+      "solution": "会员卡退款"
+    },
+    {
+      "sample_id": "5af631dec11d3b0b78e6007f6e237b607cb170f6",
+      "solution": "会员卡退款"
+    },
+    {
+      "sample_id": "20b312615570e28f4e7c106aecf0f210d979eb93",
+      "solution": "会员卡退款"
+    },
+    {
+      "sample_id": "9433526f63f79ea968ced45ea3b30bb7f8c2cf9d",
+      "solution": "会员卡退款"
+    },
+    {
+      "sample_id": "d00ad768c71c196f5de944451b746aea1d97709e",
+      "solution": "会员卡退款"
+    },
+    {
+      "sample_id": "f3469ab76daa7e8c33d168875b69b1260a7cc7fb",
+      "solution": "会员卡退款"
+    },
+    {
+      "sample_id": "481aa21421e0e41e2775fac63e5d99608a66f7c7",
+      "solution": "取消订单"
+    },
+    {
+      "sample_id": "075e11a5dc73dae6accd0a054ad5b6e4f0dcdaf6",
+      "solution": "操作赔付-优惠券-xx元"
+    },
+    {
+      "sample_id": "6e633f167f4eb2c96f6d0344d10d843f63aef9e5",
+      "solution": "操作赔付-优惠券-xx元"
+    },
+    {
+      "sample_id": "99b4694702cf7c4f5daa552def33a704ac9f07ec",
+      "solution": "取消订单"
+    },
+    {
+      "sample_id": "11e281a6ad768eb659cba81abf49d11ee43d88d9",
+      "solution": "取消订单"
+    },
+    {
+      "sample_id": "8e1baebeb8564ad2adc1b9d6acc9e783af6fc900",
+      "solution": "取消订单"
+    },
+    {
+      "sample_id": "1b737f215a6e7154c05822df704c9840f688dd86",
+      "solution": "取消订单"
+    },
+    {
+      "sample_id": "d9fdde7d15bb3275f49433025d5afc42a40b1035",
+      "solution": "取消订单"
+    },
+    {
+      "sample_id": "712b6159ec8288b8878586ee6798e456fb4b6284",
+      "solution": "取消订单"
+    },
+    {
+      "sample_id": "97da8c84610881a5d3babb0760e98ed955d6dd92",
+      "solution": "操作赔付-优惠券-xx元"
+    },
+    {
+      "sample_id": "57c7f38717badfde8d9a4df4668e4f6350523fbc",
+      "solution": "小象单商品退款-xx%"
+    },
+    {
+      "sample_id": "36039e2fe43eb4d123fd8ba307cf5c351c6a433d",
+      "solution": "小象整单申请退款"
+    },
+    {
+      "sample_id": "f7117ec3fd2bb814580f58396456cca7c35a0180",
+      "solution": "小象单商品退款-xx%"
+    },
+    {
+      "sample_id": "383e8c888e40e27857a5b0678bb2fdf88dc15bc7",
+      "solution": "小象单商品退款-xx%"
+    },
+    {
+      "sample_id": "795db4e8a32771b39e369e389f2dd11a30502091",
+      "solution": "小象单商品退款-xx%"
+    },
+    {
+      "sample_id": "fb3a9a8fba86cbbd6bfd31d4b6515ef62c205d3f",
+      "solution": "操作赔付-运费券-3元"
+    },
+    {
+      "sample_id": "104ea8a6e9793572b8499af577b4254d296fbd77",
+      "solution": "取消订单"
+    },
+    {
+      "sample_id": "4f7f9cc55681113b2eed3f51b347c2d9873daa61",
+      "solution": "取消订单"
+    },
+    {
+      "sample_id": "80a0a51b2bf12cfcc3d95755cd450ca42c17b13f",
+      "solution": "操作赔付-运费券-3元"
+    },
+    {
+      "sample_id": "93b06931643ca38c6d85b4ee84e19a53fa5c3ade",
+      "solution": "取消订单"
+    }
+  ],
+  "no_confirmation_agree_examples": []
+}

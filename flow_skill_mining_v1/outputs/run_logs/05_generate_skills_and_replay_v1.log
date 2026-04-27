@@ -1,0 +1,16 @@
+{
+  "skills": [
+    {
+      "skill_id": "fulfillment_delivery_v1",
+      "scene": "履约场景-配送问题",
+      "action_rules": 1,
+      "replay": 121
+    },
+    {
+      "skill_id": "receipt_quality_v1",
+      "scene": "收货场景-品质问题",
+      "action_rules": 14,
+      "replay": 120
+    }
+  ]
+}

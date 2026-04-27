@@ -1,0 +1,421 @@
+[
+  {
+    "solution_name": "小象单商品退款-xx%",
+    "canonical_name": "小象单商品退款-xx%",
+    "aliases": [
+      "小象单商品退款-30%",
+      "小象单商品退款-20%",
+      "小象单商品退款-40%",
+      "小象单商品退款-50%",
+      "小象单商品退款-100%",
+      "小象单商品退款-80%",
+      "小象单商品退款-70%",
+      "小象单商品退款-60%",
+      "小象单商品退款-10%"
+    ],
+    "pattern_type": "exact",
+    "requires_confirmation_level": "strong_confirmation_required",
+    "available_count": 13524,
+    "response_count": 992,
+    "agree_count": 422,
+    "agree_rate": 0.4254,
+    "notes": []
+  },
+  {
+    "solution_name": "选择商品",
+    "canonical_name": "选择商品",
+    "aliases": [],
+    "pattern_type": "exact",
+    "requires_confirmation_level": "no_confirmation_required",
+    "available_count": 13524,
+    "response_count": 734,
+    "agree_count": 0,
+    "agree_rate": 0.0,
+    "notes": []
+  },
+  {
+    "solution_name": "操作赔付-优惠券-xx元",
+    "canonical_name": "操作赔付-优惠券-xx元",
+    "aliases": [
+      "操作赔付-优惠券-10元",
+      "操作赔付-优惠券-15元",
+      "操作赔付-优惠券-20元",
+      "操作赔付-优惠券-8元",
+      "操作赔付-优惠券-5元",
+      "操作赔付-优惠券-3元"
+    ],
+    "pattern_type": "exact",
+    "requires_confirmation_level": "strong_confirmation_required",
+    "available_count": 13524,
+    "response_count": 566,
+    "agree_count": 190,
+    "agree_rate": 0.3357,
+    "notes": []
+  },
+  {
+    "solution_name": "取消订单",
+    "canonical_name": "取消订单",
+    "aliases": [],
+    "pattern_type": "exact",
+    "requires_confirmation_level": "strong_confirmation_required",
+    "available_count": 13524,
+    "response_count": 343,
+    "agree_count": 132,
+    "agree_rate": 0.3848,
+    "notes": []
+  },
+  {
+    "solution_name": "外呼骑手-xx",
+    "canonical_name": "外呼骑手-xx",
+    "aliases": [
+      "外呼骑手-催促配送",
+      "外呼骑手-协商调换货品",
+      "外呼骑手-修改订单",
+      "外呼骑手-核实情况"
+    ],
+    "pattern_type": "call_rider",
+    "requires_confirmation_level": "user_request_is_enough",
+    "available_count": 13524,
+    "response_count": 166,
+    "agree_count": 69,
+    "agree_rate": 0.4157,
+    "notes": []
+  },
+  {
+    "solution_name": "催促退款审核",
+    "canonical_name": "催促退款审核",
+    "aliases": [],
+    "pattern_type": "exact",
+    "requires_confirmation_level": "user_request_is_enough",
+    "available_count": 13524,
+    "response_count": 158,
+    "agree_count": 11,
+    "agree_rate": 0.0696,
+    "notes": []
+  },
+  {
+    "solution_name": "退审跟单",
+    "canonical_name": "退审跟单",
+    "aliases": [],
+    "pattern_type": "exact",
+    "requires_confirmation_level": "no_confirmation_required",
+    "available_count": 13524,
+    "response_count": 149,
+    "agree_count": 0,
+    "agree_rate": 0.0,
+    "notes": []
+  },
+  {
+    "solution_name": "引导自助修改订单",
+    "canonical_name": "引导自助修改订单",
+    "aliases": [],
+    "pattern_type": "exact",
+    "requires_confirmation_level": "no_confirmation_required",
+    "available_count": 13524,
+    "response_count": 121,
+    "agree_count": 0,
+    "agree_rate": 0.0,
+    "notes": []
+  },
+  {
+    "solution_name": "会员卡退款",
+    "canonical_name": "会员卡退款",
+    "aliases": [],
+    "pattern_type": "exact",
+    "requires_confirmation_level": "strong_confirmation_required",
+    "available_count": 13524,
+    "response_count": 105,
+    "agree_count": 48,
+    "agree_rate": 0.4571,
+    "notes": []
+  },
+  {
+    "solution_name": "开发票",
+    "canonical_name": "开发票",
+    "aliases": [],
+    "pattern_type": "exact",
+    "requires_confirmation_level": "no_confirmation_required",
+    "available_count": 13524,
+    "response_count": 96,
+    "agree_count": 0,
+    "agree_rate": 0.0,
+    "notes": []
+  },
+  {
+    "solution_name": "管理会员自动续费",
+    "canonical_name": "管理会员自动续费",
+    "aliases": [],
+    "pattern_type": "exact",
+    "requires_confirmation_level": "no_confirmation_required",
+    "available_count": 13524,
+    "response_count": 88,
+    "agree_count": 0,
+    "agree_rate": 0.0,
+    "notes": []
+  },
+  {
+    "solution_name": "再次外呼骑手-xx",
+    "canonical_name": "再次外呼骑手-xx",
+    "aliases": [
+      "再次外呼骑手-催促配送",
+      "再次外呼骑手-协商调换货品",
+      "再次外呼骑手-修改订单",
+      "再次外呼骑手-核实情况"
+    ],
+    "pattern_type": "call_rider",
+    "requires_confirmation_level": "user_request_is_enough",
+    "available_count": 13524,
+    "response_count": 78,
+    "agree_count": 0,
+    "agree_rate": 0.0,
+    "notes": []
+  },
+  {
+    "solution_name": "小象整单申请退款",
+    "canonical_name": "小象整单申请退款",
+    "aliases": [],
+    "pattern_type": "exact",
+    "requires_confirmation_level": "strong_confirmation_required",
+    "available_count": 13524,
+    "response_count": 55,
+    "agree_count": 27,
+    "agree_rate": 0.4909,
+    "notes": []
+  },
+  {
+    "solution_name": "加急催促退款审核",
+    "canonical_name": "加急催促退款审核",
+    "aliases": [],
+    "pattern_type": "exact",
+    "requires_confirmation_level": "user_request_is_enough",
+    "available_count": 13524,
+    "response_count": 47,
+    "agree_count": 0,
+    "agree_rate": 0.0,
+    "notes": []
+  },
+  {
+    "solution_name": "智能跟单",
+    "canonical_name": "智能跟单",
+    "aliases": [],
+    "pattern_type": "exact",
+    "requires_confirmation_level": "no_confirmation_required",
+    "available_count": 13524,
+    "response_count": 45,
+    "agree_count": 0,
+    "agree_rate": 0.0,
+    "notes": []
+  },
+  {
+    "solution_name": "系统催单",
+    "canonical_name": "系统催单",
+    "aliases": [],
+    "pattern_type": "exact",
+    "requires_confirmation_level": "no_confirmation_required",
+    "available_count": 13524,
+    "response_count": 44,
+    "agree_count": 0,
+    "agree_rate": 0.0,
+    "notes": []
+  },
+  {
+    "solution_name": "引导自助联系骑手",
+    "canonical_name": "引导自助联系骑手",
+    "aliases": [],
+    "pattern_type": "exact",
+    "requires_confirmation_level": "no_confirmation_required",
+    "available_count": 13524,
+    "response_count": 27,
+    "agree_count": 0,
+    "agree_rate": 0.0,
+    "notes": []
+  },
+  {
+    "solution_name": "发送送达图片",
+    "canonical_name": "发送送达图片",
+    "aliases": [],
+    "pattern_type": "exact",
+    "requires_confirmation_level": "no_confirmation_required",
+    "available_count": 13524,
+    "response_count": 26,
+    "agree_count": 0,
+    "agree_rate": 0.0,
+    "notes": []
+  },
+  {
+    "solution_name": "无骑手接单跟单",
+    "canonical_name": "无骑手接单跟单",
+    "aliases": [],
+    "pattern_type": "exact",
+    "requires_confirmation_level": "no_confirmation_required",
+    "available_count": 13524,
+    "response_count": 26,
+    "agree_count": 0,
+    "agree_rate": 0.0,
+    "notes": []
+  },
+  {
+    "solution_name": "引导自助查看-会员权益",
+    "canonical_name": "引导自助查看-会员权益",
+    "aliases": [
+      "引导自助查看会员权益"
+    ],
+    "pattern_type": "self_service_view",
+    "requires_confirmation_level": "no_confirmation_required",
+    "available_count": 0,
+    "response_count": 18,
+    "agree_count": 0,
+    "agree_rate": 0.0,
+    "notes": [
+      "missing_dash_alias"
+    ]
+  },
+  {
+    "solution_name": "外呼门店-xx",
+    "canonical_name": "外呼门店-xx",
+    "aliases": [
+      "外呼门店-修改订单"
+    ],
+    "pattern_type": "call_store",
+    "requires_confirmation_level": "user_request_is_enough",
+    "available_count": 13524,
+    "response_count": 15,
+    "agree_count": 8,
+    "agree_rate": 0.5333,
+    "notes": []
+  },
+  {
+    "solution_name": "操作赔付-运费券-3元",
+    "canonical_name": "操作赔付-运费券-3元",
+    "aliases": [],
+    "pattern_type": "compensation_shipping_coupon",
+    "requires_confirmation_level": "strong_confirmation_required",
+    "available_count": 13524,
+    "response_count": 15,
+    "agree_count": 6,
+    "agree_rate": 0.4,
+    "notes": []
+  },
+  {
+    "solution_name": "加急调度",
+    "canonical_name": "加急调度",
+    "aliases": [],
+    "pattern_type": "exact",
+    "requires_confirmation_level": "no_confirmation_required",
+    "available_count": 13524,
+    "response_count": 13,
+    "agree_count": 0,
+    "agree_rate": 0.0,
+    "notes": []
+  },
+  {
+    "solution_name": "引导自助查看-配送范围",
+    "canonical_name": "引导自助查看-配送范围",
+    "aliases": [
+      "引导自助查看配送范围"
+    ],
+    "pattern_type": "self_service_view",
+    "requires_confirmation_level": "no_confirmation_required",
+    "available_count": 0,
+    "response_count": 12,
+    "agree_count": 0,
+    "agree_rate": 0.0,
+    "notes": [
+      "missing_dash_alias"
+    ]
+  },
+  {
+    "solution_name": "再次外呼门店-xx",
+    "canonical_name": "再次外呼门店-xx",
+    "aliases": [
+      "再次外呼门店-修改订单"
+    ],
+    "pattern_type": "call_store",
+    "requires_confirmation_level": "user_request_is_enough",
+    "available_count": 13524,
+    "response_count": 7,
+    "agree_count": 0,
+    "agree_rate": 0.0,
+    "notes": []
+  },
+  {
+    "solution_name": "引导自助开通会员",
+    "canonical_name": "引导自助开通会员",
+    "aliases": [],
+    "pattern_type": "exact",
+    "requires_confirmation_level": "no_confirmation_required",
+    "available_count": 13524,
+    "response_count": 5,
+    "agree_count": 0,
+    "agree_rate": 0.0,
+    "notes": []
+  },
+  {
+    "solution_name": "引导自助查看-小象开通城市",
+    "canonical_name": "引导自助查看-小象开通城市",
+    "aliases": [
+      "引导自助查看小象开通城市"
+    ],
+    "pattern_type": "self_service_view",
+    "requires_confirmation_level": "no_confirmation_required",
+    "available_count": 0,
+    "response_count": 5,
+    "agree_count": 0,
+    "agree_rate": 0.0,
+    "notes": [
+      "missing_dash_alias"
+    ]
+  },
+  {
+    "solution_name": "引导自助查看-优惠券",
+    "canonical_name": "引导自助查看-优惠券",
+    "aliases": [
+      "引导自助查看优惠券"
+    ],
+    "pattern_type": "self_service_view",
+    "requires_confirmation_level": "no_confirmation_required",
+    "available_count": 0,
+    "response_count": 4,
+    "agree_count": 0,
+    "agree_rate": 0.0,
+    "notes": [
+      "missing_dash_alias"
+    ]
+  },
+  {
+    "solution_name": "引导自助管理地址",
+    "canonical_name": "引导自助管理地址",
+    "aliases": [],
+    "pattern_type": "exact",
+    "requires_confirmation_level": "no_confirmation_required",
+    "available_count": 13524,
+    "response_count": 2,
+    "agree_count": 0,
+    "agree_rate": 0.0,
+    "notes": []
+  },
+  {
+    "solution_name": "投诉骑手",
+    "canonical_name": "投诉骑手",
+    "aliases": [],
+    "pattern_type": "exact",
+    "requires_confirmation_level": "unclear",
+    "available_count": 13524,
+    "response_count": 1,
+    "agree_count": 0,
+    "agree_rate": 0.0,
+    "notes": []
+  },
+  {
+    "solution_name": "引导自助查看-xx",
+    "canonical_name": "引导自助查看-xx",
+    "aliases": [],
+    "pattern_type": "self_service_view",
+    "requires_confirmation_level": "no_confirmation_required",
+    "available_count": 13524,
+    "response_count": 0,
+    "agree_count": 0,
+    "agree_rate": 0.0,
+    "notes": []
+  }
+]
